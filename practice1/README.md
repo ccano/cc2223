@@ -43,7 +43,7 @@
 
 ###  2.1. <a name='Introduccin'></a>Introducción
 
-El despliegue de servicios en Cloud Computing es fundamental para poner en marcha funcionalidades que permitan tener aplicaciones y software además de infrastructuras con capacidades de soporte para múltiples usuarios y con posibilidades de escalado dinàmico. Aprovechar los recursos que ofrece Cloud Computing de forma flexible es la clave para el correcto diseño de servicios y microservicios interconectados desplegados en la nube (mediante contenedores). 
+El despliegue de servicios en Cloud Computing es fundamental para poner en marcha funcionalidades que permitan tener aplicaciones y software además de infrastructuras con capacidades de soporte para múltiples usuarios y con posibilidades de escalado dinámico. Aprovechar los recursos que ofrece Cloud Computing de forma flexible es la clave para el correcto diseño de servicios y microservicios interconectados desplegados en la nube (mediante contenedores). 
 
 Hoy en día cada vez existen más dispositivos conectados a Internet y transmitiendo datos de todo tipo a través de los servicios y recursos que provee Cloud Computing. Desde Internet of Things (IoT), hasta la industra, pasando por nuestros hogares, todos ellos están interconectados. Existe una necesidad de monitorizar servicios, infrastructuras y recursos que nos permitan conocer el estado de estos elementos en tiempo real y poder decidir sobre lo que está ocurriendo en términos de consumo, uso de CPU, RAM, o espacio de almacenamiento entre otros. Estos sistemas de monitorización son extremadamente flexibles y muy modulares, lo que los hace excelentes para su desarrollo y despliegue utilizando contenedores y herramientas de orquestación.
 
@@ -60,7 +60,7 @@ Este trabajo consiste en proveer de un sistema de monitorización basado en Prom
 
 Para esta práctica evaluable se desplegarán los siguientes servicios:
 
-- Para los *servicios de monitorización* y *exportación de métricas* se usanrán las herramientas y servicios proporcionados por el motor de monitorización  Prometheus (https://prometheus.io/).
+- Para los *servicios de monitorización* y *exportación de métricas* se usarán las herramientas y servicios proporcionados por el motor de monitorización  Prometheus (https://prometheus.io/).
 - Para el servicio de visualización de métricas se usará Grafana (https://grafana.com/). 
 - Para el servicio de alta disponibilidad se usará HAProxy u otro servicio similar (http://www.haproxy.org/).
 
