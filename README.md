@@ -11,7 +11,10 @@
 
 ## Session 1
 
-- Introductory session
+- Introduction to the Course. 
+- Managing Azure VMs: Create, deploy and add services
+- [Azure plaform](https://github.com/manuparra/cc2122/tree/main/session4)
+
 
 ## Session 2
 
@@ -41,12 +44,6 @@ Containers with Docker, Singularity and Kubernetes.
 - [Introduction to kubernetes](./session3/README.md#session-3-kubernetes)
 - [How to deploy your local kubernets instance (with minikube)](./session3/README.md#session-3-kubernetes)
 - Manage, deploy and usage of the kubernetes
-
-## Session 4
-
-Managing Azure VMs: Create, deploy and add services
-
--[Azure plaform](https://github.com/manuparra/cc2122/tree/main/session4)
 
 ## Session 5 
 
