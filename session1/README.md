@@ -1,5 +1,6 @@
 # Session 1 Creating VMs from MS Azure
 
+## Index
 <!-- vscode-markdown-toc -->
 * 1. [Create virtual machine](#Createvirtualmachine)
 	* 1.1. [Connect to virtual machine](#Connecttovirtualmachine)
@@ -13,7 +14,7 @@
 <!-- /vscode-markdown-toc -->
 
 
-# Session 1 Creating VMs from MS Azure
+## Introduction
 
 Azure virtual machines (VMs) can be created through the Azure portal. The Azure portal is a browser-based user interface to create Azure resources. This tutorial shows you how to use the Azure portal to deploy a Linux virtual machine (VM) running Ubuntu (version 18.04 LTS). To see your VM in action, you also SSH to the VM and install the NGINX web server.
 
