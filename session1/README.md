@@ -74,7 +74,7 @@ The contents of the session are listed here:
 
 - When the Generate new key pair window opens, select Download private key and create resource. Your key file will be download as myKey.pem. Make sure you know where the .pem file was downloaded, you will need the path to it in the next step.
 
-- If you get an error message: "The suscription is not registered to use namespace Microsoft.Compute" means you need to register the computing service in your Azure subscription. To do so, please proceed as described here --see the "Portal" instructions ![](https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-register-resource-provider?tabs=azure-portal#solution-3---azure-portal)
+- If you get an error message: "The suscription is not registered to use namespace Microsoft.Compute" means you need to register the computing service in your Azure subscription. To do so, please proceed as described here --see the "Portal" instructions https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-register-resource-provider?tabs=azure-portal#solution-3---azure-portal
 
 - When the deployment is finished, select Go to resource.
 
