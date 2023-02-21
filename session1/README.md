@@ -48,7 +48,7 @@ The contents of the session are listed here:
 
 *Screenshot of the Project details section showing where you select the Azure subscription and the resource group for the virtual machine*
 
-- Under Instance details, type myVM for the Virtual machine name, and choose Ubuntu 20.04 LTS - Gen2 for your Image. Leave the other defaults. The default size and pricing is only shown as an example. Size availability and pricing are dependent on your region and subscription.
+- Under Instance details, type myVM for the Virtual machine name, and choose Ubuntu 20.04 LTS - Gen2 for your Image. Leave the other defaults. The default size and pricing is only shown as an example. Size availability and pricing are dependent on your region and subscription. More information on sizes for VMs in Azure are here: https://learn.microsoft.com/en-us/azure/virtual-machines/sizes
 
 ![](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/media/quick-create-portal/instance-details.png)
 
