@@ -13,9 +13,12 @@ We will talk much about Containers and Virtual Machines (VMs) in this course. Fo
 
 Our class today is about Virtual Machines. Azure virtual machines can be created through the Azure portal. The Azure portal is a browser-based user interface to create Azure resources. This tutorial shows you how to use the Azure portal to deploy a Linux virtual machine (VM) running Ubuntu (version 20.04 LTS). To see your VM in action, you also SSH to the VM and install the NGINX web server.
 
-If you don't have an Azure subscription, create a free account before you begin. To do it you can use Student version here: https://azure.microsoft.com/es-es/free/students/
+If you don't have an Azure subscription, create a free account before you begin. You can create a Student account here: https://azure.microsoft.com/es-es/free/students/
 
-After that, sign in to the Azure portal.
+You can find more information about Azure accounts, suscriptions and resources here: 
+https://learn.microsoft.com/es-mx/training/modules/describe-core-architectural-components-of-azure/3-get-started-azure-accounts
+
+After creating the account, sign in to the Azure portal.
 
 The contents of the session are listed here:
 <!-- vscode-markdown-toc -->
