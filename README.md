@@ -13,7 +13,7 @@
 
 - Introduction to the Course. 
 - Managing Azure VMs: Create, deploy and add services
-- [Azure plaform](https://github.com/manuparra/cc2122/tree/main/session4)
+- [Azure plaform](https://github.com/ccano/cc2223/tree/main/session1)
 
 
 ## Session 2
