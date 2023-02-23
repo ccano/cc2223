@@ -42,13 +42,13 @@ The contents of the session are listed here:
 
 - In the Virtual machines page, select Create and then Virtual machine. The Create a virtual machine page opens.
 
-- In the Basics tab, under Project details, make sure the correct subscription is selected and then choose to Create new resource group. Type myResourceGroup for the name.*.
+- In the Basics tab, under Project details, make sure the correct subscription is selected and then choose to Create new resource group. Type myResourceGroup for the name. [More on resource groups here](https://learn.microsoft.com/es-es/training/modules/control-and-organize-with-azure-resource-manager/2-principles-of-resource-groups).
 
 ![](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/media/quick-create-portal/project-details.png)
 
 *Screenshot of the Project details section showing where you select the Azure subscription and the resource group for the virtual machine*
 
-- Under Instance details, type myVM for the Virtual machine name, and choose Ubuntu 20.04 LTS - Gen2 for your Image. Leave the other defaults. The default size and pricing is only shown as an example. Size availability and pricing are dependent on your region and subscription. More information on sizes for VMs in Azure are here: https://learn.microsoft.com/en-us/azure/virtual-machines/sizes
+- Under Instance details, type myVM for the Virtual machine name, and choose Ubuntu 20.04 LTS - Gen2 for your Image. Leave the other defaults. The default size and pricing is only shown as an example. Size availability and pricing are dependent on your region and subscription. [More on sizes for VMs in Azure here](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes).
 
 ![](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/media/quick-create-portal/instance-details.png)
 
@@ -77,7 +77,7 @@ The contents of the session are listed here:
 
 - When the Generate new key pair window opens, select Download private key and create resource. Your key file will be download as myKey.pem. Make sure you know where the .pem file was downloaded, you will need the path to it in the next step.
 
-- If you get an error message: "The suscription is not registered to use namespace Microsoft.Compute" means you need to register the computing service in your Azure subscription. To do so, please proceed as described here --see the "Portal" instructions https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-register-resource-provider?tabs=azure-portal#solution-3---azure-portal
+- If you get an error message: "The suscription is not registered to use namespace Microsoft.Compute" means you need to register the computing service in your Azure subscription. To do so, please proceed as described here --[see the "Portal" instructions here](https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-register-resource-provider?tabs=azure-portal#solution-3---azure-portal)
 
 - When the deployment is finished, select Go to resource.
 
