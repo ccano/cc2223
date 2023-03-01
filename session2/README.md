@@ -296,7 +296,7 @@ For more examples and ideas, visit:
 
 ### 4. Working with Docker containers
 
-Using a `hello-world` image is one thing, actually doing some work with containers is another. As interesting as it might be, the above image doesn't do much beyond printing out the message we have seen at the start. Not very useful from the astrophysics perspective.
+Using a `hello-world` image is one thing, actually doing some work with containers is another. 
 
 We are going to experiment with a much more useful image: an official Python 3.10.2 image based on Debian bullseye (it's a slimmed down version to be more specific - 123MB vs over 900MB for the 'traditional' bullseye).
 
