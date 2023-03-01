@@ -88,7 +88,16 @@ In this section you will learn the basics of Docker, arguably one of the most po
 
 More generally, you should use it as a tool for distributing consistent software environments. Currently it is only one of many existing container technologies that researchers can choose from. Two popular alternatives are Singularity (covered later) and Podman. Some solutions offer better support for High Performance Computing, while others provide a low-level control of the environment. There really is something for everyone.
 
-### In this section you will learn
+Below is how a typical Docker workflow will look like:
+
+- Create a Dockerfile and mention the instructions to create your docker image
+- Run docker build command which will build a docker image
+- Now the docker image is ready to be used, use docker run command to create containers
+
+![](https://geekflare.com/wp-content/uploads/2019/07/dockerfile.png)
+
+
+In this section you will learn all these steps.
 
 - [**How to start Docker containers**](#1-running-first-docker-container)
 - [**How to manage your Docker images**](#2-managing-docker-images)
@@ -413,15 +422,6 @@ Dockerfile syntax
 
 command argument argument1 ... 
 ```
-
-Below is how your workflow will look like:
-
-- Create a Dockerfile and mention the instructions to create your docker image
-- Run docker build command which will build a docker image
-- Now the docker image is ready to be used, use docker run command to create containers
-
-
-![](https://geekflare.com/wp-content/uploads/2019/07/dockerfile.png)
 
 Commands to use for the Dockerfile:
 
