@@ -12,14 +12,11 @@
 
 # Intro to containers orchestrators
 
-Although you can certainly manage research workflows that use multiple containers manually, there are a number of container orchestration tools that you may find useful when managing workflows that use multiple containers. We won’t go in depth on using these tools in this lesson but instead briefly describe a few options and point to useful resources on using these tools to allow you to explore them yourself.
+Although you can certainly manage research workflows that use multiple containers manually, there are a number of container orchestration tools that you may find useful when managing workflows that use multiple containers. Also running containers in production is tough: what happens if the containers die? How do you scale across several machines? Container orchestration solves this problem. Tools like Kubernetes, Swarm, Nomad, and ECS all help solve this problem, all in slightly different ways.
 
-- Docker Compose
-- Singularity Compose
-- Kubernetes
-- Docker Swarm
+The general idea is that you have “managers” who receive expected state. This state might be “I want to run two instances of my web app and expose port 80.” The managers then look at all of the machines in the cluster and delegate work to “worker” nodes. The managers watch for changes (such as a container quitting) and then work to make actual state reflect the expected state.
 
-Use of container orchestration tools for research workflows is a relatively new concept and so there is not a huge amount of documentation and experience out there at the moment. You may need to search around for useful information or, better still, contact your friendly neighbourhood RSE to discuss what you want to do.
+We won’t go in depth on using these tools in this lesson but instead briefly describe a few options and point to useful resources on using these tools to allow you to explore them yourself.
 
 **Docker Compose**
 
