@@ -94,6 +94,7 @@ More generally, you should use it as a tool for distributing consistent software
 - [**How to manage your Docker images**](#2-managing-docker-images)
 - [**How to manage your Docker containers**](#3-managing-docker-containers)
 - [**How to work with Docker containers**](#4-working-with-docker-containers)
+- [**How to build a Docker image**](5-Creating-a-new-Docker-image---Dockerfiles)
 
 ### 1. Running first Docker container
 
