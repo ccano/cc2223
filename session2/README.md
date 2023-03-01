@@ -44,7 +44,7 @@ You will often hear the expression that "containers are like VMs", or "like VMs,
 
 Containers remove a lot of components of virtual machines though: they do not virtualise the hardware, they do not have to contain a fully-fledged guest OS to operate. They have to rely on the host OS instead. VMs sit on top of the underlying hardware, whereas containers sit on top of the host OS.
 
-![VM vs container](https://www.researchgate.net/profile/Karen-Scarfone/publication/329973333/figure/fig1/AS:708952811655168@1546038930241/Virtual-Machine-and-Container-Deployments.png)
+![VM vs container](Virtual-Machine-and-Container-Deployments.png)
 
 NIST Special Publication 800-190, Application Container Security Guide - Scientific Figure on ResearchGate. Available from: https://www.researchgate.net/figure/Virtual-Machine-and-Container-Deployments_fig1_329973333 [accessed 28 Jan, 2023]
 
