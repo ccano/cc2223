@@ -1,486 +1,504 @@
-# Session 2: Intro to containers orchestrators
+<h1>Session 2: Docker</h1>
 
-Although you can certainly manage research workflows that use multiple containers manually, there are a number of container orchestration tools that you may find useful when managing workflows that use multiple containers. We won’t go in depth on using these tools in this lesson but instead briefly describe a few options and point to useful resources on using these tools to allow you to explore them yourself.
+- [Session 2 Docker](#session-2-docker)
+  * [Introduction to containers](#introduction-to-containers)
+    + [1. What are containers](#1-what-are-containers)
+    + [2. How containers differ from VMs](#2How-containers-differ-from-virtual-machines)
+    + [3. Why do you (and don't) need containers](#3-why-do-you--and-don-t--need-containers)
+  * [Introduction to Docker](#introduction-to-docker)
+    + [1. Running first Docker container](#1-running-first-docker-container)
+    + [2. Managing Docker images](#2-managing-docker-images)
+    + [3. Managing Docker containers](#3-managing-docker-containers)
+    + [4. Working with Docker containers](#4-working-with-docker-containers)
+    + [5. Creating a new Docker image](#5-Creating-a-new-Docker-image---Dockerfiles)
 
-- Docker Compose
-- Kubernetes
-- Docker Swarm
+# Docker
+
+## Introduction to containers
+
+In this section we provide a very short introduction to the general idea behind containers. We briefly discuss the situations when containers can be a good choice for your problem and when other solutions might be more fitting. During this training course, we focus on two containerisation technologies: Docker and Singularity. You are most likely to see these two used in the research environment, with Singularity becoming the technology of choice for High Performance Computing development (although Docker is not going from that space anytime soon).
+
+### 1. What are containers
+
+You may hear people say they are "running an image" or "running a container". These terms are often used interchangeably, although (like with Docker), they can mean different things - container being the running image.
+
+The most important feature of containers, and where their real strength comes from, is that unlike "regular" applications, they can and often do perform all their work in isolation from their host OS. Your containers do not have to know what the rest of your OS is up to. They don't even have to have access to the same files as your host OS, or share the same network  (again it is possible to achieve that). Containers put a layer between your existing host filesystem and whatever you are running inside them.
+
+Briefly, a container allows you to stick an application and all of its dependencies into a single package. This makes your application portable, shareable, and reproducible.
+
+Containers foster portability and reproducibility because they package ALL of an applications dependencies... including its own tiny operating system!
+
+This means your application won't break when you port it to a new environment. Your app brings its environment with it.
+
+Here are some examples of things you can do with containers:
+
+- Package an analysis pipeline so that it runs on your laptop, in the cloud, and in a high performance computing (HPC) environment to produce the same result.
+- Publish a paper and include a link to a container with all of the data and software that you used so that others can easily reproduce your results.
+- Install and run an application that requires a complicated stack of dependencies with a few keystrokes.
+- Create a pipeline or complex workflow where each individual program is meant to run on a different operating system.
 
 
-Use of container orchestration tools for research workflows is a relatively new concept and so there is not a huge amount of documentation and experience out there at the moment. You may need to search around for useful information or, better still, contact your friendly neighbourhood RSE to discuss what you want to do.
+### 2. How containers differ from virtual machines
 
-**Docker Compose Overview**
+You will often hear the expression that "containers are like VMs", or "like VMs, but lighter". This may make sense on the surface. At the end of the day, containers make use of virtualisation, **BUT** a different kind of virtualisation. There are fewer moving components in the case of containers and the end result might be the same for the end user.
+
+Containers remove a lot of components of virtual machines though: they do not virtualise the hardware, they do not have to contain a fully-fledged guest OS to operate. They have to rely on the host OS instead. VMs sit on top of the underlying hardware, whereas containers sit on top of the host OS.
+
+![VM vs container](https://www.researchgate.net/profile/Karen-Scarfone/publication/329973333/figure/fig1/AS:708952811655168@1546038930241/Virtual-Machine-and-Container-Deployments.png)
+
+NIST Special Publication 800-190, Application Container Security Guide - Scientific Figure on ResearchGate. Available from: https://www.researchgate.net/figure/Virtual-Machine-and-Container-Deployments_fig1_329973333 [accessed 28 Jan, 2023]
+
+Virtual Machines install every last bit of an operating system (OS) right down to the core software that allows the OS to control the hardware (called the kernel). This means that VMs:
+
+- Are complete in the sense that you can use a VM to interact with your computer via a different OS.
+- Are extremely flexible. For instance you an install a Windows VM on a Mac using software like VirtualBox.
+- Are slow and resource hungry. Every time you start a VM it has to bring up an entirely new OS.
+
+Containers share a kernel with the host OS. This means that Containers:
+
+- Are less flexible than VMs. For example, a Linux container must be run on a Linux host OS. (Although you can mix and match distributions.) In practice, containers are only extensively developed on Linux.
+- Are much faster and lighter weight than VMs. A container may be just a few MB.
+- Start and stop quickly and are suitable for running single apps.
+
+Because of their differences, VMs and containers serve different purposes and should be favored under different circumstances.
+
+- VMs are good for long running interactive sessions where you may want to use several different applications. (Checking email on Outlook and using Microsoft Word and Excel).
+- Containers are better suited to running one or two applications, often non-interactively, in their own custom environments.
+
+For a more in-depth explanation of the differences between VMs and containers, please [**see this website by the IBM Cloud Team**](https://www.ibm.com/cloud/blog/containers-vs-vms)
+
+### 3. Why you do (and don't) need containers
+
+* Containers will provide a reproducible work environment.
+* They go beyond just sharing your code: you provide a fully-working software
+with all its required dependencies (modules, libraries, etc.).
+* You can build self-contained images that meet the particular needs of your
+  project. No need to install software "just in case", or install something to
+  be used just once.
+* You are no longer tied to the software and library versions installed on your host system.
+  Need python3, but only python2 is available? There is an image for that.
+* Your software still depends on hardware you run it on - make sure your results are consistent across different hardware architectures.
+* Not the best for sharing large amounts of data (same as you wouldn't use git to share a 10GB file).
+* Additional safety concerns, as e.g. Docker gives extra power to the user "out of the box". There is potential to do some damage to the host OS by an inexperienced or malicious user if your containerisation technology of choice is not configured or used properly.
 
 
-Docker Compose provides a way of constructing a unified workflow (or service) made up of multiple individual Docker containers. In addition to the individual Dockerfiles for each container, you provide a higher-level configuration file which describes the different containers and how they link together along with shared storage definitions between the containers. Once this high-level configuration has been defined, you can use single commands to start and stop the orchestrated set of containers.
+## Introduction to Docker 
 
-**What is Kubernetes**
+In this section you will learn the basics of Docker, arguably one of the most popular containerisation technologies. Since its initial release in 2013, Docker has been widely adopted in many areas of research and the ‘industry‘. It is used to provide access to e-commerce and streaming services, machine learning platforms and scientific pipelines (CERN, SKA, NASA).
 
-Kubernetes is an open source framework that provides similar functionality to Docker Compose. Its particular strengths are that is platform independent and can be used with many different container technologies and that it is widely available on cloud platforms so once you have implemented your workflow in Kubernetes it can be deployed in different locations as required. It has become the de facto standard for container orchestration.
+More generally, you should use it as a tool for distributing consistent software environments. Currently it is only one of many existing container technologies that researchers can choose from. Two popular alternatives are Singularity (covered later) and Podman. Some solutions offer better support for High Performance Computing, while others provide a low-level control of the environment. There really is something for everyone.
 
-**Docker Swarm Overview**
+### In this section you will learn
 
-Docker Swarm provides a way to scale out to multiple copies of similar containers. This potentially allows you to parallelise and scale out your research workflow so that you can run multiple copies and increase throughput. This would allow you, for example, to take advantage of multiple cores on a local system or run your workflow in the cloud to access more resources. Docker Swarm uses the concept of a manager container and worker containers to implement this distribution.
+- [**How to start Docker containers**](#1-running-first-docker-container)
+- [**How to manage your Docker images**](#2-managing-docker-images)
+- [**How to manage your Docker containers**](#3-managing-docker-containers)
+- [**How to work with Docker containers**](#4-working-with-docker-containers)
 
+### 1. Running first Docker container
 
+For our first example, we will run a short Docker command to download the *Hello World* of **Docker images** and start our very first **Docker container**.
 
+```bash
 
+$ docker container run hello-world
 
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+b8dfde127a29: Pull complete 
+Digest: sha256:9f6ad537c5132bcce57f7a0a20e317228d382c3cd61edae14650eec68b2b345c
+Status: Downloaded newer image for hello-world:latest
 
-# Session 2: Docker Compose
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
 
-Make sure you have already installed both Docker Engine and Docker Compose. You don’t need to install Python or Redis, as both are provided by Docker images.
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
 
-## Step 1: Setup
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
 
-Define the application dependencies.
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
 
-Create a directory for the project:
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
 
 ```
-mkdir composetest
-cd composetest
+
+#### **Let's examine the command and the generated output step by step.**
+
+- **The command that we execute**
+  
+    ```bash
+    $ docker container run hello-world
+    ...
+    ```
+
+    instructs Docker that we would like to start a container using a `hello-world` image. This command can also be written as `docker run hello-world`, omitting the `container` part. This change was [**introduced in 2017**](https://www.docker.com/blog/whats-new-in-docker-1-13/) with a major overhaul of the Docker CLI (Command Line Interface). If the version of Docker installed on your machine comes from before these changes were introduced (we strongly recommend that you upgrade it due to security reasons), the full command will not work and you will have to use the short version. This section however is written with the new versions of Docker in mind and will **follow the convention of using the extended versions of the commands**.
+
+- **The next few lines**
+
+    ```docker
+    Unable to find image 'hello-world:latest' locally
+    latest: Pulling from library/hello-world
+    b8dfde127a29: Pull complete 
+    Digest: sha256:9f6ad537c5132bcce57f7a0a20e317228d382c3cd61edae14650eec68b2b345c
+    Status: Downloaded newer image for hello-world:latest
+    ```
+
+    tells us that Docker was not able to find this image on our machine and has to download it from the external repository. If you have used this particular image in the past, you will not see any information about Docker trying to download the image.
+
+    You could also separate the `docker container run ...` command above into two instructions:
+
+    ```bash
+    $ docker image pull hello-world
+    $ docker container run hello-world
+    ...
+    ```
+
+    In this case we are very explicit and tell Docker to first download (pull) the image from the external repository and then start the container based on that image. If you already have the image on your host machine, you can skip the `pull` command. In this case, including the `docker image pull` separately can be seen as a bit redundant as Docker takes care of any missing images with `docker container run`. You can however just pull the image and not run it at all, or pull it when you have access to the Internet and later start the container when you are offline.
+
+- **The rest of the output**
+
+    The rest of the output is the most interesting part. It is an
+    innocent-looking list, but as items 3 and 4 from that list explain, that
+    particular part of the output was generated INSIDE the container and only
+    then sent back to the terminal for us to see. That means we have **successfully
+    created and run our very first Docker container**.
+
+### 2. Managing Docker images
+
+- **Examine local images**
+
+    How does Docker know whether it has to download the image or that the image is already present on your computer? Can you have this knowledge as well? Docker keeps track of all the images and layers that you download. There usually is a directory on your system which contains all the currently downloaded images and the associated SHA256 keys used to identify them. This ensures that the same layer or image is not downloaded twice and can be reused if necessary. For an in-depth description on how Docker stores images, please refer to [**this help guide**](https://docs.docker.com/storage/storagedriver/).
+
+    The placement and structure of relevant directories can be different depending on your Docker installation and require root permissions to access. There is however a short command that lists all the locally available images:
+
+    ```bash
+    $ docker image ls
+    ...
+    ```
+
+    Depending on how long (if at all) you have been using Docker for, the output will show only a single image that we have used above or multiple (as many as few tens of) images, as seen below (this is what I see when I run the above command on my work PC - **you will see something different**)
+
+    ```docker
+    REPOSITORY                 TAG                      IMAGE ID       CREATED         SIZE
+    <none>                     <none>                   670fa2d9f98c   2 months ago    3.14GB
+    <none>                     <none>                   2187b33a009b   2 months ago    714MB
+    <none>                     <none>                   16b9ad7fc05d   2 months ago    3.12GB
+    python                     3.7-alpine               6c59ae21a586   2 months ago    41.6MB
+    redis                      alpine                   f7cdff500577   2 months ago    32.3MB
+    ubuntu                     18.04                    3339fde08fc3   3 months ago    63.3MB
+    nvidia/cuda                10.0-devel-ubuntu18.04   f1cb864ecfaf   3 months ago    2.24GB
+    nvidia/cuda                10.2-devel-ubuntu18.04   5fe1e15ef79b   3 months ago    2.96GB
+    hello-world                latest                   d1165f221234   3 months ago    13.3kB
+    jupyter/scipy-notebook     latest                   dab5e9968512   7 months ago    2.7GB
+    nvidia/cuda                9.2-cudnn7-devel         0a6a8962363e   8 months ago    2.88GB
+    nvidia/cuda                9.2-base                 7def1f9b9d8d   9 months ago    80.8MB
+    nvidia/cuda                9.2-base-ubuntu18.04     7def1f9b9d8d   9 months ago    80.8MB
+    nvidia/cuda                9.2-devel-ubuntu18.04    b06eca0e3d4a   9 months ago    2.2GB
+    cuda                       8.0-base-ubuntu16.04     f240c010c4f2   10 months ago   142MB
+    ubuntu                     16.04                    005d2078bdfa   14 months ago   125MB
+    rabbitmq                   3.8.2                    b8956a8129ef   16 months ago   151MB
+    nvidia/cuda                9.2-devel-ubuntu16.04    1874839f75d5   19 months ago   2.35GB
+    nvidia/cuda                10.0-base-ubuntu18.04    841d44dd4b3c   19 months ago   110MB
+    ```
+
+    If you know its name, you can list just a specific image:
+
+    ```bash
+    $ docker image ls hello-world
+    ...
+    ```
+
+    or even use wildcards if you are not sure about the full image name (was it `nvidia/cuda` or `nvidia/CUDA`?):
+
+    ```bash
+    $ docker image ls nvidia/*
+    REPOSITORY    TAG         IMAGE ID       CREATED        SIZE
+    nvidia/cuda   10.1-base   bfa75f8b799e   6 months ago   105MB
+    nvidia/cuda   9.2-base    5eabb7ffec15   6 months ago   80.7MB
+    ```
+
+    This is the default output that tells us that there are two images starting with `nvidia/` available locally on our machine, with the `9.2-base` and `10.1-base` tags. You can treat the tags as an extra bit of information about the version of the image. Next comes the image ID, which is a shortened version of the SHA256 key (or digest, using Docker vocabulary) used to identify the image and information on when the image was created. This information refers to when the image was first built and not pulled.
+
+    We have used the most basic version of the image listing command, with the exception of using wildcards. For a complete reference and advanced examples, such as formatting and filtering, please visit [**this docker images reference**](https://docs.docker.com/engine/reference/commandline/images/). **Quick note:** the above document refers to a `docker images` command, which is *an alias* to the full `docker image ls` command. All the options however will work with both versions of this command. You can still use it as a reference for the `--format` and `--filter` options.
+
+- **Remove the image**
+
+    We made sure that the container was no longer running and then we removed it. What if we want to go one step further and want to get rid of the underlying image? Docker has a fairly intuitive command for that as well - instead of removing a container, we tell it to remove the image instead:
+
+    ```bash
+    $ docker image rm  hello-world
+    Untagged: hello-world:latest
+    Untagged: hello-world@sha256:9f6ad537c5132bcce57f7a0a20e317228d382c3cd61edae14650eec68b2b345c
+    Deleted: sha256:d1165f2212346b2bab48cb01c1e39ee8ad1be46b87873d9ca7a4e434980a7726
+    Deleted: sha256:f22b99068db93900abe17f7f5e09ec775c2826ecfe9db961fea68293744144bd
+    ```
+
+    In this case we use the **image name** and Docker prints out the confirmation that it was removed successfully.
+
+### 3. Managing Docker containers
+
+- **Examine currently running containers**
+
+    In the same way we listed the images currently available locally on our machine, we can examine currently running containers:
+
+    ```bash
+    $ docker container ls
+    CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+    ```
+
+    We see nothing really useful. This means there are no containers running at this moment in time.
+
+    When we launched our `hello-world` container above, it started, it did the job it was designed to do and it stopped immediately. In the case of the `hello-world` image, the designers decided it should print out a helpful output once the container is launched successfully, but that may not always be the case.
+
+    We still have an option to check whether our container was started at all. We can force Docker to list *all* the containers with the extra `-a` option:
+
+    ```bash
+    $ docker container ls -a
+    CONTAINER ID   IMAGE                   COMMAND                  CREATED        STATUS                    PORTS     NAMES
+    7dd021096f75   hello-world             "/hello"                 3 hours ago    Exited (0) 3 hours ago              trusting_herschel
+    ```
+
+    In this case we actually get some useful information about our container we have just run. We see that we launched the container, it ran and it exited with code 0, meaning a successful, error-free execution. We can also see when the container was created and when it completed its execution. As you have seen, we get the results from the `hello-world` container pretty much immediately, and therefore the `CREATED` and `Exited` times are the same, but generally this is not the case.
+
+    Every container has a "human-readable" name assigned to it at launch. It makes it easier to refer to the container using that name instead of the container ID, listed in the first column of the above output. These names are randomly generated from a list of adjectives and famous scientists and Docker does not guarantee the name will repeat for the same container (it is extremely unlikely your container will have the same name as the one listed above).
+
+    It is therefore important to provide a name with the `run` command using the `--name` option to ensure reproducible and predictable deployment. This is especially important when you run multiple  containers at the same time, e.g. making it easy to differentiate front- and backend Node-based containers that can have the same underlying image, or rely on automatic scripts that require predictable names.
+
+    If you are running containers right now, you will see them as "Up", as below
+
+    ```bash
+    $ docker container ls -a
+    CONTAINER ID   IMAGE            COMMAND                  CREATED        STATUS         PORTS     NAMES
+    f1d9fa05caae   rabbitmq:3.8.2   "docker-entrypoint.s…"   2 months ago   Up 5 minutes             rabid_rabbit
+    ```
+
+- **Remove the container**
+
+    Exited containers can be thought of as being hibernated - they are not running, their internal state is saved and they can be woken up and run again. When we are satisfied with the results provided by our container launch,  we might need to remove it. We can do this with the help of `container rm` command:
+
+    ```bash
+    $ docker container rm trusting_herschel
+    trusting_herschel
+    ```
+
+    Here we used the Docker-assigned name to remove the container. We can also use the container ID to achieve the same result. Make sure you replace the name above with the name or the container ID that you got by running the `docker container ls -a` command.
+
+### 4. Working with Docker containers
+
+Using a `hello-world` image is one thing, actually doing some work with containers is another. As interesting as it might be, the above image doesn't do much beyond printing out the message we have seen at the start. Not very useful from the astrophysics perspective.
+
+We are going to experiment with a much more useful image: an official Python 3.10.2 image based on Debian bullseye (it's a slimmed down version to be more specific - 123MB vs over 900MB for the 'traditional' bullseye).
+
+Instead of just running the image, we fill first pull it:
+
+```bash
+$ docker image pull python:3.10.2-slim-bullseye
+3.10.2-slim-bullseye: Pulling from library/python
+a2abf6c4d29d: Pull complete 
+27003db43ed4: Pull complete 
+a41b33cb9814: Pull complete 
+6ed4b1851bbe: Pull complete 
+51db3bf96e69: Pull complete 
+Digest: sha256:e7adb53c5bb371c55148dfea3c4a72f34d047c87e89b8958f8da759abe9c3f1e
+Status: Downloaded newer image for python:3.10.2-slim-bullseye
+docker.io/library/python:3.10.2-slim-bullseye
 ```
 
-Create a file called app.py in your project directory and paste this in:
-```
-    import time
+If we just run it, we won't get any output like when using the `hello-world` image (we will also explicitly test whether the container is running):
 
-    import redis
-    from flask import Flask
+```bash
+$ docker container run --name python-test python:3.10.2-slim-bullseye
 
-    app = Flask(__name__)
-    cache = redis.Redis(host='redis', port=6379)
-
-    def get_hit_count():
-        retries = 5
-        while True:
-            try:
-                return cache.incr('hits')
-            except redis.exceptions.ConnectionError as exc:
-                if retries == 0:
-                    raise exc
-                retries -= 1
-                time.sleep(0.5)
-
-    @app.route('/')
-    def hello():
-        count = get_hit_count()
-        return 'Hello World! I have been seen {} times.\n'.format(count)
+$ docker container ls -a
+CONTAINER ID   IMAGE                         COMMAND                  CREATED          STATUS                      PORTS     NAMES
+67b36e6034d2   python:3.10.2-slim-bullseye   "python3"                27 seconds ago   Exited (0) 22 seconds ago             python-test
 ```
 
-In this example, redis is the hostname of the redis container on the application’s network. We use the default port for Redis, 6379.
+The container exits immediately, just like the `hello-world` one. That's because by default, there is no work to be done. We can change that. We can remove the container like we have done before, but this time, we can use the name we have provided explicitly with `--name` flag (I used `python-test`, feel free to name your container something else, just make sure you change the name in the commands that use it).
 
-Handling transient errors
-
-        Note the way the get_hit_count function is written. This basic retry loop lets us attempt our request multiple times if the redis service is not available. This is useful at startup while the application comes online, but also makes our application more resilient if the Redis service needs to be restarted anytime during the app’s lifetime. In a cluster, this also helps handling momentary connection drops between nodes.
-
-Create another file called requirements.txt in your project directory and paste this in:
-
-
-```
-    flask
-    redis
+```bash
+$ docker container rm python-test
+python-test
 ```
 
-## Step 2: Create a Dockerfile
+I removed this container because I want to reuse the name and also keep my Docker containers to bare minimum. We can use the same image to actually start executing some code from INSIDE the running container. We will start slowly, I want to find out a version of Python available inside the running container:
 
-In this step, you write a Dockerfile that builds a Docker image. The image contains all the dependencies the Python application requires, including Python itself.
-
-In your project directory, create a file named Dockerfile and paste the following:
-
-```
-# syntax=docker/dockerfile:1
-FROM python:3.7-alpine
-WORKDIR /code
-ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
-RUN apk add --no-cache gcc musl-dev linux-headers
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-EXPOSE 5000
-COPY . .
-CMD ["flask", "run"]
+```bash
+$ docker container run --name python-test python:3.10.2-slim-bullseye python3 --version
+Python 3.10.2
 ```
 
-This tells Docker to:
+That's the version we expected to see based on the image we're using. Most importantly, this is the version that is shipped inside this Python image and executed inside our container. You do not have to have Python installed on your host machine, or can have a completely different version (for example I am running 3.8.5 on my host) - Python inside your container is not even aware of that other version.
 
-    Build an image starting with the Python 3.7 image.
-    Set the working directory to /code.
-    Set environment variables used by the flask command.
-    Install gcc and other dependencies
-    Copy requirements.txt and install the Python dependencies.
-    Add metadata to the image to describe that the container is listening on port 5000
-    Copy the current directory . in the project to the workdir . in the image.
-    Set the default command for the container to flask run.
+But let's do some actual work. We will do it in two ways. First we will launch a very simple script that you can download from [**here**](files/script.py). You do not have to be familiar with Python to understand what it does: we simply print out a welcome message and perform some very basic operations.
 
-For more information on how to write Dockerfiles, see the Docker user guide and the Dockerfile reference.
+As we have mentioned before, containers by default do not know much about their host machine. Most importantly, they do not share any files with it, so they will not be able to find our Python script and run it. We therefore have to make it available inside the container.  We launch our image it with the additional options that *mount* the data inside the container:
 
-
-## Step 3: Define services in a Compose file
-
-Create a file called `docker-compose.yml` in your project directory and paste the following:
-
-```
-version: "3.9"
-services:
-  web:
-    build: .
-    ports:
-      - "8000:5000"
-  redis:
-    image: "redis:alpine"
+```bash
+$ docker container run --name python-test-2 --mount type=bind,source=$(pwd),target=/scripts python:3.10.2-slim-bullseye python3 /scripts/script.py
+Welcome to Docker Python
+8
+13
+2.0
+0.5
+We  are  done!
 ```
 
-This Compose file defines two services: web and redis.
+The `--mount` option may seem a bit verbose if you have not seen it before, but it should be fairly easy to understand. First we specify the `type=bind` to tell Docker to use a bind mount (it is not the only type of mount we can have, but we are not going to cover them here). We then provide two [key]:[value] pairs separated by a comma ( , ) that specify the source and target directory and/or file. As we are using distinctive keys, the order of the pairs is not important, but try to keep it in some order for consistency.
 
-*Web service*
+Here we make only a single file available inside the container, but it is also possible to make whole directories available and bound to a directory inside your container.
 
-The web service uses an image that’s built from the Dockerfile in the current directory. It then binds the container and the host machine to the exposed port, 8000. This example service uses the default port for the Flask web server, 5000.
-Redis service
+**IMPORTANT:** bind mounts do not create a copy of the data! Your data is shared between your host and container environments. Any changes that you make to your data on the host side, will be visible inside the container and vice versa. Be careful if you are manipulating any data that you cannot afford to corrupt - it might be safer to make a copy in this case!
 
-The redis service uses a public Redis image pulled from the Docker Hub registry.
+Making data available inside your container at a runtime has some obvious drawbacks. With that approach, your data and your software are no longer placed in a single environment. You have to rely on your end-users to  provide their own data or to be able to access your data from external sources. This can also increase the development time for your software, as you have to take into account and prevent errors that users can introduce if their data does not meet your requirements. The decision on whether to include the data inside your image during the build time or as a mount during the runtime will be entirely up to you and will depend on your project and user requirements.
 
-## Step 4: Build and run your app with Compose
+Second approach can be running our image *interactively*. In this case our container will behave like a usual Python CLI interpreter and we can treat it as such.
 
-    From your project directory, start up your application by running docker-compose up.
-
- ```
- docker-compose up
- ```
-
-Compose pulls a Redis image, builds an image for your code, and starts the services you defined. In this case, the code is statically copied into the image at build time.
-
-Enter http://localhost:8000/ in a browser to see the application running.
-
-If you’re using Docker natively on Linux, Docker Desktop for Mac, or Docker Desktop for Windows, then the web app should now be listening on port 8000 on your Docker daemon host. Point your web browser to http://localhost:8000 to find the Hello World message. If this doesn’t resolve, you can also try http://127.0.0.1:8000.
-
-You should see a message in your browser saying:
-
-``hello world in browser``
-
-Refresh the page.
-
-The number should increment.
-
-```hello world in browser``
-
-Switch to another terminal window, and type docker image ls to list local images.
-
-Listing images at this point should return redis and web.
-
-````
-docker image ls
-````
-
-    You can inspect images with docker inspect <tag or id>.
-
-    Stop the application, either by running docker-compose down from within your project directory in the second terminal, or by hitting CTRL+C in the original terminal where you started the app.
-
-## Step 5: Edit the Compose file to add a bind mount
-
-Edit docker-compose.yml in your project directory to add a bind mount for the web service:
-
-```
-version: "3.9"
-services:
-  web:
-    build: .
-    ports:
-      - "8000:5000"
-    volumes:
-      - .:/code
-    environment:
-      FLASK_ENV: development
-  redis:
-    image: "redis:alpine"
+```bash
+$ docker container run --name python-test-3 -it python:3.10.2-slim-bullseye
+Python 3.10.2 (main, Jan 18 2022, 20:00:03) [GCC 10.2.1 20210110] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> print("I'm inside the container")
+I'm inside the container
 ```
 
-The new volumes key mounts the project directory (current directory) on the host to ``/code`` inside the container, allowing you to modify the code on the fly, without having to rebuild the image. The environment key sets the FLASK_ENV environment variable, which tells flask run to run in development mode and reload the code on change. This mode should only be used in development.
+However, we are not limited to running just Python. This particular image comes with bash installed, so we can make use of it. We can launch an interactive bash session and treat this container like a regular terminal (albeit with many things missing):
 
-## Step 6: Re-build and run the app with Compose
-
-From your project directory, type docker-compose up to build the app with the updated Compose file, and run it.
-
-``docker-compose up`` 
-
-Check the Hello World message in a web browser again, and refresh to see the count increment.
-
-    Shared folders, volumes, and bind mounts
-
-        If your project is outside of the Users directory (cd ~), then you need to share the drive or location of the Dockerfile and volume you are using. If you get runtime errors indicating an application file is not found, a volume mount is denied, or a service cannot start, try enabling file or drive sharing. Volume mounting requires shared drives for projects that live outside of C:\Users (Windows) or /Users (Mac), and is required for any project on Docker Desktop for Windows that uses Linux containers. For more information, see File sharing on Docker for Mac, and the general examples on how to Manage data in containers.
-
-        If you are using Oracle VirtualBox on an older Windows OS, you might encounter an issue with shared folders as described in this VB trouble ticket. Newer Windows systems meet the requirements for Docker Desktop for Windows and do not need VirtualBox.
-
-## Step 7: Update the application
-
-Because the application code is now mounted into the container using a volume, you can make changes to its code and see the changes instantly, without having to rebuild the image.
-
-Change the greeting in app.py and save it. For example, change the Hello World! message to Hello from Docker!:
-
-return 'Hello from Docker! I have been seen {} times.\n'.format(count)
-
-Refresh the app in your browser. The greeting should be updated, and the counter should still be incrementing.
-
-hello world in browser
-Step 8: Experiment with some other commands
-
-If you want to run your services in the background, you can pass the -d flag (for “detached” mode) to docker-compose up and use docker-compose ps to see what is currently running:
-
-```
-docker-compose up -d
-docker-compose ps
-```
-
-The docker-compose run command allows you to run one-off commands for your services. For example, to see what environment variables are available to the web service:
-
-```
-docker-compose run web env
-```
-
-See docker-compose --help to see other available commands. You can also install command completion for the bash and zsh shell, which also shows you available commands.
-
-If you started Compose with docker-compose up -d, stop your services once you’ve finished with them:
-
-```docker-compose stop```
-
-You can bring everything down, removing the containers entirely, with the down command. Pass --volumes to also remove the data volume used by the Redis container:
-
-```docker-compose down --volumes```
-
-That's all!
-
-# Session 2: Singularity Compose
-
-
-Singularity compose is intended to run a small number of container instances on your host. It is not a complicated orchestration tool like Kubernetes, but rather a controlled way to represent and manage a set of container instances, or services.
-
-## When do I need sudo?
-
-Singularity compose uses Singularity on the backend, so anything that would require sudo (root) permissions for Singularity is also required for Singularity compose. This includes most networking commands (e.g., asking to allocate ports) and builds from recipe files. However, if you are using Singularity v3.3 or higher, you can take advantage of fakeroot to try and get around this. The snippet below shows how to add fakeroot as an option under a build section:
-
-```
-    build:
-      context: ./nginx
-      recipe: Singularity.nginx
-      options:
-       - fakeroot
-```
-
-
-## Getting Started
-
-Dependencies
-
-Singularity Compose must use a version of Singularity 3.2.1 or greater. It's recommended to use the latest (3.3.0 release at the time of this writing) otherwise there was a bug with some versions of 3.2.1. Singularity 2.x absolutely will not work. Python 3 is also required, as Python 2 is at end of life.
-
-```
-singularity-compose.yml
-```
-
-For a singularity-compose project, it's expected to have a singularity-compose.yml in the present working directory. You can look at a simple example here, here is a version 1.0 spec (before we added networking and exec options):
-
-```
-version: "1.0"
-instances:
-  app:
-    build:
-      context: ./app
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./app:/code
-      - ./static:/var/www/static
-      - ./images:/var/www/images
-    ports:
-      - 80:80
-```
-
-and here is a version 2.0 spec that shows adding networking and exec options:
-
-If you are familiar with docker-compose the file should look very familiar. A key difference is that instead of **"services"** we have **"instances."** And you guessed correctly - each section there corresponds to a Singularity instance that will be created. In this guide, we will walk through each of the sections in detail.
-Instance folders
-
-Generally, each section in the yaml file corresponds with a container instance to be run, and each container instance is matched to a folder in the present working directory. For example, if I give instruction to build an nginx instance from a nginx/Singularity.nginx file, I should have the following in my singularity-compose:
-
-```
-  nginx:
-    build:
-      context: ./nginx
-      recipe: Singularity.nginx
-```
-
-The above says that I want to build a container and corresponding instance named nginx, and use the recipe Singularity.nginx in the context folder ./nginx in the present working directory. This gives me the following directory structure:
-```
-singularity-compose-example
-├── nginx
+```bash
+$ docker container run --name python-test-4 -it python:3.10.2-slim-bullseye /bin/bash
+root@2decf291ee44:/# pwd
+/
+root@2decf291ee44:/# ls -l
+total 64
+drwxr-xr-x   1 root root 4096 Jan 18 20:02 bin
+drwxr-xr-x   2 root root 4096 Dec 11 17:25 boot
+drwxr-xr-x   5 root root  360 Jan 22 23:36 dev
+drwxr-xr-x   1 root root 4096 Jan 22 23:35 etc
+drwxr-xr-x   2 root root 4096 Dec 11 17:25 home
 ...
-│   ├── Singularity.nginx
-│   └── uwsgi_params.par
-└── singularity-compose.yml
-```
-Notice how I also have other dependency files for the nginx container in that folder. While the context for starting containers with Singularity compose is the directory location of the singularity-compose.yml, the build context for this container is inside the nginx folder. We will talk about the build command soon. First, as another option, you can just define a container to pull, and it will be pulled to the same folder that is created if it doesn't exist.
-```
-  nginx:
-    image: docker://nginx
 ```
 
-This will pull a container nginx.sif into a nginx context folder:
-```
-├── nginx                    (- created if it doesn't exist
-│   └── nginx.sif            (- named according to the instance
-└── singularity-compose.yml
-```
-It's less likely that you will be able to pull a container that is ready to go, as typically you will want to customize the startscript for the instance. Now that we understand the basic organization, let's bring up some instances.
+This way you can use containers not just for one-off jobs, but also use them for interactive work.
 
-## Quick Start
+**IMPORTANT:**  Launching our container the way we did just now may seem innocent enough, but comes with a **serious security problem** If you look closely at the command line prompt, we are listed as a user `root`, meaning we have administrative privileges inside the container. This becomes a very serious issue if we give our container access to any external resources such as host disks or network. We usually do not perform our day-to-day activities with privileged accounts and we shouldn't do that inside our containers either.
 
-For this quick start, we are going to use the singularity-compose-simple example. Singularity has a networking issue that currently doesn't allow communication between multiple containers (due to iptables and firewall issues) so for now the most we can do is show you one container. First, install singularity-compose from pip:
+We can change this default behaviour by providing a `--user` flag to our `run` command:
 
-```$ pip install singularity-compose```
-
-Then, clone the repository:
-
-```$ git clone https://www.github.com/singularityhub/singularity-compose-simple```
-
-cd inside, and you'll see a singularity-compose.yml like we talked about.
-```
-$ cd singularity-compose-simple
-$ ls
-app  images  LICENSE  nginx.conf  README.md  singularity-compose.yml  static
+```bash
+$ docker container run --user 1000:1000 --name python-test-5 -it python:3.10.2-slim-bullseye /bin/bash
+I have no name!@46023ae04069:/$
 ```
 
-Let's take a look at the singularity-compose.yml
+We have launched a new container with user ID 1000 and group ID 1000 (the format is `--user [user ID]:[group ID]`. As we have not created this user inside the container, Docker has no idea who that user is exactly, but we can still perform various tasks with the same permissions as the original user on the host OS.
+
+### 5.  Creating a new Docker image - Dockerfiles
+
+Dockerfile is a simple text file with a set of command or instruction. These commands/instructions are executed successively to perform actions on the base image to create a new docker image.
+
+Dockerfile syntax
 
 ```
-version: "1.0"
-instances:
-  app:
-    build:
-      context: ./app
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./app/nginx/uwsgi_params.par:/etc/nginx/uwsgi_params.par
-      - ./app/nginx/cache:/var/cache/nginx
-      - ./app/nginx/run:/var/run
-      - ./app:/code
-      - ./static:/var/www/static
-      - ./images:/var/www/images
-    ports:
-      - 80:80
-...
+#Line blocks used for commenting
+
+command argument argument1 ... 
 ```
 
-It defines a single service, app, which has both a Django application and a nginx server with the nginx-upload module enabled. It tells us right away that the folder app is the context folder, and inside we can see dependency files for nginx and django.
+Below is how your workflow will look like:
+
+- Create a Dockerfile and mention the instructions to create your docker image
+- Run docker build command which will build a docker image
+- Now the docker image is ready to be used, use docker run command to create containers
+
+
+![](https://geekflare.com/wp-content/uploads/2019/07/dockerfile.png)
+
+Commands to use for the Dockerfile:
+
+- `FROM` – Defines the base image to use and start the build process.
+
+- `RUN` – It takes the command and its arguments to run it from the image.
+
+- `CMD` – Similar function as a RUN command, but it gets executed only after the container is instantiated.
+
+- `ENTRYPOINT` – It targets your default application in the image when the container is created.
+
+- `ADD` – It copies the files from source to destination (inside the container).
+
+- `ENV` – Sets environment variables.
+
+Firstly, let’s create a Dockerfile:
 
 ```
-$ ls app/
-manage.py  nginx  requirements.txt  run_uwsgi.sh  Singularity  upload...
-```
-What we don't see is a container. We need to build that from the Singularity recipe. Let's do that.
+    FROM centos:7
+    MAINTAINER manuelparra
+
+    LABEL Remarks="This is a dockerfile example for CentOS system"
+
+    RUN yum -y update && yum -y install httpd && \
+            yum clean all
+
+    
+    EXPOSE 80
+
+    WORKDIR /root
 
 ```
-$ singularity-compose build
-```
 
-Will generate an app.sif in the folder:
+This is just a Dockerfile to create a container with a simple HTTPD service (Apache).
 
-```
-$ ls app/
-
-app.sif manage.py  nginx  requirements.txt  run_uwsgi.sh  Singularity  upload...
-```
-
-And now we can bring up our instance!
-
-```$ singularity-compose up```
-
-Verify it's running:
+To build it:
 
 ```
-$ singularity-compose ps
-INSTANCES  NAME PID     IMAGE
-1           app    20023    app.sif
+docker build . -t myfirstcontainer
 ```
 
-And then look at logs, shell inside, or execute a command.
+Now we are going to create a more complex application from a Dockerfile that serves a nodejs application.
+
+Our Dockerfile will be the next:
 
 ```
-$ singularity-compose logs app
-$ singularity-compose logs app --tail 30
-$ singularity-compose shell app
-$ singularity-compose exec app uname -a
-```
-
-When you open your browser to http://127.0.0.1 you should see the upload interface.
-
-```
-img/upload.png
-```
-
-If you drop a file in the box (or click to select) we will use the nginx-upload module to send it directly to the server. Cool!
-
-```img/content.png```
-
-This is just a simple Django application, the database is sqlite3, and it's now appeared in the app folder:
+FROM debian
+# Copy application files
+COPY . /app
+# Install required system packages
+RUN apt-get update
+RUN apt-get -y install imagemagick curl software-properties-common gnupg vim ssh
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get -y install nodejs
+# Install NPM dependencies
+RUN npm install --prefix /app
+EXPOSE 80
+CMD ["npm", "start", "--prefix", "app"]
 
 ```
-$ ls app/
-app.sif  db.sqlite3  manage.py  nginx  requirements.txt  run_uwsgi.sh  Singularity  upload  uwsgi.ini
-```
 
-The images that you upload are stored in images at the root:
+Clone this [repository](https://github.com/juan131/dockerfile-best-practices) to have all the files that are used in the sentence COPY.
 
-```
-$ ls images/
-2018-02-20-172617.jpg  40-acos.png  _upload 
-```
-
-And static files are in static.
+Then run:
 
 ```
-$ ls static/
-admin  css  js
+docker build . -t nodeapp
 ```
 
-Finally, the volumes that we specified in the singularity-compose.yml tell us exactly where nginx and the application need write. The present working directory (where the database is written) is bound to the container at /code, and nginx dependencies are bound to locations in /etc/nginx. Notice how the local static and images folder are bound to locations in the container where we normally wouldn't have write.
-```
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./app/nginx/uwsgi_params.par:/etc/nginx/uwsgi_params.par
-      - ./app/nginx/cache:/var/cache/nginx
-      - ./app/nginx/run:/var/run
-      - ./app:/code
-      - ./static:/var/www/static
-      - ./images:/var/www/images
-```
-This is likely a prime different between Singularity and Docker compose - Docker doesn't need binds for write, but rather to reduce isolation. When you develop an application, a lot of your debug will come down to figuring out where the services need to write log and similar files, which you might not have been aware of when using Docker.
-
-Continue below to read about networking, and see these commands in detail.
-Networking
-
-When you bring the container up, you'll see generation of an etc.hosts file, and if you guessed it, this is indeed bound to /etc/hosts in the container. 
-
-Let's take a look:
-```
-10.22.0.2    app
-127.0.0.1    localhost
-
-# The following lines are desirable for IPv6 capable hosts
-::1     ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-```
-
-This file will give each container that you create (in our case, just one) a name on its local network. Singularity by default creates a bridge for instance containers, which you can conceptually think of as a router, This means that, if I were to reference the hostname "app" in a second container, it would resolve to 10.22.0.2. Singularity compose does this by generating these addresses before creating the instances, and then assigning them to it. If you would like to see the full commands that are generated, run the up with --debug (binds and full paths have been removed to make this easier to read).
+Once this command is executed, you will have the image stored in Docker ready to launch the container:
 
 ```
-$ singularity instance start \
-    --bind /home/vanessa/Documents/Dropbox/Code/singularity/singularity-compose-simple/etc.hosts:/etc/hosts \
-    --net --network-args "portmap=80:80/tcp" --network-args "IP=10.22.0.2" \
-    --hostname app \
-    --writable-tmpfs app.sif app
+# See docker images
+docker images
 ```
 
-Control and customization of these instances is probably the coolest (and not widely used) feature of Singularity. You can create your own network configurations, and customie the arguments to the command. Read here for more detalis.
+And now run the container with this image:
+
+```
+docker run -d -p 80:80 nodeapp
+```
