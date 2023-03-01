@@ -1,7 +1,7 @@
 ## Programación de prácticas de Cloud Computing (temporización tentativa)
 
 - Sesión 1: Máquinas virtuales en Azure
-- Sesiones 2-4: Introducción a la orquestación de contenedores: Docker-compose, Singularity composer, Kubernetes 
+- Sesiones 2-4: Introducción a la orquestación de contenedores: Docker-compose, Singularity compose, Kubernetes 
 - Sesión 5: Presentación práctica 1 - Desarrollo y despliegue de servicios en Cloud usando contenedores
 - Sesión 6: Introducción a las BDs en CC: MongoDB y Neo4J (Graph DB)
 - Sesión 7: Funciones como servicio FaaS - OpenFaaS y OpenWhisk
