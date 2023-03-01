@@ -69,6 +69,15 @@ Singularity is focused for scientific software running in an HPC environent.
 
 ## Docker vs. Singularity
 
+Given the popularity of Docker, why do we need *another* container platform? 
+
+Let's first check what expert users say about Docker and what use cases are best for Singularity: 
+https://pythonspeed.com/articles/containers-filesystem-data-processing/
+https://www.reddit.com/r/docker/comments/7y2yp2/why_is_singularity_used_as_opposed_to_docker_in/
+https://biohpc.cornell.edu/doc/singularity_v3.pdf
+
+Here is a compilation of the facts we found. 
+
 ### Docker
 
 Docker is currently the most widely used container software. It has several strengths and weaknesses that make it a good choice for some projects but not for others.
@@ -126,7 +135,6 @@ Singularity assumes that you will have a build system where you are the root use
 Singularity shines for scientific software running in an HPC environent. We will use it for the remainder of the class.
 
 ## Installing and Set-up Singularity
-
 
 Here we will install the latest tagged release from GitHub. If you prefer to install a different version or to install Singularity in a different location, see these Singularity docs.
 
