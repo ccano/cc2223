@@ -507,7 +507,7 @@ docker run -d -p 80:80 nodeapp
 
 ### Exercises to train
 - Dockerize a Node.js application following the instructions here: https://docs.docker.com/get-started/02_our_app/
-- We want to Dockerize this Python App: https://github.com/scottbrady91/Python-Email-Verification-Script. Create a Docker container running this script and test it. 
+- Dockerize this Python App: https://github.com/scottbrady91/Python-Email-Verification-Script. 
 
 
 
