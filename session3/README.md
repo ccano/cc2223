@@ -326,8 +326,6 @@ We have prepared an image that is available in the Singularity image repository 
 - It creates a python framework that includes the python libraries: `scipy`, `numpy` and `mathplotlib`.
 - It includes a python application that draws a plot in a output file.
 
-The source code to generate it is located [here](link) (we will work on it later).
-
 ### Pulling the new image
 
 This download takes about 300 MBytes.
