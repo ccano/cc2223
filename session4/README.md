@@ -341,7 +341,8 @@ This Compose file defines two services: web and redis.
 *Web service*
 
 The web service uses an image that’s built from the Dockerfile in the current directory. It then binds the container and the host machine to the exposed port, 8000. This example service uses the default port for the Flask web server, 5000.
-Redis service
+
+*Redis service*
 
 The redis service uses a public Redis image pulled from the Docker Hub registry.
 
