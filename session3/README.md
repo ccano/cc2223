@@ -140,7 +140,7 @@ We will use Singularity for the remainder of the class.
 
 ## Installing and Set-up Singularity
 
-Here we will install the latest tagged release from GitHub. If you prefer to install a different version or to install Singularity in a different location, see these [Singularity docs]([https://docs.sylabs.io/guides/3.2/user-guide/installation.html](https://docs.sylabs.io/guides/latest/admin-guide/installation.html#)).
+Here we will install the latest tagged release from GitHub. If you prefer to install a different version or to install Singularity in a different location, see these [Singularity docs](https://docs.sylabs.io/guides/latest/admin-guide/installation.html#).
 
 We're going to compile Singularity from source code. First we'll need to make sure we have some development tools and libraries installed so that we can do that. On Ubuntu, run these commands to make sure you have all the necessary packages installed.
 
