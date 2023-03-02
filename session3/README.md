@@ -641,3 +641,21 @@ From: ubuntu:20.04
 ```
 
 And this is all for now with containers. In the following training sessions we will go deeper into the use of containers.
+
+### Exercises to train
+
+- Create a Singularity container for this Python App: https://github.com/scottbrady91/Python-Email-Verification-Script and run it to test it works.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
