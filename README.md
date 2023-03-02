@@ -29,7 +29,7 @@
 
 ## Session 4 
 
-- [Containers orquestrators: Docker compose, Singularity compose and Kubernettes ](./session4/README.md)
+- [Containers orquestrators: Docker compose, Singularity compose and Kubernetes ](./session4/README.md)
 
 
 ## Session 6
