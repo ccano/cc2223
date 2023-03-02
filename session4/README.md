@@ -239,8 +239,6 @@ Name   Command   State   Ports
 
 # Docker Compose Use Case #1: Web server with Redis + Flask
 
-Make sure you have already installed both Docker Engine and Docker Compose. You don’t need to install Python or Redis, as both are provided by Docker images.
-
 ## Step 1: Setup
 
 Define the application dependencies.
