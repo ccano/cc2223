@@ -106,7 +106,7 @@ Docker assumes that you will be a root user. Or that it will be OK for you to el
 - Not architected with security in mind
 - Not built for HPC (but good for cloud)
 
-Docker shines for DevOPs teams providing cloud-native micro-services to users.
+Docker shines for DevOPs teams providing cloud-native micro-services to users. 
 
 ### Singularity
 
@@ -132,7 +132,11 @@ Singularity assumes that you will have a build system where you are the root use
 - Smaller user community (as of now)
 - Under active development (must keep up with new changes)
 
-Singularity shines for scientific software running in an HPC environent. We will use it for the remainder of the class.
+Singularity shines for scientific software running in an HPC environent. 
+
+While Docker focuses on **isolation**, Singularity focuses on **integration**. 
+
+We will use Singularity for the remainder of the class.
 
 ## Installing and Set-up Singularity
 
