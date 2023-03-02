@@ -358,9 +358,6 @@ As we have mentioned before, containers by default do not know much about their 
 $ docker container run --name python-test-2 --mount type=bind,source=$(pwd),target=/scripts python:3.10.2-slim-bullseye python3 /scripts/script.py
 Welcome to Docker Python
 8
-13
-2.0
-0.5
 We  are  done!
 ```
 
