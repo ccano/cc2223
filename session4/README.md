@@ -615,7 +615,7 @@ Singularity Compose must use a version of Singularity 3.2.1 or greater. It's rec
 singularity-compose.yml
 ```
 
-For a singularity-compose project, it's expected to have a singularity-compose.yml in the present working directory. You can look at a simple example here, here is a version 1.0 spec (before we added networking and exec options):
+For a singularity-compose project, it's expected to have a singularity-compose.yml in the present working directory. You can look at a simple example here:
 
 ```
 version: "1.0"
@@ -631,8 +631,6 @@ instances:
     ports:
       - 80:80
 ```
-
-and here is a version 2.0 spec that shows adding networking and exec options:
 
 If you are familiar with docker-compose the file should look very familiar. A key difference is that instead of **"services"** we have **"instances."** And you guessed correctly - each section there corresponds to a Singularity instance that will be created. In this guide, we will walk through each of the sections in detail.
 Instance folders
