@@ -609,7 +609,7 @@ Singularity compose uses Singularity on the backend, so anything that would requ
 
 Dependencies
 
-Singularity Compose must use a version of Singularity 3.2.1 or greater. It's recommended to use the latest (3.3.0 release at the time of this writing) otherwise there was a bug with some versions of 3.2.1. Singularity 2.x absolutely will not work. Python 3 is also required, as Python 2 is at end of life.
+Singularity Compose must use a version of Singularity 3.2.1 or greater. It's recommended to use the latest (3.8.0 release at the time of this writing) otherwise there was a bug with some versions of 3.2.1. Singularity 2.x absolutely will not work. Python 3 is also required, as Python 2 is at end of life.
 
 ```
 singularity-compose.yml
