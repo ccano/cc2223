@@ -644,7 +644,7 @@ And this is all for now with containers. In the following training sessions we w
 
 ### Exercises to train
 
-- Create a Singularity container for this Python App: https://github.com/scottbrady91/Python-Email-Verification-Script and run it to test it works.  
+- Create a Singularity container for this Python App: https://github.com/scottbrady91/Python-Email-Verification-Script and run it to test it works. Make it portable so the Singularity container downloads the git repository.   
 
 
 
