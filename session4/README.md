@@ -797,7 +797,7 @@ $ ls static/
 admin  css  js
 ```
 
-Finally, the volumes that we specified in the singularity-compose.yml tell us exactly where nginx and the application need write. The present working directory (where the database is written) is bound to the container at /code, and nginx dependencies are bound to locations in /etc/nginx. Notice how the local static and images folder are bound to locations in the container where we normally wouldn't have write.
+Finally, the volumes that we specified in the ```singularity-compose.yml``` tell us exactly where nginx and the application need permission to write. The present working directory (where the database is written) is bound to the container at ```/code```, and nginx dependencies are bound to locations in ```/etc/nginx```. Notice how the local static and images folder are bound to locations in the container where we normally wouldn't have writen.
 ```
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
@@ -808,10 +808,9 @@ Finally, the volumes that we specified in the singularity-compose.yml tell us ex
       - ./static:/var/www/static
       - ./images:/var/www/images
 ```
-This is likely a prime different between Singularity and Docker compose - Docker doesn't need binds for write, but rather to reduce isolation. When you develop an application, a lot of your debug will come down to figuring out where the services need to write log and similar files, which you might not have been aware of when using Docker.
+This is likely a prime different between Singularity and Docker compose - Docker doesn't need binds for write, but rather to reduce isolation. When you develop an application, a lot of your debug will come down to figuring out where the services need to access (to write logs and similar files), which you might not have been aware of when using Docker.
 
-Continue below to read about networking, and see these commands in detail.
-Networking
+### Networking 
 
 When you bring the container up, you'll see generation of an etc.hosts file, and if you guessed it, this is indeed bound to /etc/hosts in the container. 
 
@@ -828,7 +827,7 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ```
 
-This file will give each container that you create (in our case, just one) a name on its local network. Singularity by default creates a bridge for instance containers, which you can conceptually think of as a router, This means that, if I were to reference the hostname "app" in a second container, it would resolve to 10.22.0.2. Singularity compose does this by generating these addresses before creating the instances, and then assigning them to it. If you would like to see the full commands that are generated, run the up with --debug (binds and full paths have been removed to make this easier to read).
+This file will give each container that you create (in our case, just one) a name on its local network. Singularity by default creates a bridge for instance containers, which you can conceptually think of as a router. This means that, if I were to reference the hostname "app" in a second container, it would resolve to 10.22.0.2. Singularity compose does this by generating these addresses before creating the instances, and then assigning them to it. If you would like to see the full commands that are generated, run the up with --debug (binds and full paths have been removed to make this easier to read).
 
 ```
 $ singularity instance start \
@@ -838,7 +837,7 @@ $ singularity instance start \
     --writable-tmpfs app.sif app
 ```
 
-Control and customization of these instances is probably the coolest (and not widely used) feature of Singularity. You can create your own network configurations, and customie the arguments to the command. Read here for more detalis.
+Control and customization of these instances is probably the coolest (and not widely used) feature of Singularity. You can create your own network configurations, and customie the arguments to the command. Read [here](https://github.com/singularityhub/singularity-compose-examples/tree/master) for more  examples of use of singularity-compose.
 
 
 # Kubernetes
