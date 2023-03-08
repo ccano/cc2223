@@ -7,7 +7,7 @@
   * [Docker compose Use Case #2: Monitoring system with Prometheus + NodeExporter](#Docker-compose-Use-Case-#2:-Monitoring-system-with-Prometheus-+-NodeExporter)
     + [Adding a HAProxy](#adding-a-haproxy)
   * [Singularity Compose](#Singularity-Compose)
-  * [Kubernettes](#Kubernetes)
+  * [Kubernetes](#Kubernetes)
 
 
 # Intro to containers orchestrators
