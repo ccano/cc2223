@@ -593,6 +593,29 @@ Singularity was conceived as a more secure option to run encapsulated environmen
 
 Singularity compose is intended to run a small number of container instances on your host. It is not a complicated orchestration tool like Kubernetes, but rather a controlled way to represent and manage a set of container instances, or services.
 
+## Installation
+```
+pip3 install singularity-compose
+
+```
+
+The obtained binaries for singularity-compose might be placed in a folder which is not in the ```$PATH```, and you might get a warning message from the installation for this:
+```
+  WARNING: The script singularity-compose is installed in './home/vagrant/.local/bin/singularity-compose' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+```
+
+Either if you get the warning message or not, it is convenient to locate the binaries in your system and check that they are on ```$PATH``` or include them if not already in. 
+```
+$ find . -name singularity-compose -print
+./home/vagrant/.local/bin/singularity-compose
+$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+$export PATH=$PATH:./home/vagrant/.local/bin
+```
+add the ```export``` command to your ```~/.profile``` file to make this change in the ```$PATH``` persistent in the bash shell.  
+
+
 ## Getting Started
 
 Dependencies
