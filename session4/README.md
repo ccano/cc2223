@@ -594,6 +594,13 @@ Singularity was conceived as a more secure option to run encapsulated environmen
 Singularity compose is intended to run a small number of container instances on your host. It is not a complicated orchestration tool like Kubernetes, but rather a controlled way to represent and manage a set of container instances, or services.
 
 ## Installation
+
+
+Dependencies
+
+Singularity Compose must use a version of Singularity 3.2.1 or greater. It's recommended to use the latest (3.8.0 release at the time of this writing) otherwise there was a bug with some versions of 3.2.1. Singularity 2.x absolutely will not work. Python 3 is also required, as Python 2 is at end of life.
+
+Install singularity-compose using ```pip3```:
 ```
 pip3 install singularity-compose
 
@@ -617,10 +624,6 @@ add the ```export``` command to your ```~/.profile``` file to make this change i
 
 
 ## Getting Started
-
-Dependencies
-
-Singularity Compose must use a version of Singularity 3.2.1 or greater. It's recommended to use the latest (3.8.0 release at the time of this writing) otherwise there was a bug with some versions of 3.2.1. Singularity 2.x absolutely will not work. Python 3 is also required, as Python 2 is at end of life.
 
 ```
 singularity-compose.yml
