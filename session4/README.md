@@ -589,21 +589,9 @@ haproxy:
 
 # Singularity Compose
 
+Singularity was conceived as a more secure option to run encapsulated environments. Unlike Docker, Singularity containers allows user to interact with processes in the foreground (e.g. running a script and exiting) and were not appropriate to run background services. This was a task for **container instances** (Singularity argot). A container instance equates to running a container in a detached or daemon mode. Instances allow for running persistent services in the background and then interaction with theses services from the host and other containers. To orchestrate and customize several of these Singularity instances, Singularity Compose came up (https://www.theoj.org/joss-papers/joss.01578/10.21105.joss.01578.pdf).
 
 Singularity compose is intended to run a small number of container instances on your host. It is not a complicated orchestration tool like Kubernetes, but rather a controlled way to represent and manage a set of container instances, or services.
-
-## When do I need sudo?
-
-Singularity compose uses Singularity on the backend, so anything that would require sudo (root) permissions for Singularity is also required for Singularity compose. This includes most networking commands (e.g., asking to allocate ports) and builds from recipe files. However, if you are using Singularity v3.3 or higher, you can take advantage of fakeroot to try and get around this. The snippet below shows how to add fakeroot as an option under a build section:
-
-```
-    build:
-      context: ./nginx
-      recipe: Singularity.nginx
-      options:
-       - fakeroot
-```
-
 
 ## Getting Started
 
@@ -667,11 +655,24 @@ This will pull a container nginx.sif into a nginx context folder:
 ```
 It's less likely that you will be able to pull a container that is ready to go, as typically you will want to customize the startscript for the instance. Now that we understand the basic organization, let's bring up some instances.
 
+### When do I need sudo?
+
+Singularity compose uses Singularity on the backend, so anything that would require sudo (root) permissions for Singularity is also required for Singularity compose. This includes most networking commands (e.g., asking to allocate ports) and builds from recipe files. However, if you are using Singularity v3.3 or higher, you can take advantage of fakeroot to try and get around this. The snippet below shows how to add fakeroot as an option under a build section:
+
+```
+    build:
+      context: ./nginx
+      recipe: Singularity.nginx
+      options:
+       - fakeroot
+```
+
+
 ## Quick Start
 
 For this quick start, we are going to use the singularity-compose-simple example. Singularity has a networking issue that currently doesn't allow communication between multiple containers (due to iptables and firewall issues) so for now the most we can do is show you one container. First, install singularity-compose from pip:
-
-```$ pip install singularity-compose```
+```$ sudo apt-get install python3-pip```
+```$ pip3 install singularity-compose```
 
 Then, clone the repository:
 
