@@ -602,6 +602,7 @@ Singularity Compose must use a version of Singularity 3.2.1 or greater. It's rec
 
 Install singularity-compose using ```pip3```:
 ```
+sudo apt-get install python3-pip
 pip3 install singularity-compose
 
 ```
@@ -625,11 +626,7 @@ add the ```export``` command to your ```~/.profile``` file to make this change i
 
 ## Getting Started
 
-```
-singularity-compose.yml
-```
-
-For a singularity-compose project, it's expected to have a singularity-compose.yml in the present working directory. You can look at a simple example here:
+For a singularity-compose project, it's expected to have a ```singularity-compose.yml``` in the present working directory. You can look at a simple example here:
 
 ```
 version: "1.0"
@@ -696,11 +693,7 @@ Singularity compose uses Singularity on the backend, so anything that would requ
 
 ## Quick Start
 
-For this quick start, we are going to use the singularity-compose-simple example. Singularity has a networking issue that currently doesn't allow communication between multiple containers (due to iptables and firewall issues) so for now the most we can do is show you one container. First, install singularity-compose from pip:
-```$ sudo apt-get install python3-pip```
-```$ pip3 install singularity-compose```
-
-Then, clone the repository:
+For this quick start, we are going to use the singularity-compose-simple example. Singularity has a networking issue that currently doesn't allow communication between multiple containers (due to iptables and firewall issues) so for now the most we can do is show you one container. First, clone the repository:
 
 ```$ git clone https://www.github.com/singularityhub/singularity-compose-simple```
 
