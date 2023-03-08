@@ -616,10 +616,10 @@ The obtained binaries for singularity-compose might be placed in a folder which 
 Either if you get the warning message or not, it is convenient to locate the binaries in your system and check that they are on ```$PATH``` or include them if not already in. 
 ```
 $ find . -name singularity-compose -print
-./home/vagrant/.local/bin/singularity-compose
+/home/vagrant/.local/bin/singularity-compose
 $ echo $PATH
 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
-$export PATH=$PATH:./home/vagrant/.local/bin
+$export PATH=$PATH:/home/vagrant/.local/bin
 ```
 add the ```export``` command to your ```~/.profile``` file to make this change in the ```$PATH``` persistent in the bash shell.  
 
