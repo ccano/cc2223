@@ -239,6 +239,9 @@ Name   Command   State   Ports
 
 # Docker Compose Use Case #1: Web server with Redis + Flask
 
+[Redis](https://redis.io)
+[Flask](https://flask.palletsprojects.com/en/2.2.x/)
+
 ## Step 1: Setup
 
 Create a directory for the project:
@@ -281,10 +284,9 @@ In this example, redis is the hostname of the redis container on the application
 
 Create another file called requirements.txt in your project directory and paste this in:
 
-
 ```
-    flask
-    redis
+flask
+redis
 ```
 
 ## Step 2: Create a Dockerfile
@@ -348,7 +350,7 @@ The redis service uses a public Redis image pulled from the Docker Hub registry.
 
 ## Step 4: Build and run your app with Compose
 
-    From your project directory, start up your application by running docker-compose up.
+From your project directory, start up your application by running docker-compose up.
 
  ```
  docker-compose up
