@@ -557,7 +557,7 @@ Then type:
 docker-compose down
 ```
 
-Now we are going to drop this service to add [Grafana](https://grafana.com) as a Prometheus stats visualizer. Add to the services level the following:
+Now we are going to drop this service to add [Grafana](https://grafana.com) as a Prometheus stats visualizer. Add to the ```docker-compose.yml``` the following code for ```grafana``` at the services level:
 
 ```
   grafana:
@@ -567,7 +567,7 @@ Now we are going to drop this service to add [Grafana](https://grafana.com) as a
       - 3000:3000
 ```
 
-And add Node-Exporter to the docker-compose.yml:
+And the following for Node-Exporter:
 
 ```
 node-exporter:
