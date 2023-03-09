@@ -590,26 +590,6 @@ And open in your browser 3 tabs:
 
 Check if all the services are running.
 
-### Adding a HAProxy
-
-Add the following to you docker-compose.yml:
-
-```
-haproxy:
-    image: haproxy:1.6
-    volumes:
-        - ./haproxy:/haproxy-override
-        - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
-    ports:
-        - "8080:80"        
-```
-
-
-
-
-
-
-
 
 
 
