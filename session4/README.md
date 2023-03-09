@@ -380,7 +380,7 @@ docker image ls
 
 You can inspect images with ```docker inspect <tag or id>```, check the logs with ```docker logs <tag or id>``` or even open a shell interactive session in both containers and check that they are listening to other IPs and bind to each other: 
 ```
-$ docker exec -it <tag or id for the flask server> sh
+$ docker exec -it <id for the flask container> sh
 /code # netstat -an
 Active Internet connections (servers and established)
 Proto Recv-Q Send-Q Local Address           Foreign Address         State       
@@ -391,7 +391,7 @@ udp        0      0 127.0.0.11:56331        0.0.0.0:*
 Active UNIX domain sockets (servers and established)
 Proto RefCnt Flags       Type       State         I-Node Path
 
-$ docker exec -it <tag or id for the redis server> sh
+$ docker exec -it <id for the redis container> sh
 /data # netstat -an
 Active Internet connections (servers and established)
 Proto Recv-Q Send-Q Local Address           Foreign Address         State       
