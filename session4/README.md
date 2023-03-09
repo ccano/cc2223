@@ -557,7 +557,7 @@ Then type:
 docker-compose down
 ```
 
-Now we are going to drop this service to add Grafana as a Prometheus stats visualizer. Add to the services level the following:
+Now we are going to drop this service to add [Grafana](https://grafana.com) as a Prometheus stats visualizer. Add to the services level the following:
 
 ```
   grafana:
