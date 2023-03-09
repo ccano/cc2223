@@ -868,10 +868,8 @@ Kubernetes is an open source platform for managing containerized workloads and s
 ## How to deploy your local kubernets instance (with minikube)
 
 We are going to follow minikube tutorial here: (https://minikube.sigs.k8s.io/docs/start/)
-
 Proceed with the following steps from the tutorial: 
-1- Installation
-2- Start your cluster ```minikube start```
-3- Interact with your cluster
-4- Deploy applications (Service tab)
-5- Manage your cluster
+- Installation
+- Start your cluster ```minikube start```
+- Deploy applications (Service tab)
+- Manage your cluster
