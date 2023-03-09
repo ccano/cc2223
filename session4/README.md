@@ -239,8 +239,8 @@ Name   Command   State   Ports
 
 # Docker Compose Use Case #1: Web server with Redis + Flask
 
-[Redis](https://redis.io)
-[Flask](https://flask.palletsprojects.com/en/2.2.x/)
+- [Redis](https://redis.io)
+- [Flask](https://flask.palletsprojects.com/en/2.2.x/)
 
 ## Step 1: Setup
 
