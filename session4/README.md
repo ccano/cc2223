@@ -362,25 +362,50 @@ If you’re using Docker natively on Linux, Docker Desktop for Mac, or Docker De
 
 You should see a message in your browser saying:
 
-``hello world in browser``
+```Hello World! I have been seen 1 times. ```
 
 Refresh the page.
 
 The number should increment.
 
-```hello world in browser``
+```Hello World! I have been seen 2 times. ```
 
-Switch to another terminal window, and type docker image ls to list local images.
+Switch to another terminal window, and type ```docker images``` to list local images.
 
-Listing images at this point should return redis and web.
+Listing images at this point should include ```redis``` and ```composetest-web```.
 
 ````
 docker image ls
 ````
 
-    You can inspect images with docker inspect <tag or id>.
+You can inspect images with ```docker inspect <tag or id>```, check the logs with ```docker logs <tag or id>``` or even open a shell interactive session in both containers and check that they are listening to other IPs and bind to each other: 
+```
+$ docker exec -it <tag or id for the flask server> sh
+/code # netstat -an
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       
+tcp        0      0 0.0.0.0:5000            0.0.0.0:*               LISTEN      
+tcp        0      0 127.0.0.11:40677        0.0.0.0:*               LISTEN      
+tcp        0      0 192.168.32.3:46608      192.168.32.2:6379       ESTABLISHED 
+udp        0      0 127.0.0.11:56331        0.0.0.0:*                           
+Active UNIX domain sockets (servers and established)
+Proto RefCnt Flags       Type       State         I-Node Path
 
-    Stop the application, either by running docker-compose down from within your project directory in the second terminal, or by hitting CTRL+C in the original terminal where you started the app.
+$ docker exec -it <tag or id for the redis server> sh
+/data # netstat -an
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       
+tcp        0      0 0.0.0.0:6379            0.0.0.0:*               LISTEN      
+tcp        0      0 127.0.0.11:45659        0.0.0.0:*               LISTEN      
+tcp        0      0 192.168.32.2:6379       192.168.32.3:46608      ESTABLISHED 
+tcp        0      0 :::6379                 :::*                    LISTEN      
+udp        0      0 127.0.0.11:34763        0.0.0.0:*                           
+Active UNIX domain sockets (servers and established)
+Proto RefCnt Flags       Type       State         I-Node Path
+
+```
+
+Stop the application by hitting CTRL+C in the original terminal where you started the app and then remove the containers by running ```docker-compose down```. 
 
 ## Step 5: Edit the Compose file to add a bind mount
 
@@ -396,12 +421,12 @@ services:
     volumes:
       - .:/code
     environment:
-      FLASK_ENV: development
+      FLASK_DEBUG: True
   redis:
     image: "redis:alpine"
 ```
 
-The new volumes key mounts the project directory (current directory) on the host to ``/code`` inside the container, allowing you to modify the code on the fly, without having to rebuild the image. The environment key sets the FLASK_ENV environment variable, which tells flask run to run in development mode and reload the code on change. This mode should only be used in development.
+The new ```volumes``` key mounts the project directory (current directory) on the host to ``/code`` inside the container, allowing you to modify the code on the fly, without having to rebuild the image. The ```environment``` key sets the ```FLASK_DEBUG``` environment variable, which tells flask to run in debug/development mode and reload the code on change. **This mode should only be used in development**.
 
 ## Step 6: Re-build and run the app with Compose
 
@@ -411,11 +436,10 @@ From your project directory, type docker-compose up to build the app with the up
 
 Check the Hello World message in a web browser again, and refresh to see the count increment.
 
-    Shared folders, volumes, and bind mounts
+Shared folders, volumes, and bind mounts
 
-        If your project is outside of the Users directory (cd ~), then you need to share the drive or location of the Dockerfile and volume you are using. If you get runtime errors indicating an application file is not found, a volume mount is denied, or a service cannot start, try enabling file or drive sharing. Volume mounting requires shared drives for projects that live outside of C:\Users (Windows) or /Users (Mac), and is required for any project on Docker Desktop for Windows that uses Linux containers. For more information, see File sharing on Docker for Mac, and the general examples on how to Manage data in containers.
+If your project is outside of the Users directory (cd ~), then you need to share the drive or location of the Dockerfile and volume you are using. If you get runtime errors indicating an application file is not found, a volume mount is denied, or a service cannot start, try enabling file or drive sharing. Volume mounting requires shared drives for projects that live outside of C:\Users (Windows) or /Users (Mac), and is required for any project on Docker Desktop for Windows that uses Linux containers. For more information, see File sharing on Docker for Mac, and the general examples on how to Manage data in containers.
 
-        If you are using Oracle VirtualBox on an older Windows OS, you might encounter an issue with shared folders as described in this VB trouble ticket. Newer Windows systems meet the requirements for Docker Desktop for Windows and do not need VirtualBox.
 
 ## Step 7: Update the application
 
@@ -423,29 +447,28 @@ Because the application code is now mounted into the container using a volume, y
 
 Change the greeting in app.py and save it. For example, change the Hello World! message to Hello from Docker!:
 
-return 'Hello from Docker! I have been seen {} times.\n'.format(count)
+```return 'Hello from Docker! I have been seen {} times.\n'.format(count)```
 
 Refresh the app in your browser. The greeting should be updated, and the counter should still be incrementing.
 
-hello world in browser
-Step 8: Experiment with some other commands
+## Step 8: Experiment with some other commands
 
-If you want to run your services in the background, you can pass the -d flag (for “detached” mode) to docker-compose up and use docker-compose ps to see what is currently running:
+If you want to run your services in the background, you can pass the -d flag (for “detached” mode) to ```docker-compose up``` and use ```docker-compose ps``` to see what is currently running:
 
 ```
 docker-compose up -d
 docker-compose ps
 ```
 
-The docker-compose run command allows you to run one-off commands for your services. For example, to see what environment variables are available to the web service:
+The ```docker-compose run``` command allows you to run one-off commands for your services. For example, to see what environment variables are available to the web service:
 
 ```
 docker-compose run web env
 ```
 
-See docker-compose --help to see other available commands. You can also install command completion for the bash and zsh shell, which also shows you available commands.
+See ```docker-compose --help``` to see other available commands. You can also install command completion for the bash and zsh shell, which also shows you available commands.
 
-If you started Compose with docker-compose up -d, stop your services once you’ve finished with them:
+If you started Compose with ```docker-compose up -d```, stop your services once you’ve finished with them:
 
 ```docker-compose stop```
 
