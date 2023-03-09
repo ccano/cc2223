@@ -873,3 +873,34 @@ Proceed with the following steps from the tutorial:
 - Start your cluster ```minikube start```
 - Deploy applications (Service tab)
 - Manage your cluster
+
+
+After completing the first tutorial, you can proceed with the [minikube HandBook tutorials] https://minikube.sigs.k8s.io/docs/handbook/: 
+- Basic controls
+- Deploying apps
+- kubectl
+- Accesing apps
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
