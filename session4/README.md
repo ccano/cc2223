@@ -5,7 +5,6 @@
   * [Docker Compose](#Docker-Compose)
   * [Docker Compose Use Case #1: Web server with Redis + Flask](#Docker-Compose-Use-Case-1:-Web-server-with-Redis-+-Flask)
   * [Docker compose Use Case #2: Monitoring system with Prometheus + NodeExporter](#Docker-compose-Use-Case-2:-Monitoring-system-with-Prometheus-+-NodeExporter)
-    + [Adding a HAProxy](#adding-a-haproxy)
   * [Singularity Compose](#Singularity-Compose)
   * [Kubernetes](#Kubernetes)
 
