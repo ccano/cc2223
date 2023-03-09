@@ -482,7 +482,7 @@ You can bring everything down, removing the containers entirely, with the down c
 
 # Docker compose Use Case #2: Monitoring system with Prometheus + NodeExporter
 
-We are going to deploy a Basic monitoring version that allows to serve Prometheus + NodeExporter.
+We are going to deploy a Basic monitoring version that allows to serve [Prometheus](https://prometheus.io) + [NodeExporter](https://prometheus.io/docs/guides/node-exporter/).
 
 Create a project/folder:
 
