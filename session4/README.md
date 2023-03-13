@@ -1162,7 +1162,7 @@ If you remember the description of the Kubernetes Arquitecture, the Controller M
 
 ### More tutorials 
   
-After completing this first tutorial, you can proceed with the [minikube HandBook tutorials](https://minikube.sigs.k8s.io/docs/handbook/) and the [contributed end-to-end tutorials] (https://minikube.sigs.k8s.io/docs/tutorials/)
+After completing this first tutorial, you can proceed with the [minikube HandBook tutorials](https://minikube.sigs.k8s.io/docs/handbook/) and the [contributed end-to-end tutorials](https://minikube.sigs.k8s.io/docs/tutorials/)
   
 
 
