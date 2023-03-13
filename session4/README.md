@@ -1081,13 +1081,13 @@ spec:
   selector:
     app: nginx 
 
-
+```
 Create the service with: 
 ```
 $ kubectl create -f webserver-svc.yaml
 
 service/web-service created
-
+```
 Now list the services created: 
 ```
 
@@ -1096,7 +1096,7 @@ $ kubectl get services
 NAME          TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
 kubernetes    ClusterIP   10.96.0.1      <none>        443/TCP        1d
 web-service   NodePort    10.110.47.84   <none>        80:31074/TCP   22s
-
+```
 
 Our web-service is now created and its ClusterIP is 10.110.47.84. In the PORT(S)section, we see a mapping of 80:31074, which means that we have reserved a static port 31074 on the node. If we connect to the node on that port, our requests will be proxied to the ClusterIP on port 80.
 
@@ -1123,14 +1123,14 @@ Events:                   <none>
   
 ### Accessing an Application 
   
-Our application is running on the Minikube VM node. To access the application from our workstation, let's first get the IP address of the Minikube VM:
+Our application is running on the Minikube node. To access the application from our workstation, let's first get the IP address of the Minikube machine:
 
 ```
 $ minikube ip
 
 192.168.99.100
 ```
-Now, open the browser and access the application on 192.168.99.100 at port 31074 to check the ```Welcome to nginx!``` message
+Now, open the browser and access the application on 192.168.99.100 at port 31074 to check the ```Welcome to nginx!``` message. If you see the message you have successfully completed the configuration of an nginx web service with 3 replicas. 
 
   
 ### More tutorials 
