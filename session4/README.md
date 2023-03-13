@@ -937,7 +937,7 @@ kubeconfig: Configured
 ```
 
 The minikube profile command allows us to view the status of all our clusters in a table formatted output. Assuming we have created only the default minikube cluster, we could list the properties that define the default profile with:
-
+```
 $ minikube profile list
 |----------|-----------|---------|--------------|------|---------|---------|-------|--------|
 | Profile  | VM Driver | Runtime |      IP      | Port | Version | Status  | Nodes | Active |
@@ -950,7 +950,7 @@ This table presents the columns associated with the default properties such as t
 
 To stop the minikube cluster, run: 
 
-
+```
 $ minikube stop 
 ✋  Stopping node "minikube"  ...
 🛑  Apagando "minikube" mediante SSH...
