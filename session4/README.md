@@ -899,14 +899,13 @@ Although Kubernetes is described as a "container orchestration engine", it lacks
 
 Minikube is one of the easiest, most flexible and popular methods to run an all-in-one or a multi-node local Kubernetes cluster directly on our local workstations. It installs and runs on any native OS such as Linux, macOS, or Windows. However, in order to fully take advantage of all the features Minikube has to offer, a Type-2 Hypervisor or a Container Runtime (for example, Docker Engine) should be installed on the local workstation, to run in conjunction with Minikube.
 
-For Minikube installation and getting started with this tool, we are going to follow the official [Get Started with Minikube tutorial](https://minikube.sigs.k8s.io/docs/start/)
+For Minikube installation and getting started with this tool, we are going to follow the official [Get Started with Minikube tutorial](https://minikube.sigs.k8s.io/docs/start/) with more steps and info from the [LinuxFoundationX LFS158x EdX Course on Introduction to Kubernetes](https://learning.edx.org/course/course-v1:LinuxFoundationX+LFS158x+1T2022/)
 
-Proceed with the following steps from the tutorial: 
 ### Installation 
 Choose your OS and Arquitecture and Install Minikube: [(https://minikube.sigs.k8s.io/docs/start/)](https://minikube.sigs.k8s.io/docs/start/#what-youll-need)
 
 ### Basic commands
-- Start your cluster ```minikube start```
+Start your cluster ```minikube start```
 ```
 $ minikube start
 😄  minikube v1.29.0 en Darwin 12.6
@@ -961,25 +960,183 @@ $ minikube stop
 ### Accesing your cluster
 Any healthy running Kubernetes cluster can be accessed via any one of the following methods:
 
-Command Line Interface (CLI) tools and scripts with ```kubectl``` -- this is the preferred method for our tutorials
-Web-based User Interface (Web UI) from a web browser with [Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
-APIs from CLI or programmatically
+- **Command Line Interface (CLI) tools and scripts with ```kubectl``` -- this is the preferred method for our tutorials**
+- Web-based User Interface (Web UI) from a web browser with [Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
+- APIs from CLI or programmatically
 These methods are applicable to all Kubernetes clusters.
 
 
-### Deploy applications 
+### Run applications with Pods
+
+You can run a Pod in two ways: 
+- Creating a yaml file with the definition of the pod. This is a sample .yaml file named nginx.yaml to define an nginx service: 
+
+```
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports: 
+    - containerPort: 80
+```
+
+After editing this file, you can run the Pod with: 
+```
+$ kubectl apply -f nginx.yaml 
+pod/nginx created
+```
+
+Check the list of created pods with: 
+```
+$ kubectl get pods 
+NAME                              READY   STATUS    RESTARTS      AGE
+nginx                             1/1     Running   0             15s
+$ kubectl get pods -o wide
+NAME                              READY   STATUS    RESTARTS      AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+nginx                             1/1     Running   0             20s     10.244.0.10   minikube   <none>           <none>
+```
+- Directly pulling the image from a repository and running it with ```run```. For example, this command will pull the latest nginx and run it as a service in a pod called ```myfirstpod```:  
+  
+```
+$ kubectl run myfirstpod --image=nginx
+pod/myfirstpod created
+$ kubectl get pods -o wide
+NAME                              READY   STATUS    RESTARTS      AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+myfirstpod                        1/1     Running   0             16s     10.244.0.11   minikube   <none>           <none>
+nginx                             1/1     Running   0             3m50s   10.244.0.10   minikube   <none>           <none>
+```
+
+  
+### Run Applications as Services 
+
+To deploy an application that runs a service with Pods we need to create a **Deployment** and a **Service**. 
+
+- To create a deployment, we need to first define a **Deployment** controller in a .yaml definition manifest file. This is the .yaml file (named webserver.yaml) for a deployment controller for a simple web services in nginx with 3 replicas: 
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+
+```
+We can run this deployment with: 
+
+```
+$ kubectl create -f webserver.yaml 
+deployment.apps/webserver created
+```
+And check the pods created and number of replicas:
+```
+$ kubectl get pods 
+NAME                              READY   STATUS    RESTARTS      AGE
+webserver-774f96d4d9-k9k22        1/1     Running   0             23s
+webserver-774f96d4d9-sblxp        1/1     Running   0             23s
+webserver-774f96d4d9-vzgfd        1/1     Running   0             23s
+$ kubectl get replicaset
+NAME                        DESIRED   CURRENT   READY   AGE
+webserver-774f96d4d9        3         3         3       81s
+
+```
+
+As an alternative to the .yaml definition file, we could also have created the webserver application by pulling the image direct with this command: 
+```
+$  kubectl create deployment webserver --image=nginx:alpine --replicas=3 --port=80
+```
+
+- Once the deployment is created, we need to create the **Service**. Create a ```webserver-svc.yaml```file with the following content: 
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  labels:
+    app: nginx
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: nginx 
 
 
-### Manage your cluster
+Create the service with: 
+```
+$ kubectl create -f webserver-svc.yaml
+
+service/web-service created
+
+Now list the services created: 
+```
+
+$ kubectl get services
+
+NAME          TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+kubernetes    ClusterIP   10.96.0.1      <none>        443/TCP        1d
+web-service   NodePort    10.110.47.84   <none>        80:31074/TCP   22s
 
 
-### Basic Controls
-After completing the first tutorial, you can proceed with the [minikube HandBook tutorials](https://minikube.sigs.k8s.io/docs/handbook/): 
-- Basic controls
-- Deploying apps
-- kubectl
-- Accesing apps
+Our web-service is now created and its ClusterIP is 10.110.47.84. In the PORT(S)section, we see a mapping of 80:31074, which means that we have reserved a static port 31074 on the node. If we connect to the node on that port, our requests will be proxied to the ClusterIP on port 80.
 
+To get more details about the Service, we can use the ```kubectl describe``` command, as in the following example:
+```
+
+$ kubectl describe service web-service
+Name:                     web-service
+Namespace:                default
+Labels:                   app=nginx
+Annotations:              <none>
+Selector:                 app=nginx
+Type:                     NodePort
+IP:                       10.110.47.84
+Port:                     <unset>  80/TCP
+TargetPort:               80/TCP
+NodePort:                 <unset>  31074/TCP
+Endpoints:                172.17.0.4:80,172.17.0.5:80,172.17.0.6:80
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+  
+```
+  
+### Accessing an Application 
+  
+Our application is running on the Minikube VM node. To access the application from our workstation, let's first get the IP address of the Minikube VM:
+
+```
+$ minikube ip
+
+192.168.99.100
+```
+Now, open the browser and access the application on 192.168.99.100 at port 31074 to check the ```Welcome to nginx!``` message
+
+  
+### More tutorials 
+  
+After completing this first tutorial, you can proceed with the [minikube HandBook tutorials](https://minikube.sigs.k8s.io/docs/handbook/)
+  
 
 
 
