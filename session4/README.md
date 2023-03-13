@@ -1132,10 +1132,37 @@ $ minikube ip
 ```
 Now, open the browser and access the application on 192.168.99.100 at port 31074 to check the ```Welcome to nginx!``` message. If you see the message you have successfully completed the configuration of an nginx web service with 3 replicas. 
 
-  
+### What if one of your replicas fails?
+
+After you have set up the webserver service, you will have 3 replicas of your nginx server running: 
+```
+$ kubectl get pods 
+NAME                              READY   STATUS    RESTARTS       AGE
+webserver-774f96d4d9-k9k22        1/1     Running   0              45m
+webserver-774f96d4d9-sblxp        1/1     Running   0              46m
+webserver-774f96d4d9-vzgfd        1/1     Running   0              46m
+```
+What if one of your replicas fails? Lets kill one of them with ```kubectl delete pod```
+```
+$ kubectl delete pod webserver-774f96d4d9-k9k22
+pod "webserver-774f96d4d9-k9k22" deleted
+
+```
+
+What now? Check the status again and... you guess! 
+```
+$ kubectl get pods 
+NAME                              READY   STATUS    RESTARTS       AGE
+webserver-774f96d4d9-dl2bm        1/1     Running   0              3s
+webserver-774f96d4d9-sblxp        1/1     Running   0              46m
+webserver-774f96d4d9-vzgfd        1/1     Running   0              46m
+```
+
+If you remember the description of the Kubernetes Arquitecture, the Controller Manager in the Control Plane is continuously monitoring the Kubernetes cluster and realized that the cluster's desired state (3 replicas of the nginx server) was not the same as the current state (2 replicas), requesting a corrective action to be taken by the API Server. The API Server then forwarded the corresponding request to the Scheduler for a new worker node to match the desired state again. 
+
 ### More tutorials 
   
-After completing this first tutorial, you can proceed with the [minikube HandBook tutorials](https://minikube.sigs.k8s.io/docs/handbook/)
+After completing this first tutorial, you can proceed with the [minikube HandBook tutorials](https://minikube.sigs.k8s.io/docs/handbook/) and the [contributed end-to-end tutorials] (https://minikube.sigs.k8s.io/docs/tutorials/)
   
 
 
