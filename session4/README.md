@@ -865,17 +865,115 @@ Control and customization of these instances is probably the coolest (and not wi
 
 Kubernetes is an open source platform for managing containerized workloads and services. Originally developed at Google and open-sourced in 2014, Kubernetes has a large, rapidly growing ecosystem. Its main capabilities are listed [here](https://kubernetes.io/docs/concepts/overview/#why-you-need-kubernetes-and-what-can-it-do). 
 
+There is an EdX course on Kubernetes running right now. Check it out here: (https://learning.edx.org/course/course-v1:LinuxFoundationX+LFS158x+1T2022/home)
+
+
+## Kubernetes Arquitecture
+
+At a very high level, Kubernetes is a cluster of compute systems categorized by their distinct roles:
+
+- One or more control plane nodes
+- One or more worker nodes
+
+[Kubernetes cluster arquitecture](https://courses.edx.org/asset-v1:LinuxFoundationX+LFS158x+1T2022+type@asset+block@TrainingImage.png)
+
+### Control Plane
+The control plane node provides a running environment for the control plane agents responsible for managing the state of a Kubernetes cluster, and it is the brain behind all operations inside the cluster. It is important to keep the control plane running at all costs. Losing the control plane may introduce downtime, causing service disruption to clients, with possible loss of business. To ensure the control plane's fault tolerance, control plane node replicas can be added to the cluster, configured in High-Availability (HA) mode.
+
+- To persist the Kubernetes cluster's state, all cluster configuration data is saved to a distributed key-value store which only holds cluster state related data, no client workload generated data. This key-value store is implemented with etcd (open-source). New data is written to the data store only by appending to it, data is never replaced in the data store. Obsolete data is compacted (or shredded) periodically to minimize the size of the data store. Out of all the control plane components, only the API Server is able to communicate with the etcd data store.
+
+- All the administrative tasks are coordinated by the kube-apiserver, a central control plane component running on the control plane node. The API Server intercepts RESTful calls from users, administrators, developers, operators and external agents, then validates and processes them. During processing the API Server reads the Kubernetes cluster's current state from the key-value store, and after a call's execution, the resulting state of the Kubernetes cluster is saved in the key-value store for persistence. The API Server is the only control plane component to talk to the key-value store, both to read from and to save Kubernetes cluster state information - acting as a middle interface for any other control plane agent inquiring about the cluster's state.
+
+- The role of the kube-scheduler is to assign new workload objects, such as pods encapsulating containers, to nodes - typically worker nodes. The scheduler obtains from the key-value store, via the API Server, resource usage data for each worker node in the cluster. The scheduler also receives from the API Server the new workload object's requirements which are part of its configuration data. Once all the cluster data is available, the scheduling algorithm filters the nodes with predicates to isolate the possible node candidates which then are scored with priorities in order to select the one node that satisfies all the requirements for hosting the new workload. The outcome of the decision process is communicated back to the API Server, which then delegates the workload deployment with other control plane agents.
+
+- The controller managers are components of the control plane node running controllers or operator processes to regulate the state of the Kubernetes cluster. Controllers are watch-loop processes continuously running and comparing the cluster's desired state (provided by objects' configuration data) with its current state (obtained from the key-value store via the API Server). In case of a mismatch, corrective action is taken in the cluster until its current state matches the desired state.
+
+### Worker nodes
+
+A worker node provides a running environment for client applications. These applications are microservices running as application containers. In Kubernetes the application containers are encapsulated in **Pods**, controlled by the cluster control plane agents running on the control plane node. Pods are scheduled on worker nodes, where they find required compute, memory and storage resources to run, and networking to talk to each other and the outside world. A Pod is the smallest scheduling work unit in Kubernetes. It is a logical collection of one or more containers scheduled together, and the collection can be started, stopped, or rescheduled as a single unit of work. 
+[](https://courses.edx.org/assets/courseware/v1/def37bf56d010897b7db29a7e292d90c/asset-v1:LinuxFoundationX+LFS158x+1T2022+type@asset+block/Single-_and_Multi-Container_Pods.png)
+
+Although Kubernetes is described as a "container orchestration engine", it lacks the capability to directly handle and run containers. In order to manage a container's lifecycle, Kubernetes requires a container runtime on the node where a Pod and its containers are to be scheduled. Runtimes are required on all nodes of a Kubernetes cluster, both control plane and worker. Docker Engine can be used as container runtime. 
+
 ## How to deploy your local kubernets instance (with minikube)
 
-We are going to follow the [Get Started with minikube tutorial](https://minikube.sigs.k8s.io/docs/start/)
+Minikube is one of the easiest, most flexible and popular methods to run an all-in-one or a multi-node local Kubernetes cluster directly on our local workstations. It installs and runs on any native OS such as Linux, macOS, or Windows. However, in order to fully take advantage of all the features Minikube has to offer, a Type-2 Hypervisor or a Container Runtime (for example, Docker Engine) should be installed on the local workstation, to run in conjunction with Minikube.
+
+For Minikube installation and getting started with this tool, we are going to follow the official [Get Started with Minikube tutorial](https://minikube.sigs.k8s.io/docs/start/)
 
 Proceed with the following steps from the tutorial: 
-- Installation
+### Installation 
+Choose your OS and Arquitecture and Install Minikube: [(https://minikube.sigs.k8s.io/docs/start/)](https://minikube.sigs.k8s.io/docs/start/#what-youll-need)
+
+### Basic commands
 - Start your cluster ```minikube start```
-- Deploy applications (Service tab)
-- Manage your cluster
+```
+$ minikube start
+😄  minikube v1.29.0 en Darwin 12.6
+✨  Controlador docker seleccionado automáticamente. Otras opciones: virtualbox, ssh
+📌  Using Docker Desktop driver with root privileges
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+💾  Descargando Kubernetes v1.26.1 ...
+    > preloaded-images-k8s-v18-v1...:  397.05 MiB / 397.05 MiB  100.00% 24.35 M
+    > gcr.io/k8s-minikube/kicbase...:  407.19 MiB / 407.19 MiB  100.00% 9.70 Mi
+🔥  Creando docker container (CPUs=2, Memory=7810MB) ...
+🐳  Preparando Kubernetes v1.26.1 en Docker 20.10.23...
+    ▪ Generando certificados y llaves
+    ▪ Iniciando plano de control
+    ▪ Configurando reglas RBAC...
+🔗  Configurando CNI bridge CNI ...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🔎  Verifying Kubernetes components...
+🌟  Complementos habilitados: default-storageclass, storage-provisioner
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+
+$ minikube status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+```
+
+The minikube profile command allows us to view the status of all our clusters in a table formatted output. Assuming we have created only the default minikube cluster, we could list the properties that define the default profile with:
+
+$ minikube profile list
+|----------|-----------|---------|--------------|------|---------|---------|-------|--------|
+| Profile  | VM Driver | Runtime |      IP      | Port | Version | Status  | Nodes | Active |
+|----------|-----------|---------|--------------|------|---------|---------|-------|--------|
+| minikube | docker    | docker  | 192.168.49.2 | 8443 | v1.26.1 | Running |     1 | *      |
+|----------|-----------|---------|--------------|------|---------|---------|-------|--------|
+```
+
+This table presents the columns associated with the default properties such as the profile name: minikube, the isolation driver: docker, the container runtime: docker, the Kubernetes version: v1.26.1, the status of the cluster - running or stopped. The table also displays the number of nodes: 1 by default, the private IP address of the minikube cluster's control plane, and the secure port that exposes the API Server to cluster control plane components, agents and clients: 8443. If we had several different clusters, they would be listed here. 
+
+To stop the minikube cluster, run: 
 
 
+$ minikube stop 
+✋  Stopping node "minikube"  ...
+🛑  Apagando "minikube" mediante SSH...
+🛑  1 node stopped.
+```
+
+### Accesing your cluster
+Any healthy running Kubernetes cluster can be accessed via any one of the following methods:
+
+Command Line Interface (CLI) tools and scripts with ```kubectl``` -- this is the preferred method for our tutorials
+Web-based User Interface (Web UI) from a web browser with [Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
+APIs from CLI or programmatically
+These methods are applicable to all Kubernetes clusters.
+
+
+### Deploy applications 
+
+
+### Manage your cluster
+
+
+### Basic Controls
 After completing the first tutorial, you can proceed with the [minikube HandBook tutorials](https://minikube.sigs.k8s.io/docs/handbook/): 
 - Basic controls
 - Deploying apps
