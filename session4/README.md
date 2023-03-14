@@ -490,6 +490,61 @@ mkdir prometheus
 cd prometheus
 ```
 
+## NodeExporter 
+
+First, we are going to deploy a NodeExporter Service. NodeExporter exposes a wide variety of hardware- and kernel- related metrics of usage of our system. 
+
+Create a `docker-compose.yml` file
+
+```
+version: '3'
+
+services:
+  node-exporter:
+    container_name: node1-exporter
+    image: prom/node-exporter
+    ports:
+      - 9100:9100
+```
+
+Then, run:
+
+```
+docker-compose up -d
+```
+
+And open in your browser http://localhost:9100 to check that the service is running. 
+
+Once the Node Exporter is running, you can verify that metrics are being exported by going to [http://localhost:9100/metrics](http://localhost:9100/metrics) or by cURLing the ```/metrics``` endpoint:
+
+```
+curl http://localhost:9100/metrics
+```
+You should see output like this:
+```
+# HELP go_gc_duration_seconds A summary of the GC invocation durations.
+# TYPE go_gc_duration_seconds summary
+go_gc_duration_seconds{quantile="0"} 3.8996e-05
+go_gc_duration_seconds{quantile="0.25"} 4.5926e-05
+go_gc_duration_seconds{quantile="0.5"} 5.846e-05
+# etc.
+```
+
+Success! The Node Exporter is now exposing metrics that Prometheus can scrape, including a wide variety of system metrics further down in the output (prefixed with node_). To view those metrics (along with help and type information):
+```
+curl http://localhost:9100/metrics | grep "node_"
+```
+
+Then type:
+
+```
+docker-compose down
+```
+
+## Prometheus
+
+Second, to set up a Prometheus service, you need to create the following configuration .yml files in the same folder (```prometheus```). 
+
 Create a file `prometheus.yml` and include the following:
 
 ```
@@ -521,12 +576,9 @@ groups:
         for: 5m
 ```
 
-Finally create a `docker-compose.yml` file
+Finally, add to the ```docker-compose.yml``` the following code for ```prometheus``` at the services level (```prometheus``` service should be at the same level than ```node-exporter``` since they are both ```services``` and the last ```volumnes``` should be at the root level):
 
 ```
-version: '3'
-
-services:
   prometheus:
     container_name: node-prom
     image: prom/prometheus:v2.30.3
@@ -542,32 +594,35 @@ volumes:
 
 ```
 
-Then type the following:
 
+This is how the final ```docker-compose.yml``` file looks like: 
 ```
-docker-compose up -d
-```
+version: '3'
 
-And open a browser with this URL: http://localhost:9090 for Prometheus.
+services:
 
-Then type:
-
-```
-docker-compose down
-```
-
-Add to the ```docker-compose.yml``` the following code for ```node-exporter``` at the services level:
-
-```
-node-exporter:
+  node-exporter:
     container_name: node1-exporter
     image: prom/node-exporter
     ports:
-      - 9100:9100
+      - 9100:9100      
+
+  prometheus:
+    container_name: node-prom
+    image: prom/prometheus:v2.30.3
+    ports:
+      - 9090:9090
+    volumes:
+      - .:/etc/prometheus
+      - prometheus-data:/prometheus
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+
+volumes:
+  prometheus-data:
 ```
 
 
-Then, run again:
+Then type the following:
 
 ```
 docker-compose up -d
@@ -577,29 +632,10 @@ And open in your browser 2 tabs:
 - http://localhost:9090 For Prometheus server
 - http://localhost:9100 For Node Exporter
 
-Check if the services are running. 
+Check if all the services are running.
 
-Once the Node Exporter is installed and running, you can verify that metrics are being exported by cURLing the ```/metrics``` endpoint:
 
-```
-curl http://localhost:9100/metrics
-```
-You should see output like this:
-```
-# HELP go_gc_duration_seconds A summary of the GC invocation durations.
-# TYPE go_gc_duration_seconds summary
-go_gc_duration_seconds{quantile="0"} 3.8996e-05
-go_gc_duration_seconds{quantile="0.25"} 4.5926e-05
-go_gc_duration_seconds{quantile="0.5"} 5.846e-05
-# etc.
-```
-
-Success! The Node Exporter is now exposing metrics that Prometheus can scrape, including a wide variety of system metrics further down in the output (prefixed with node_). To view those metrics (along with help and type information):
-```
-curl http://localhost:9100/metrics | grep "node_"
-```
-
-## Adding Grafana for visualizing Prometheus+Node Exporter stats.
+## Grafana
 
 Now we are going to drop this service to add [Grafana](https://grafana.com) as a Prometheus stats visualizer. 
 ```
@@ -629,7 +665,7 @@ And open in your browser 3 tabs:
 
 Check if all the services are running.
 
-## Using Grafana 
+### Using Grafana 
 
 Grafana is an open-source platform for monitoring and observability that lets you visualize and explore the state of your systems. You can find Grafana Tutorials [here](https://grafana.com/tutorials/). This tutorial will just cover the first steps to log into Grafana and create a query to plot some of the metrics forwared from Prometheus. 
 
