@@ -556,7 +556,50 @@ Then type:
 docker-compose down
 ```
 
-## Adding Grafana for visualizing Prometheus stats.
+Add to the ```docker-compose.yml``` the following code for ```node-exporter``` at the services level:
+
+```
+node-exporter:
+    container_name: node1-exporter
+    image: prom/node-exporter
+    ports:
+      - 9100:9100
+```
+
+
+Then, run again:
+
+```
+docker-compose up -d
+```
+
+And open in your browser 2 tabs:
+- http://localhost:9090 For Prometheus server
+- http://localhost:9100 For Node Exporter
+
+Check if the services are running. 
+
+Once the Node Exporter is installed and running, you can verify that metrics are being exported by cURLing the ```/metrics``` endpoint:
+
+```
+curl http://localhost:9100/metrics
+```
+You should see output like this:
+```
+# HELP go_gc_duration_seconds A summary of the GC invocation durations.
+# TYPE go_gc_duration_seconds summary
+go_gc_duration_seconds{quantile="0"} 3.8996e-05
+go_gc_duration_seconds{quantile="0.25"} 4.5926e-05
+go_gc_duration_seconds{quantile="0.5"} 5.846e-05
+# etc.
+```
+
+Success! The Node Exporter is now exposing metrics that Prometheus can scrape, including a wide variety of system metrics further down in the output (prefixed with node_). To view those metrics (along with help and type information):
+```
+curl http://localhost:9100/metrics | grep "node_"
+```
+
+## Adding Grafana for visualizing Prometheus+Node Exporter stats.
 
 Now we are going to drop this service to add [Grafana](https://grafana.com) as a Prometheus stats visualizer. Add to the ```docker-compose.yml``` the following code for ```grafana``` at the services level:
 
@@ -566,16 +609,6 @@ Now we are going to drop this service to add [Grafana](https://grafana.com) as a
     image: grafana/grafana-oss
     ports:
       - 3000:3000
-```
-
-And the following for Node-Exporter:
-
-```
-node-exporter:
-    container_name: node1-exporter
-    image: prom/node-exporter
-    ports:
-      - 9100:9100
 ```
 
 Then, run again:
