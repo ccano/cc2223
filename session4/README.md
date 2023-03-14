@@ -601,7 +601,12 @@ curl http://localhost:9100/metrics | grep "node_"
 
 ## Adding Grafana for visualizing Prometheus+Node Exporter stats.
 
-Now we are going to drop this service to add [Grafana](https://grafana.com) as a Prometheus stats visualizer. Add to the ```docker-compose.yml``` the following code for ```grafana``` at the services level:
+Now we are going to drop this service to add [Grafana](https://grafana.com) as a Prometheus stats visualizer. 
+```
+docker-compose down
+```
+
+Add to the ```docker-compose.yml``` the following code for ```grafana``` at the services level:
 
 ```
   grafana:
