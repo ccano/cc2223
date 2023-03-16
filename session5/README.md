@@ -5,7 +5,7 @@
 
 # Session 5:  Practice presentation
 
-The content of this session is to finish the tutorials pending from Session 4: Container Orchestrators, particularly Docker-Compose Case Study #2 and Kubernetes. Also, we will be presenting the first assignment for the practical part of the course.  
+In this session we will finish the tutorials pending from Session 4: Container Orchestrators, particularly Docker-Compose Case Study #2 and Kubernetes. Also, we will be presenting the first assignment for the practical part of the course.  
 
 ```
 version: '3'
