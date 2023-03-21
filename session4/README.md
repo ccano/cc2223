@@ -1089,7 +1089,15 @@ nginx                             1/1     Running   0             3m50s   10.244
 
 To deploy an application that runs a service with Pods we need to create a **Deployment** and a **Service**. 
 
-- To create a deployment, we need to first define a **Deployment** controller in a .yaml definition manifest file. This is the .yaml file (named webserver.yaml) for a deployment controller for a simple web services in nginx with 3 replicas: 
+- A **Deployment** provides declarative updates for Pods and ReplicaSets. You describe a desired state in a Deployment, and the Deployment Controller changes the actual state to the desired state at a controlled rate. You can define Deployments to create new ReplicaSets, or to remove existing Deployments and adopt all their resources with new Deployments. More information here: (https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+
+- A **Service** is a method for exposing a network application that is running as one or more Pods in your cluster. A key aim of Services in Kubernetes is that you don't need to modify your existing application to make it available on the network -- you can run code in Pods, whether this is a code designed for a cloud-native world, or an older app you've containerized, and you use a Service to make that set of Pods available on the network so that clients can interact with it.
+If you use a Deployment to run your app, that Deployment can create and destroy Pods dynamically. From one moment to the next, you don't know how many of those Pods are working and healthy; you might not even know what those healthy Pods are named. Kubernetes Pods are created and destroyed to match the desired state of your cluster. Pods are emphemeral resources (you should not expect that an individual Pod is reliable and durable) and each Pod gets its own IP address (Kubernetes expects network plugins to ensure this). For a given Deployment in your cluster, the set of Pods running in one moment in time could be different from the set of Pods running that application a moment later. A Service is an abstraction to help you expose groups of Pods over a network. Each Service object defines a logical set of endpoints (usually these endpoints are Pods) along with a policy about how to make those pods accessible.
+(https://kubernetes.io/docs/concepts/services-networking/service/)
+
+#### Create a Deployment
+
+To create a deployment, we need to first define a **Deployment** controller in a .yaml definition manifest file. This is the .yaml file (named webserver.yaml) for a deployment controller for a simple web services in nginx with 3 replicas: 
 ```
 apiVersion: apps/v1
 kind: Deployment
@@ -1138,7 +1146,8 @@ As an alternative to the .yaml definition file, we could also have created the w
 $  kubectl create deployment webserver --image=nginx:alpine --replicas=3 --port=80
 ```
 
-- Once the deployment is created, we need to create the **Service**. Create a ```webserver-svc.yaml```file with the following content: 
+#### Create the Service
+Once the deployment is created, we need to create the **Service**. Create a ```webserver-svc.yaml```file with the following content: 
 
 ```
 apiVersion: v1
