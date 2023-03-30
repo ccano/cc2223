@@ -17,7 +17,7 @@
 - Conocer el despliegue de servicios en contenedores usando docker, docker-compose y kubernetes.
 - Implementar distintas arquitecturas de servicios en contenedores en función de los requisitos del sistema. 
 - Gestionar la escalabilidad de los servicios.
-- Gestionar réplicas y herramientas de balanceo de carga. 
+- Gestionar réplicas y herramientas de monitoreo y balanceo de carga. 
 - Implementar una arquitectura de alta disponibilidad y uso concurrente por parte de múltiples usuarios. 
 - Gestión de servicio de autenticación de usuarios. 
 - Trabajar la persistencia de datos en contenedores. 
