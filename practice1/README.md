@@ -270,6 +270,8 @@ En el [manual de OpenLDAP](https://www.openldap.org/doc/admin21/intro.html) ten�
 
 ## Desplegando OpenLDAP
 
+OpenLDAP es una implementación de código abierto de LDAP disponible aquí: https://www.openldap.org
+
 Puedes desplegar openLDAP desde una de las muchas imágenes de Docker disponibles: 
 ```
 docker run -d -p 389:389 --name openldap-server -t osixia/openldap:1.5.0 
@@ -288,6 +290,8 @@ o
 docker exec openldap-server ldapsearch -x -H ldap://localhost -b dc=example,dc=org -D "cn=admin,dc=example,dc=org" -w admin
 
 ```
+
+Donde ```-w ``` sirve para indicar el password del administrador ```admin```, por defecto es también ```admin```. 
 
 
 Esto imprime por pantalla el listado de todos los objetos que cuelgan del servicio de directorio bajo el objeto  ```dc=example``` que está bajo el objeto raíz ```dc=org```:
