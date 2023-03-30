@@ -41,17 +41,19 @@ Para realizar este despliegue, se requiere que el estudiante utilice tecnología
 **Tarea obligatoria para superar la práctica**: 
 
 1.- Diseño y despliegue de un servicio Owncloud basado en contenedores según la arquitectura descrita en el Escenario 1 (Ver sección Tipos de arquitecturas de cloud propuestas). En particular, se requiere que este servicio incluya, al menos, 4 microservicios: 
-- Servicio web owncloud
+- Servicio web ownCloud
 - MariaDB
 - Redis
 - LDAP (autenticación de usuarios)
+
+
 Para este despliegue puede utilizarse Docker y Docker-compose. 
 
 **Tareas adicionales para conseguir la máxima puntuación en la práctica**: 
 
 2.- Diseño y despliegue de un servicio Owncloud basado en contenedores, con alta disponibilidad e inspirado en la arquitectura descrita en el Escenario 2. En particular, se requiere que este servicio incluya: 
 - Balanceo de carga con HAProxy u otra herramienta
-- Servicio web owncloud
+- Servicio web ownCloud
 - MariaDB
 - Redis
 - LDAP (autenticación de usuarios)
@@ -63,7 +65,7 @@ Para este despliegue puede utilizarse Docker, Docker-compose o Kubernetes.
 
 ### 2.3. Implementación y despliegue de los servicios con contenedores
 
-El objetivo de esta práctica es que el alumno sea capaz de poner en marcha un sistema owncloud en la nube con los servicios citados anteriormente.
+El objetivo de esta práctica es que el alumno sea capaz de poner en marcha un sistema ownCloud en la nube con los servicios citados anteriormente.
 
 Para esta implementación con contenedores, se sugiere realizar el despliegue de manera escalonada en cada una de las siguientes modalidades:
 
