@@ -841,11 +841,11 @@ Esta práctica incluye una tarea obligatoria para superar la práctica y dos tar
 **Evaluación de las tareas adicionales para alcanzar la máxima calificación**: 
 
 Se evaluará: 
-    - Documentación que incluya una descripción completa de los despliegues y los detalles de configuración. 
-    - Despliegue con éxito de servicios según la arquitectura expuesta en el Escenario 2 de la práctica. 
-    - Uso de Docker-compose y Kubernetes para despliegue con éxito de servicios. Se valorará que se realice un despliegue con Docker-compose y el mismo despliegue con Kubernetes. 
-    - Proveer de alta disponibilidad con la replicación de, al menos, uno de los servicios ofrecidos. 
-    - Proveer de un proxy invertido con balanceo de carga con HAProxy, la funcionalidad incluida en Kubernetes u otra herramienta de balanceo de carga. 
+ - Documentación que incluya una descripción completa de los despliegues y los detalles de configuración. 
+ - Despliegue con éxito de servicios según la arquitectura expuesta en el Escenario 2 de la práctica. 
+ - Uso de Docker-compose y Kubernetes para despliegue con éxito de servicios. Se valorará que se realice un despliegue con Docker-compose y el mismo despliegue con Kubernetes. 
+ - Proveer de alta disponibilidad con la replicación de, al menos, uno de los servicios ofrecidos. 
+ - Proveer de un proxy invertido con balanceo de carga con HAProxy, la funcionalidad incluida en Kubernetes u otra herramienta de balanceo de carga. 
 
 
 # REFERENCIAS
