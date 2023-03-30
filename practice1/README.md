@@ -15,9 +15,12 @@
 ## 1. Objetivos de la práctica
 - Crear servicios interconectados usando contenedores.
 - Conocer el despliegue de servicios en contenedores usando docker, docker-compose y kubernetes.
+- Implementar distintas arquitecturas de servicios en contenedores en función de los requisitos del sistema. 
 - Gestionar la escalabilidad de los servicios.
-- Implementar una estructura de contenedores para que provea de alta disponibilidad.
-- Soporte del servicio para múltiples usuarios al mismo tiempo.
+- Gestionar réplicas y herramientas de balanceo de carga. 
+- Implementar una arquitectura de alta disponibilidad y uso concurrente por parte de múltiples usuarios. 
+- Gestión de servicio de autenticación de usuarios. 
+- Trabajar la persistencia de datos en contenedores. 
 
 ##  2. Descripción del trabajo a desarrollar en la práctica
 
@@ -630,7 +633,7 @@ docker run --detach --name mariadb --env MARIADB_USER=<nombre_usuario> --env MAR
 
 Sin embargo, con este despliegue de MariaDB, [**¿Dónde se almacenan los datos de MariaDB?**](https://github.com/docker-library/docs/blob/master/mariadb/README.md#where-to-store-data)
 
-Para que el almacenamiento de los datos en MariaDB sea persistente, es necesario crear un directorio local y compartir este directorio con el contenedor de docker en el que se despliega la imagen de MariaDB. Para ello, echad abajo el contenedor anterior y, en su lugar, desplegad este otro.  
+Para que el almacenamiento de los datos en MariaDB sea **persistente**, es necesario crear un directorio local y compartir este directorio con el contenedor de docker en el que se despliega la imagen de MariaDB. Para ello, echad abajo el contenedor anterior y, en su lugar, desplegad este otro.  
 
 ```
 $ mkdir <path_al_directorio_deseado>/MariaDB_data
