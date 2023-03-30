@@ -157,7 +157,8 @@ En un escenario simulado, como el que nos ocupa, bastará con implementar los si
 - Servicio web owncloud
 - MariaDB
 - Redis
-- LDAP (autenticación de usuarios)
+- LDAP
+- Replicación de servicio de, al menos, uno de los servicios anteriores. 
 
 ##### Balanceo de Carga
 
@@ -165,9 +166,9 @@ Un servicio HAProxy ejecutándose en un servidor dedicado que recibe todas las p
 
 ##### Base de datos
 
-Cluster de MariaDB [con répicas](https://mariadb.com/kb/en/setting-up-replication/). Considerar, además un [monitor de configuración para MariaDB](https://mariadb.com/kb/en/mariadb-maxscale-22-automatic-failover-with-mariadb-monitor) para prevenir comportamiento ante caída de servicio.
+En un entorno real, se construiría un cluster de servicios MariaDB [con répicas](https://mariadb.com/kb/en/setting-up-replication/) y consideraríamos, además, un [monitor de configuración para MariaDB](https://mariadb.com/kb/en/mariadb-maxscale-22-automatic-failover-with-mariadb-monitor) para prevenir comportamiento ante caída de servicio. En nuestro caso, sin embargo, bastará con replicar uno de los servicios anteriores (MariaDB u otro servicio). 
 
-##### Authentication
+##### Autenticación
 
 Autenticación de usuario a través de uno o varios servidores LDAP. 
 
