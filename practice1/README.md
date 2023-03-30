@@ -57,7 +57,7 @@ Para esta implementación con contenedores, se sugiere realizar el despliegue de
 
 Para este despligue es necesario desarrollar cada uno de los contenedores de forma individual para que alberguen cada uno de los servicios indicados. En esta modalidad, los contenedores tienen que ejecutarse sin un orquestador, lo que requerirá que se cree un script para poder desplegar y también bajar todos los servicios. 
 
-####  docker-compose
+####  Docker-compose
 
 Para este despliegue se requiere el uso de la herramienta de composición de servicios `docker-compose` que provee Docker. Al igual que la anterior, se requiere que se incluyan todos los sevicios dentro del fichero de descripción de servicios a desplegar en `docker-compose`.
 
