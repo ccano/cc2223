@@ -642,11 +642,11 @@ $ mkdir <path_al_directorio_deseado>/MariaDB_data
 $ docker run --detach --name mariadb -v <path_al_directorio_deseado>:/var/lib/mysql --env MARIADB_DATABASE=test --env MARIADB_USER=<nombre_usuario> --env MARIADB_PASSWORD=<contraseña> --env MARIADB_ROOT_PASSWORD=<contraseña_root>  mariadb:latest
 ```
 
-[**Integración de LDAP en Owncloud**]
+### Integración de LDAP en Owncloud
 Una vez lanzado el servicio web de Owncloud y su backend (MariaDB y Redis), podéis visualizar este tutorial para integrar Owncloud con un servicio de LDAP existente: 
 https://www.youtube.com/watch?v=Jd0JImHj3fk
+   
 Este manual también puede resultaros de ayuda: https://doc.owncloud.com/server/next/admin_manual/configuration/user/user_auth_ldap.html
-
 
 
 ## 3.3. Despliegue de HAProxy
