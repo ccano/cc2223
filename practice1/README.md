@@ -1,5 +1,5 @@
 
-# Descripción Práctica Número 1
+# Práctica 1: Despliegue de servicio ownCloud
 
 ## 1. Objetivos de la práctica
 - Crear servicios interconectados usando contenedores.
