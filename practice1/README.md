@@ -85,7 +85,7 @@ Este escenario sería el más apropiado para este tipo de requisitos:
 
 Una máquina ejecutando la aplicación: la web, el servidor de BD y almacenamiento local. Otra máquina prestando el servicio de autenticación a través de LDAP. Este diagrama representaría la arquitectura propuesta: 
 
-![Arquitectura propuesta para una pequeña empresa(https://doc.owncloud.com/server/next/admin_manual/_images/installation/deprecs-1.png)
+![Arquitectura propuesta para una pequeña empresa](https://doc.owncloud.com/server/next/admin_manual/_images/installation/deprecs-1.png)
 
 Que incluye los siguientes 4 servicios: 
 - Servicio web owncloud
