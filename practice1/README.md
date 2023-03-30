@@ -1,6 +1,7 @@
 
 # Práctica 1: Despliegue de servicio ownCloud
 
+
 ## 1. Objetivos de la práctica
 - Crear servicios interconectados usando contenedores.
 - Conocer el despliegue de servicios en contenedores usando docker, docker-compose y kubernetes.
@@ -594,13 +595,13 @@ Por ejemplo, si queremos encontrar todos los objetos almacenados bajo la categor
 ldapsearch -H ldap://localhost -LL -b ou=People,dc=example,dc=org -x
 ```
 
-Cualquier combinación de  ``ou``, ``dc``, ... está permitida para buscar dentro del DIT.
+Cualquier combinación de  ```ou```, ```dc```, ... está permitida para buscar dentro del DIT.
 
 
 
-## 3.2. Despliegue de owncloud
+## 3.2. Despliegue de ownCloud
 
-El despliegue de un servicio ownCloud requiere desplegar un frontend con la aplicación web y un backend para la Base de Datos (en mySQL o MariaDB, en nuestro caso, optaremos por MariaDB) y el almacenamiento de variables de configuración y estado del sistema con Redis. Ya conocéis cómo desplegar Redis (se trabajó en la sesión 4), así que nos centraremos en esta sección en cómo desplegar ownCloud y MariaDB. Las instrucciones siguientes despliegan los contenedores de forma individual con docker. 
+El despliegue de un servicio ownCloud requiere desplegar un frontend con la aplicación web y un backend para la Base de Datos (en mySQL o MariaDB, en nuestro caso, optaremos por MariaDB) y la gestión de memoria caché con Redis para mejorar el rendimiento del sistema. Ya conocéis cómo desplegar Redis (se trabajó en la sesión 4), así que nos centraremos en esta sección en cómo desplegar ownCloud y MariaDB. Las instrucciones siguientes despliegan los contenedores de forma individual con docker - podéis tomarlos como punto de partida para hacer despliegues con orquestadores de contenedores. 
 
 ### Despliegue de contenedor ownCloud
 
@@ -616,14 +617,22 @@ docker run -d -p 80:80 owncloud:latest
 docker pull mariadb
 docker run --detach --name mariadb --env MARIADB_USER=<nombre_usuario> --env MARIADB_PASSWORD=<contraseña> --env MARIADB_ROOT_PASSWORD=<contraseña-root>  mariadb:latest
 ````
-[**¿Dónde se almacenan los datos de MariaDB?**](https://github.com/docker-library/docs/blob/master/mariadb/README.md#where-to-store-data)
 
-Para que el almacenamiento de los datos en MariaDB sea persistente, es necesario crear un directorio local y compartir este directorio con el contenedor de docker en el que se despliega la imagen de MariaDB: 
+Sin embargo, con este despliegue de MariaDB, [**¿Dónde se almacenan los datos de MariaDB?**](https://github.com/docker-library/docs/blob/master/mariadb/README.md#where-to-store-data)
+
+Para que el almacenamiento de los datos en MariaDB sea persistente, es necesario crear un directorio local y compartir este directorio con el contenedor de docker en el que se despliega la imagen de MariaDB. Para ello, echad abajo el contenedor anterior y, en su lugar, desplegad este otro.  
 
 ```
 $ mkdir <path_al_directorio_deseado>/MariaDB_data
 $ docker run --detach --name mariadb -v <path_al_directorio_deseado>:/var/lib/mysql --env MARIADB_DATABASE=test --env MARIADB_USER=<nombre_usuario> --env MARIADB_PASSWORD=<contraseña> --env MARIADB_ROOT_PASSWORD=<contraseña_root>  mariadb:latest
 ```
+
+[**Integración de LDAP en Owncloud**]
+Una vez lanzado el servicio web de Owncloud y su backend (MariaDB y Redis), podéis visualizar este tutorial para integrar Owncloud con un servicio de LDAP existente: 
+https://www.youtube.com/watch?v=Jd0JImHj3fk
+Este manual también puede resultaros de ayuda: https://doc.owncloud.com/server/next/admin_manual/configuration/user/user_auth_ldap.html
+
+
 
 ## 3.3. Despliegue de HAProxy
 
@@ -807,7 +816,7 @@ Esta práctica incluye una tarea obligatoria para superar la práctica y dos tar
  - Se evaluará si el estudiante despliega con éxito los servicios según la arquitectura descrita en el Escenario 1 con Docker o Docker-compose. 
  - Los ficheros de configuración y documentación deben incluir con todos los detalles necesarios. 
  - El despliegue de los servicios debe realizarse sin errores y los servicios deben funcionar correctamente. 
- - Se valorará que el estudiante cree al menos una nueva categoría de usuarios en LDAP y distintos usuarios nuevos para simular un entorno laboral pequeño pero realista. 
+ - Se valorará que el estudiante cree al menos una nueva categoría de usuarios en LADP y distintos usuarios nuevos para simular un entorno laboral pequeño pero realista. 
 
 **Evaluación de las tareas adicionales para alcanzar la máxima calificación**: 
 
