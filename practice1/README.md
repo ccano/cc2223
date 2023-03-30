@@ -1,6 +1,9 @@
 
 # Práctica 1: Despliegue de servicio ownCloud
 
+# Contenidos:
+* [1. Objetivos de la práctica](https://github.com/ccano/cc2223/blob/main/practice1/README.md#1-objetivos-de-la-práctica)
+* [2. Descripcion del trabajo a desarrollar en la practica](https://github.com/ccano/cc2223/blob/main/practice1/README.md#2-descripción-del-trabajo-a-desarrollar-en-la-práctica)
 
 ## 1. Objetivos de la práctica
 - Crear servicios interconectados usando contenedores.
