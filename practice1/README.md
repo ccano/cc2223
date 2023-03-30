@@ -84,7 +84,7 @@ El servicio de HAProxy puede se sustituido por el equivalente en Kubernetes, que
 
 ### 2.4. Tipos de arquitecturas de cloud propuestas
 
-En esta sección se describen dos posibles arquitecturas de cloud para el despliegue del servicio en función del tamaño de la empresa y de los recursos TIC disponibles. Tomado de la web (https://doc.owncloud.com/server/next/admin_manual/installation/deployment_recommendations.html).
+En esta sección se describen dos posibles arquitecturas de cloud para el despliegue del servicio en función del tamaño de la empresa y de los recursos TIC disponibles. Tomado de la web https://doc.owncloud.com/server/next/admin_manual/installation/deployment_recommendations.html . 
 
 #### Escenario 1: Pequeña empresa o departamento - grupo de usuarios pequeño
 
