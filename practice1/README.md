@@ -4,6 +4,13 @@
 # Contenidos:
 * [1. Objetivos de la práctica](https://github.com/ccano/cc2223/blob/main/practice1/README.md#1-objetivos-de-la-práctica)
 * [2. Descripcion del trabajo a desarrollar en la practica](https://github.com/ccano/cc2223/blob/main/practice1/README.md#2-descripción-del-trabajo-a-desarrollar-en-la-práctica)
+* [3. Características de cada servicio para despliegue con contenedores](https://github.com/ccano/cc2223/blob/main/practice1/README.md#3-caracter%C3%ADsticas-de-cada-servicio-para-despliegue-con-contenedores)
+   - [3.1. Despliegue y gestión de servicios de autenticación de usuarios con LDAP](https://github.com/ccano/cc2223/blob/main/practice1/README.md#31-despliegue-y-gestión-de-servicios-de-autenticación-de-usuarios-con-ldap)
+   - [3.2. Despliegue de ownCloud](https://github.com/ccano/cc2223/blob/main/practice1/README.md#32-despliegue-de-owncloud)
+   - [3.3. Despliegue de HAProxy](https://github.com/ccano/cc2223/blob/main/practice1/README.md#33-despliegue-de-haproxy)
+* [4. Entrega a través de PRADO. Documentación y evaluación de la práctica](https://github.com/ccano/cc2223/blob/main/practice1/README.md#entrega-de-la-práctica-a-traves-de-prado-documentación-y-evaluación-de-la-práctica)
+* [5. Referencias](https://github.com/ccano/cc2223/blob/main/practice1/README.md#referencias)
+
 
 ## 1. Objetivos de la práctica
 - Crear servicios interconectados usando contenedores.
