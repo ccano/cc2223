@@ -207,16 +207,18 @@ Y a continuación lo levantamos de nuevo:
 docker run --name mongodb -d -p 27017:27017 -v $(pwd)/data:/data/db mongodb/mongodb-community-server
 ```
 
-Podemos conectarnos a este servicio utilizando [la shell de MongoDB](https://www.mongodb.com/try/download/shell) o el [cliente Compass con GUI](https://www.mongodb.com/try/download/compass). Prueba a instalar el cliente Compass y familiarízate con la interfaz de usuario. 
+Podemos conectarnos a este servicio utilizando la [shell de MongoDB](https://www.mongodb.com/try/download/shell) o el [cliente Compass con GUI](https://www.mongodb.com/try/download/compass). Prueba a instalar el cliente Compass y familiarízate con la interfaz de usuario. El cliente Compass incluye, además de la interfaz gráfica, el cliente MongoSH para interactuar con MongoDB a través de una shell. 
 
 ![Cliente Compass para MongoDB. Incluye una interfaz gráfica y el cliente de shell MongoSH](image.png)
+
+A continuación se indica cómo crear, manipular y consultar registros de datos como documentos y colecciones MongoDB en la shell MongoSH. Puedes irlos ejecutando desde Compass e ir visualizando los cambios desde la interfaz gráfica. 
 
 ## Selección/creación/eliminación de la base de datos
 
 El comando creará una nueva base de datos si no existe, de lo contrario devolverá la base de datos existente.
 
 ```
-> use test:
+> use test
 ```
 
 Ahora estás usando la base de datos ``test`` .
@@ -227,9 +229,7 @@ Si quieres saber qué base de datos estás usando:
 > db
 ```
 
-El comando ``command db.dropDatabase()`` es usado para borrar la base de datos existente.
-
-NO USES ESTE COMANDO:
+El comando ``command db.dropDatabase()`` es usado para borrar la base de datos existente. Cuidado con su uso: 
 
 ```
 db.dropDatabase()
@@ -238,7 +238,7 @@ db.dropDatabase()
 Para conocer el tamaño de las bases de datos:
 
 ```
-show dbs
+show databases
 ```
 
 ## Crear una colección
@@ -254,7 +254,7 @@ donde ``options`` es Opcional y especifica opciones sobre el tamaño de la memor
 Recuerde que en primer lugar el mongodb necesita saber cuál es la Base de Datos donde creará la Colección. Use ``show dbs`` y luego ``use <su base de datos>``.
 
 ```
-use manuparra;
+use test
 ```
 
 Y luego creamos la colección:
@@ -272,7 +272,7 @@ show collections
 En MongoDB, no es necesario crear la colección. MongoDB crea la colección automáticamente, cuando usted inserta algún documento:
 
 ```
-db.MySecondCollection.insert({"name" : "Manuel Parra"})
+db.MySecondCollection.insertOne({"name" : "Carlos Cano"})
 ```
 
 Ya tienes las nuevas colecciones creadas:
@@ -397,7 +397,7 @@ Añade multiple documentos:
 	        "type":"Polygon"
 	      },
 	     "country":"Spain",
-	     "country_code":"US",
+	     "country_code":"ES",
 	     "likes":2334244,
 	     "full_name":"Madrid",
 	     "id":"01fbe706f872cb32",
@@ -414,24 +414,7 @@ y:
 db.MyFirstCollection.insert(places)
 ```
 
-
 En el documento insertado, si no especificamos el parámetro ``_id``, entonces MongoDB asigna un ObjectId único para este documento.
-Puede anular el valor ``_id``, usando su propio ``_id``.
-
-Dos métodos para guardar/insertar:
-
-
-```
-db.MyFirstCollection.save({username:"myuser",password:"mypasswd"})
-db.MyFirstCollection.insert({username:"myuser",password:"mypasswd"})
-```
-
-Diferencias:
-
-> Si un documento no existe con el valor ```_id``` especificado, el método ``save()`` realiza una inserción con los campos especificados en el documento.
-
-> Si existe un documento con el valor ``_id`` especificado, el método ``save()`` realiza una actualización, sustituyendo todos los campos del registro existente por los campos del documento.
-
 
 ## Seleccionando, Consultando y Filtrando
 
@@ -451,13 +434,6 @@ Cuenta los documentos, añade  ``.count()`` al comando:
 
 ```
 > db.MyFirstCollection.find().count();
-```
-
-
-Muestra los documentos en un formato bonito:
-
-```
-> db.MyFirstCollection.find().pretty()
 ```
 
 Selecciona o busca mediante campos, por ejemplo como ``bounding_box.type``:
@@ -480,19 +456,19 @@ Selecciona o busca mediante campos, por ejemplo como ``bounding_box.type``:
 
 
 ```
-> db.MyFirstCollection.find("bounding_box.type":"Polygon")
+> db.MyFirstCollection.find({"bounding_box.type": "Polygon"})
 ```
 
 
 Filtrado:
 
-Igualdad	``{<key>:<value>}``	 ``db.MyFirstCollection.find({"country":"Spain"}).pretty()``
+Igualdad	``{<key>:<value>}``	 ``db.MyFirstCollection.find({"country":"Spain"})``
 
-Menor que 	``{<key>:{$lt:<value>}}``	``db.mycol.find({"likes":{$lt:50}}).pretty()``
+Menor que 	``{<key>:{$lt:<value>}}``	``db.MyFirstCollection.find({"likes":{$lt:3000000}})``
 
-Menor o igual	``{<key>:{$lte:<value>}}``	``db.mycol.find({"likes":{$lte:50}}).pretty()``
+Menor o igual	``{<key>:{$lte:<value>}}``	``db.MyFirstCollection.find({"likes":{$lte:3000000}})``
 
-Mayor que	``{<key>:{$gt:<value>}}``	``db.mycol.find({"likes":{$gt:50}}).pretty()``
+Mayor que	``{<key>:{$gt:<value>}}``	``db.MyFirstCollection.find({"likes":{$gt:3000000}})``
 
 Más o igual que : ``gte`` Greater than equal, ``ne`` Not equal, etc. 
 
@@ -505,7 +481,7 @@ Y:
          {key1: value1}, {key2:value2}
       ]
    }
-).pretty()
+)
 ```
 
 O:
@@ -515,19 +491,19 @@ O:
          {key1: value1}, {key2:value2}
       ]
    }
-).pretty()
+)
 
 Mezclando todo:
 
 ```
 db.MyFirstCollection.find(
-		{"likes": {$gt:10}, 
-		 $or: 
+		{"likes": {$gt:1000000}, 
+		 $and: 
 			[
-			 {"by": "..."},
-   			 {"title": "..."}
+			 {"country_code":"ES"},
+   			 {"place_type":"city"}
    			]
-   		}).pretty()
+   		})
 ```
 
 
