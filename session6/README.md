@@ -20,7 +20,7 @@ Tabla de contenido:
 
 # Usando MongoDB
 
-MongoDB es una base de datos de código abierto desarrollada por MongoDB, Inc. 
+MongoDB es una base de datos de código abierto desarrollada por MongoDB, Inc. Se trata de una BD No-SQL orientada al desarrollo en la nube. 
 
 MongoDB almacena datos en documentos similares a JSON que pueden variar en estructura. La información relacionada se almacena junta para un acceso rápido a la consulta a través del lenguaje de consulta MongoDB. MongoDB utiliza esquemas dinámicos, lo que significa que puede crear registros **sin definir primero la estructura**, como los campos o los tipos de sus valores. Puede cambiar la estructura de los registros (a los que llamamos documentos) simplemente añadiendo nuevos campos o borrando los existentes. Este modelo de datos le da la capacidad de representar relaciones jerárquicas, almacenar matrices y otras estructuras más complejas fácilmente. No es necesario que los documentos de una colección tengan un conjunto idéntico de campos y es frecuente la desnormalización de los datos. MongoDB también fue diseñado con alta disponibilidad y escalabilidad en mente, e incluye replicación lista para usar y auto-sharding.
 
@@ -108,7 +108,7 @@ MongoDB almacena registros de datos como documentos BSON.
 
 BSON es una representación binaria de documentos JSON, contiene más tipos de datos que JSON.
 
-![bsonchema](https://docs.mongodb.com/manual/_images/crud-annotated-document.png)
+![bsonchema](https://www.google.com/url?sa=i&url=https%3A%2F%2Fdevopedia.org%2Fmongodb-query-language&psig=AOvVaw1J2IKpzKZO3O4tHEdefEkI&ust=1680611249146000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCKjT_fXajf4CFQAAAAAdAAAAABAI)
 
 Los documentos MongoDB se componen de pares de campo y valor y tienen la siguiente estructura:
 
@@ -191,75 +191,34 @@ El tamaño máximo de los documentos BSON es de **16 megabytes!**.
 
 # Comenzando con MongoDB
 
-Conectate a ATCSTACK:
+Vamos a desplegar en local un servicio de MongoDB utilizando Docker o Docker Compose siguiendo las instrucciones de la web: https://www.mongodb.com/compatibility/docker. 
+Para ello, en primer lugar desplegamos un servidor MongoDB en local y exponemos el puerto 27017 (puerto por defecto para MongoDB) por si queremos conectar MongoDB con otra aplicación en local: 
 
 ```
-ssh manuparra@.........es
+docker run --name mongodb -d -p 27017:27017 mongodb/mongodb-community-server
 ```
 
-En primer lugar, compruebe que tiene acceso al sistema de herramientas mongo, pruebe este comando:
-
+Sin embargo, los datos que creemos serán volátiles y se eliminarán una vez que echemos abajo el contenedor. Para evitarlo, hacemos los datos persistentes en un volumen de datos con la opción ```--v```. Para desplegar el contenedor con esta opción, primero retiramos el contenedor anterior:
 ```
-mongo + tab
-```
+docker stop mongodb && docker rm mongodb
 
-mostrará:
-
+Y a continuación lo levantamos de nuevo: 
 ```
-mongo         mongodump     mongoexport   mongofiles    
-mongoimport   mongooplog    mongoperf     mongorestore  mongostat     mongotop 
+docker run --name mongodb -d -p 27017:27017 -v $(pwd)/data:/data/db mongodb/mongodb-community-server
 ```
 
-## Conectando a mongodb:
+Podemos conectarnos a este servicio utilizando [la shell de MongoDB](https://www.mongodb.com/try/download/shell) o el [cliente Compass con GUI](https://www.mongodb.com/try/download/compass). Prueba a instalar el cliente Compass y familiarízate con la interfaz de usuario. 
 
-El puerto por defecto para instancias de mongodb y mongos es 27017. 
-Puede cambiar este puerto con port o --port cuando se conecte.
-
-Escribe:
-
-```
-mongo
-```
-
-Conectará con los parámetros por defecto: ```localhost```, puerto: ```27017``` y base de datos: ``test``.
-
-
-```
-MongoDB shell version: 2.6.12
-connecting to: test
->
-```
-
-Para salir usa ``CTRL+C`` o ``exit``
-
-Cada usuario tiene una cuenta en el servicio mongodb. Para conectar:
-
-```
-mongo localhost:27017/manuparra -p 
-```
-
-Preguntará el password ``password``. 
-
-```
-mongo localhost:27017/manuparra -p mipasss 
-```
-
-
-El servicio MongoDB se está ejecutando localmente en sistemas Docker, por lo tanto, si se conecta desde contenedores Docker o Máquinas Virtuales, debe utilizar el sistema local Docker IP:
-
-```
-mongo 192.168.10.30:27017/manuparra -p mipasss 
-```
-
+![]()
 ## Selección/creación/eliminación de la base de datos
 
 El comando creará una nueva base de datos si no existe, de lo contrario devolverá la base de datos existente.
 
 ```
-> use manuparra:
+> use test:
 ```
 
-Ahora estás usando la base de datos ``manuparra`` .
+Ahora estás usando la base de datos ``test`` .
 
 Si quieres saber qué base de datos estás usando:
 
