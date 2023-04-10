@@ -201,7 +201,7 @@ docker run --name mongodb -d -p 27017:27017 mongodb/mongodb-community-server
 Sin embargo, los datos que creemos serán volátiles y se eliminarán una vez que echemos abajo el contenedor. Para evitarlo, hacemos los datos persistentes en un volumen de datos con la opción ```--v```. Para desplegar el contenedor con esta opción, primero retiramos el contenedor anterior:
 ```
 docker stop mongodb && docker rm mongodb
-
+```
 Y a continuación lo levantamos de nuevo: 
 ```
 docker run --name mongodb -d -p 27017:27017 -v $(pwd)/data:/data/db mongodb/mongodb-community-server
@@ -209,7 +209,8 @@ docker run --name mongodb -d -p 27017:27017 -v $(pwd)/data:/data/db mongodb/mong
 
 Podemos conectarnos a este servicio utilizando [la shell de MongoDB](https://www.mongodb.com/try/download/shell) o el [cliente Compass con GUI](https://www.mongodb.com/try/download/compass). Prueba a instalar el cliente Compass y familiarízate con la interfaz de usuario. 
 
-![]()
+![Cliente Compass para MongoDB. Incluye una interfaz gráfica y el cliente de shell MongoSH](image.png)
+
 ## Selección/creación/eliminación de la base de datos
 
 El comando creará una nueva base de datos si no existe, de lo contrario devolverá la base de datos existente.
@@ -226,7 +227,7 @@ Si quieres saber qué base de datos estás usando:
 > db
 ```
 
-El comando ```command db.dropDatabase()`` es usado para borrar la base de datos existente.
+El comando ``command db.dropDatabase()`` es usado para borrar la base de datos existente.
 
 NO USES ESTE COMANDO:
 
