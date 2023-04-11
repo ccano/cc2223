@@ -22,7 +22,7 @@ Tabla de contenido:
 
 MongoDB es una base de datos de código abierto desarrollada por MongoDB, Inc. Se trata de una BD No-SQL orientada al desarrollo en la nube. 
 
-MongoDB almacena datos en documentos similares a JSON que pueden variar en estructura. La información relacionada se almacena junta para un acceso rápido a la consulta a través del lenguaje de consulta MongoDB. MongoDB utiliza esquemas dinámicos, lo que significa que puede crear registros **sin definir primero la estructura**, como los campos o los tipos de sus valores. Puede cambiar la estructura de los registros (a los que llamamos documentos) simplemente añadiendo nuevos campos o borrando los existentes. Este modelo de datos le da la capacidad de representar relaciones jerárquicas, almacenar matrices y otras estructuras más complejas fácilmente. No es necesario que los documentos de una colección tengan un conjunto idéntico de campos y es frecuente la desnormalización de los datos. MongoDB también fue diseñado con alta disponibilidad y escalabilidad en mente, e incluye replicación lista para usar y auto-sharding.
+MongoDB almacena datos en documentos similares a JSON que pueden variar en estructura. La información relacionada se almacena junta para un acceso rápido a la consulta a través del lenguaje de consulta MongoDB. MongoDB utiliza esquemas dinámicos, lo que significa que puede crear registros **sin definir primero la estructura**, como los campos o los tipos de sus valores. Puede cambiar la estructura de los registros (a los que llamamos documentos) simplemente añadiendo nuevos campos o borrando los existentes. Este modelo de datos permite representar relaciones jerárquicas, almacenar matrices y otras estructuras más complejas fácilmente. No es necesario que los documentos de una colección tengan un conjunto idéntico de campos y es frecuente la desnormalización de los datos. MongoDB también fue diseñado con alta disponibilidad y escalabilidad en mente, e incluye replicación lista para usar y auto-sharding.
 
 
 **MongoDB principales características:**
@@ -108,7 +108,7 @@ MongoDB almacena registros de datos como documentos BSON.
 
 BSON es una representación binaria de documentos JSON, contiene más tipos de datos que JSON.
 
-![bsonchema](https://www.google.com/url?sa=i&url=https%3A%2F%2Fdevopedia.org%2Fmongodb-query-language&psig=AOvVaw1J2IKpzKZO3O4tHEdefEkI&ust=1680611249146000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCKjT_fXajf4CFQAAAAAdAAAAABAI)
+![bsonchema](https://devopedia.org/images/article/355/4130.1634316271.svg))
 
 Los documentos MongoDB se componen de pares de campo y valor y tienen la siguiente estructura:
 
@@ -167,8 +167,6 @@ Los documentos permiten documentos incrustados documentos incrustados documentos
 }
 ```
 
-El tamaño máximo de los documentos BSON es de **16 megabytes!**.
-
 
 ### Tipos de datos
 
@@ -207,11 +205,11 @@ Y a continuación lo levantamos de nuevo:
 docker run --name mongodb -d -p 27017:27017 -v $(pwd)/data:/data/db mongodb/mongodb-community-server
 ```
 
-Podemos conectarnos a este servicio utilizando la [shell de MongoDB](https://www.mongodb.com/try/download/shell) o el [cliente Compass con GUI](https://www.mongodb.com/try/download/compass). Prueba a instalar el cliente Compass y familiarízate con la interfaz de usuario. El cliente Compass incluye, además de la interfaz gráfica, el cliente MongoSH para interactuar con MongoDB a través de una shell. 
+Podemos conectarnos a este servicio utilizando la [shell MongoSH](https://www.mongodb.com/try/download/shell) o el [cliente Compass con GUI](https://www.mongodb.com/try/download/compass). Prueba a instalar el cliente Compass y familiarízate con la interfaz de usuario. El cliente Compass incluye, además de la interfaz gráfica, el cliente MongoSH para interactuar con MongoDB a través de una shell. 
 
 ![Cliente Compass para MongoDB. Incluye una interfaz gráfica y el cliente de shell MongoSH](image.png)
 
-A continuación se indica cómo crear, manipular y consultar registros de datos como documentos y colecciones MongoDB en la shell MongoSH. Puedes irlos ejecutando desde Compass e ir visualizando los cambios desde la interfaz gráfica. 
+A continuación se indica cómo crear, manipular y consultar registros de datos como documentos y colecciones MongoDB en la shell MongoSH. Puedes irlos ejecutando desde Compass e ir visualizando los cambios desde la interfaz gráfica. El [manual de MongoDB](https://www.mongodb.com/docs/manual/) debe ser tu referencia principal en todo el proceso. 
 
 ## Selección/creación/eliminación de la base de datos
 
@@ -539,37 +537,33 @@ IMPORTANTE: use ``multi:true`` para actualizar todas las coincidencias.
 
 ## Borrando documentos
 
-MongoDB tiene el método  ``remove()`` para borrar un documento de una colección. ``remove()``. El método acepta dos parametros. Uno, el método de borrado y el otro el la opción justOne.
-
-```
-> db.MyFirstCollection.remove(<criteria>)
-```
+MongoSH tiene el método  ``deteteOne()`` y ``deleteMany()`` para borrar un(os) documento(s) de una colección. 
 
 Ejemplo:
 
 ```
-db.MyFirstCollection.remove({'country':'United States'})
+db.MyFirstCollection.deleteMany({'country':'United States'})
 ```
 
 
 ## Importar datos externos
 
-Descargue este conjunto de datos en tu HOME (copie este enlace: http://samplecsvs.s3.amazonaws.com/SacramentocrimeJanuary2006.csv):
+Descarga este conjunto de datos (http://samplecsvs.s3.amazonaws.com/SacramentocrimeJanuary2006.csv)
 
-[DataSet](http://samplecsvs.s3.amazonaws.com/SacramentocrimeJanuary2006.csv) 7585 rows and 794 KB)
+[DataSet](http://samplecsvs.s3.amazonaws.com/SacramentocrimeJanuary2006.csv) (7585 rows and 794 KB)
 
-Usa el comando siguiente:
+Usando el comando siguiente:
 
 ```
 curl -O http://samplecsvs.s3.amazonaws.com/SacramentocrimeJanuary2006.csv
 ```
 
-o descargalo desde [github](./datasetmongodb/SacramentocrimeJanuary2006.csv).
+o desde [github](./datasetmongodb/SacramentocrimeJanuary2006.csv).
 
-Para importar el fichero:
+Importa el fichero a MongoDB de esta forma: 
 
 ```
-mongoimport -d manuparra -c <your collection> --type csv --file /tmp/SacramentocrimeJanuary2006.csv --headerline
+mongoimport -d <your user> -c <your collection> --type csv --file /tmp/SacramentocrimeJanuary2006.csv --headerline
 ```
 
 Prueba las siguientes consultas a la colección:
@@ -588,7 +582,7 @@ Prueba las siguientes consultas a la colección:
 
 
 # References 
-
+- Manual MongoDB: https://www.mongodb.com/docs/manual/
 - Getting Started with MongoDB (MongoDB Shell Edition): https://docs.mongodb.com/getting-started/shell/
 - MongoDB Tutorial: https://www.tutorialspoint.com/mongodb/
 - MongoDB Tutorial for Beginners: https://www.youtube.com/watch?v=W-WihPoEbR4
