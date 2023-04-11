@@ -527,9 +527,9 @@ Sintaxis:
 Ejemplo:
 
 ```
-db.MyFirstCollection.update(
-	 { 'place_type':'area'},
-	 { $set: {'title':'New MongoDB Tutorial'}},
+db.MyFirstCollection.updateMany(
+  	 { 'place_type':'city'},
+	 { $set: {'principal':'Yes'}},
 	 {multi:true}
 	);
 ```
