@@ -548,11 +548,11 @@ db.MyFirstCollection.deleteMany({'country':'United States'})
 
 ## Importar datos externos
 
-Descarga este conjunto de datos (http://samplecsvs.s3.amazonaws.com/SacramentocrimeJanuary2006.csv)
+Descarga este conjunto de datos
 
 [DataSet](http://samplecsvs.s3.amazonaws.com/SacramentocrimeJanuary2006.csv) (7585 rows and 794 KB)
 
-Usando el comando siguiente:
+Puedes hacerlo con ``curl``:
 
 ```
 curl -O http://samplecsvs.s3.amazonaws.com/SacramentocrimeJanuary2006.csv
