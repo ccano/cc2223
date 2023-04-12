@@ -40,6 +40,10 @@ MongoDB almacena datos en documentos similares a JSON que pueden variar en estru
 * Infraestructura Móvil y Social
 * Gestión de datos de usuario
 * Hub de datos
+* Operaciones CRUD
+
+![bsonchema](https://devopedia.org/images/article/355/4130.1634316271.svg))
+
 
 **Comparado con MySQL:**
 
@@ -107,8 +111,6 @@ db.users.update(
 MongoDB almacena registros de datos como documentos BSON. 
 
 BSON es una representación binaria de documentos JSON, contiene más tipos de datos que JSON.
-
-![bsonchema](https://devopedia.org/images/article/355/4130.1634316271.svg))
 
 Los documentos MongoDB se componen de pares de campo y valor y tienen la siguiente estructura:
 
