@@ -40,7 +40,7 @@ MongoDB almacena datos en documentos similares a JSON que pueden variar en estru
 * Infraestructura Móvil y Social
 * Gestión de datos de usuario
 * Hub de datos
-* Operaciones CRUD
+* Operaciones CRUD (Create, Read, Update, Delete)
 
 ![bsonchema](https://devopedia.org/images/article/355/4130.1634316271.svg))
 
