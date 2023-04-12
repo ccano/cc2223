@@ -553,16 +553,14 @@ Descarga este [conjunto de datos](./SacramentocrimeJanuary2006.csv) (7585 rows a
 Puedes hacerlo con ``curl``:
 
 ```
-curl -O http://samplecsvs.s3.amazonaws.com/SacramentocrimeJanuary2006.csv
+curl -O https://github.com/ccano/cc2223/blob/main/session6/SacramentocrimeJanuary2006.csv
 ```
 
-Importa el fichero a MongoDB Compass con el botón ``ADD DATA`` 
+En MongoDB Compass crea una nueva colección ``Crime`` e importa el fichero con el botón ``ADD DATA -> Upload .csv`` 
 
-```
-mongoimport -d <your user> -c <your collection> --type csv --file /tmp/SacramentocrimeJanuary2006.csv --headerline
-```
+## Ejercicios 
 
-Prueba las siguientes consultas a la colección:
+Diseña las siguientes consultas para la colección:
 
 - Cuenta el número de delitos/robos.
 - Cuenta el número de delitos por hora.
