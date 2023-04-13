@@ -82,7 +82,7 @@ Serverless computing allows developers to purchase backend services on a flexibl
 
 The term ‘serverless’ is somewhat misleading, as there are still servers providing these backend services, but all of the server space and infrastructure concerns are handled by the vendor. Serverless means that the developers can do their work without having to worry about servers at all.
 
-**Is Serverless for you?**
+### Is Serverless for you?
 
 Developers who want to decrease their go-to-market time and build lightweight, flexible applications that can be expanded or updated quickly may benefit greatly from serverless computing.
 
@@ -90,7 +90,7 @@ Serverless architectures will reduce the cost for applications that see inconsis
 
 Also, developers who want to push some or all of their application functions close to end users for reduced latency will require at least a partially serverless architecture, since doing so necessitates moving some processes out of the origin server.
 
-**Example of services provided by the vendor in a Serverless Architecture** 
+###Example of services provided by the vendor in a Serverless Architecture
  With a large number of workloads now shifting to the cloud, cloud providers need to provide backend services like:
 
 - Load balancer configuration
