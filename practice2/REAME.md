@@ -6,7 +6,7 @@ Implementing facial recognition using Functions-as-a-Service
 **Objectives of the practice:**
 
 - Install and deploy a tool for container orchestration: Kubernetes.
-- Deploy the functionality of the function catalogue and functions service through OpenWisk or OpenFaaS.
+- Deploy the functionality of the function catalogue and functions service through OpenFaaS.
 - Implement a scalable function that would become a component for biometric identitication of users based on face images. 
 
 ## Description of the practice
@@ -21,7 +21,7 @@ The main idea of the practice is to create one or more functions that allow you 
 For this you will need the following in terms of platforms/tools to install:
 
 - Install microk8s (or minikube). 
-- Install a RAS platform: OpenFaaS or OpenWisk on top of the Kubernetes platform above.
+- Install a RAS platform: OpenFaaS on top of the Kubernetes platform above.
 
 Having done this, you will then need to create the role within the platform and add it to the role platform catalog.
 
@@ -107,7 +107,7 @@ cv2.imshow('img', img)
 
 The delivery of the practice consists of 3 parts:
 
-1. Development and description of the steps to set up the platform for the FaaS functions service, in one of the existing platforms (OpenFaas, OpenWhisk, ...).
+1. Development and description of the steps to set up the platform for the FaaS functions service, in OpenFaas (if you prefer some other existing platform for FaaS, please inform the teacher).
 2. Implementation of the face detection function in the selected language (python, node.js, etc.).
 3. Steps for the deployment of the implemented function within the selected OpenFaaS platform.
 
