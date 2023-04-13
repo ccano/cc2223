@@ -3,7 +3,8 @@
 
 ## Introduction to Function as a Service (FaaS)
 
-Before we dive into Function as a Service (FaaS), let's see what the journey has been before FaaS: Physical Servers > Virtual Machines > Containers > Functions. 
+Before we dive into Function as a Service (FaaS), let's see what the journey has been before FaaS: 
+Physical Servers > Virtual Machines > Containers > Functions. 
 
 Earlier, Physical Servers were used to run applications. Though they offered good performance, they were meant to support the working of specific applications only. If another application were to run on them, it would affect the workflows of both. The rise of Virtual Machines in 2001 allows enabling application-specific resources from physical machines to VM instances. This decreased the infrastructure concerns related to particular applications on physical servers. Then Docker containers came, which provided a lightweight alternative to Virtual machines by encapsulating only the application and it is specific dependencies inside a container. 
 
@@ -12,22 +13,6 @@ Functions are code snippets inside the container.
 Execute them based on some events. 
 
 For example, a function can be made which creates a database, and on creation, it populates that database with values. Without functions, developers would have to wait for database creation and then manually update the database.
-
-## Other Cloud Models you saw in this subject
-
-Apart from FaaS, we have other cloud models:
-
-- PaaS: Platform as a Service
-
-PaaS provides a software development environment to clients by providing all software tools to developers in one place in an organized manner.
-
-- SaaS: Software as a Service
- 
-Here the provider does not expose Virtual machines or networks to the user; instead provides him with access to software services such as databases. So the client doesn't need to worry about the OS and focuses on software.
-
-- IaaS: Infrastructure as a Service
-
-Here the client is provided by full infrastructure such as networks, Virtual machines, etc. In other terms, it is called " Cloud Computing ."
 
 ## What is Function as a Service (FaaS)?
 
@@ -38,8 +23,6 @@ Function as a Service is a cloud service execution model and uses functions for 
 - A function that executes manually.
 
 Moreover, we can also chain functions, which means a particular function on completion can trigger another function to execute. For example, A function for web requests on completion can trigger any scheduled job function. This way, the process becomes more autonomous.
-
-- Open FaaS quickly turn anything into a serverless function that runs on Linux or windows through Docker or Kubernetes. Source: Serverless Architecture with OpenFaaS and Java
 
 List of Function as a Service (FaaS) Service providers on Public Clouds:
 
@@ -171,6 +154,15 @@ Official templates exist for many popular languages and are easily extensible wi
     }
     ```
 
-### OpenWhisk
 
-TBC
+
+
+
+
+
+
+
+
+
+
+
