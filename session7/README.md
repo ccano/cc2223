@@ -24,7 +24,24 @@ Function as a Service is a cloud service execution model and uses functions for 
 
 Moreover, we can also chain functions, which means a particular function on completion can trigger another function to execute. For example, A function for web requests on completion can trigger any scheduled job function. This way, the process becomes more autonomous.
 
-List of Function as a Service (FaaS) Service providers on Public Clouds:
+Summing up, FaaS is a serverless way to execute modular pieces of code. FaaS lets developers write and update a piece of code on the fly, which can then be executed in response to an event, such as a user clicking on an element in a web application. This makes it easy to scale code and is a cost-efficient way to implement microservices.
+
+### What are the advantages of using FaaS?
+
+*Improved developer velocity*: With FaaS, developers can spend more time writing application logic and less time worrying about servers and deployment. This typically means a much faster development turnaround.
+
+*Built-in scalability*: Since FaaS code is inherently scalable, developers do not have to worry about contingencies due to high traffic or heavy use. The serverless provider will handle all of the scaling concerns.
+
+*Cost efficiency*: Unlike traditional cloud providers, serverless FaaS providers do not charge their clients for idle computation time. Because of this, clients only pay for as much computation time as they use, and do not need to waste money over-provisioning cloud resources.
+
+
+###What are the drawbacks of FaaS?
+
+*Less system control*: Having a third party managing part of the infrastructure makes it tough to understand the whole system and adds debugging challenges.
+
+*More complexity required for testing*: It can be very difficult to incorporate FaaS code into a local testing environment, making thorough testing of an application a more intensive task.
+
+### List of Function as a Service (FaaS) Service providers on Public Clouds
 
 - Microsoft Azure
 - Amazon Web Services (AWS)
@@ -33,6 +50,7 @@ List of Function as a Service (FaaS) Service providers on Public Clouds:
 - Algoritmia
 - ...
 
+### Example
 Below is a sample example of an Azure function snippet. 
 
 ```
@@ -55,11 +73,29 @@ Anyone who wants to get the benefits of FaaS needs to use a cloud service provid
 
 
 ## What is the Serverless Architecture of FaaS?
-Serverless architecture is a far broader concept than FaaS. With a large number of workloads now shifting to the cloud, cloud providers need to provide backend services like
+
+Serverless architecture is a far broader concept than FaaS. Serverless computing offers a number of advantages over traditional cloud-based or server-centric infrastructure. For many developers, serverless architectures offer greater scalability, more flexibility, and quicker time to release, all at a reduced cost. With serverless architectures, developers do not need to worry about purchasing, provisioning, and managing backend servers. However, serverless computing is not a magic bullet for all web application developers.
+
+![FaaS](https://cf-assets.www.cloudflare.com/slt3lc6tev37/7nyIgiecrfe9W6TfmJRpNh/dfc5434659e31300d1918d4163dfb263/benefits-of-serverless.svg)
+
+Serverless computing allows developers to purchase backend services on a flexible ‘pay-as-you-go’ basis, meaning that developers only have to pay for the services they use. This is like switching from a cell phone data plan with a monthly fixed limit, to one that only charges for each byte of data that actually gets used.
+
+The term ‘serverless’ is somewhat misleading, as there are still servers providing these backend services, but all of the server space and infrastructure concerns are handled by the vendor. Serverless means that the developers can do their work without having to worry about servers at all.
+
+**Is Serverless for you?**
+
+Developers who want to decrease their go-to-market time and build lightweight, flexible applications that can be expanded or updated quickly may benefit greatly from serverless computing.
+
+Serverless architectures will reduce the cost for applications that see inconsistent usage, with peak periods alternating with times of little to no traffic. For such applications, purchasing a server or a block of servers that are constantly running and always available, even when unused, may be a waste of resources. A serverless setup will respond instantly when needed and will not incur costs when at rest.
+
+Also, developers who want to push some or all of their application functions close to end users for reduced latency will require at least a partially serverless architecture, since doing so necessitates moving some processes out of the origin server.
+
+** Example of services provided by the vendor in a Serverless Architecture ** 
+ With a large number of workloads now shifting to the cloud, cloud providers need to provide backend services like:
 
 - Load balancer configuration
 - Cluster management
-- Operating system to support the workloads etc
+- Operating system to support the workloads, etc
 
 These are known as BaaS (Backend as a service). And serverless architecture comprises FaaS and BaaS. For example, in databases, many BaaS solution providers provide data validation mechanisms so an application can use these at its backend to authenticate with the database. Now FaaS comes into play. Consider the case when a new record is inserted into the database. Using FaaS, a small function can be added inside the application container, triggered when a new record is added inside the database. The serverless architecture makes FaaS more reliable and affordable. It promotes the trend to implement things as services and use API gateways to map HTTP requests with those functions.
 
