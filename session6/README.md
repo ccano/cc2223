@@ -550,22 +550,26 @@ db.MyFirstCollection.deleteMany({'country':'United States'})
 
 ## Importar datos externos
 
-Descarga este [conjunto de datos](./SacramentocrimeJanuary2006.csv) (7585 rows and 794 KB)
+Descarga este [conjunto de datos](./sacramento_crime.csv) (7585 rows and 794 KB)
 
 Puedes hacerlo con ``curl``:
 
 ```
-curl -O https://github.com/ccano/cc2223/blob/main/session6/SacramentocrimeJanuary2006.csv
+curl -O https://github.com/ccano/cc2223/blob/main/session6/sacramento_crime.csv
 ```
 
-En MongoDB Compass crea una nueva colección ``Crime`` e importa el fichero con el botón ``ADD DATA -> Upload .csv`` 
+En MongoDB Compass crea una nueva colección ``Crime`` e importa el fichero con el botón ``ADD DATA -> Upload .csv`` . Para sacar el máximo partido de esta colección, especifica que el campo ``cdatetime``es de tipo ``Date``. El resto de campos puedes dejarlos con el tipo por defecto asignado tras la autodetección de tipos. 
 
 ## Ejercicios 
 
 Diseña las siguientes consultas para la colección:
 
-- Cuenta el número de delitos/robos.
-- Cuenta el número de delitos por hora.
+- Cuenta el número total de delitos.
+- Obtén todos los delitos cometidos en la calle ``STOCKTON BLVD``. ¿Cuántos son?
+- Explora por tu cuenta cómo se agregan resultados temporales a partir de esta web: 
+https://www.mongodb.com/docs/manual/reference/operator/aggregation/week/
+y utilizando las opciones del menú ``Agregations`` de MongoDBCompass.  
+Cuenta el número de delitos totales que se cometen a cada hora del día (para averiguar cuáles son las horas más peligrosas). 
 
 
 ## Clients MongoDB
