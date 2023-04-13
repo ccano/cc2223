@@ -119,7 +119,7 @@ The zip file must contain the following:
 - Implemented function and its code
 - Script to deploy the function on the chosen platform.
 
-Deadline for submission: 08-Jun-2022 23:59:00
+Deadline for submission: 21-May-2023 23:59:00
 
 
 ## References 
