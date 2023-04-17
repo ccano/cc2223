@@ -1,4 +1,4 @@
-# Introduction to Functions as a Service
+# Introduction to Function as a Service
 
 
 ## Introduction to Function as a Service (FaaS)
