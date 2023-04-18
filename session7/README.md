@@ -129,9 +129,52 @@ OpenFaaS&reg; makes it easy for developers to deploy event-driven functions and 
 ## Overview of OpenFaaS (Serverless Functions Made Simple)
 
 Conceptual architecture and stack, [more detail available in the docs](https://docs.openfaas.com/architecture/stack/)
-![](https://blog.alexellis.io/content/images/2019/05/provider-1.png)
+
+This is the so-called PLONK Stack: 
+- Prometheus
+- Linux
+- OpenFaaS
+- NATS
+- Kubernetes
+- it also requires a Container Runtime and Conainer Registry such as Docker (but there is no letter in the name for this ;)
+
+The following diagram represent the conceptual architecture for OpenFaaS: 
+
+![PLONK STACK](https://blog.alexellis.io/content/images/2019/05/provider-1.png)
+
+
+
+The core functionality provided by the OpenFaaS Gateway is to:
+
+- Create, list, update and delete functions.
+- Scale function replicas.
+- Invoke a function.
+- Query the health, metrics, and scaling status of functions. 
+- Create, list and delete secrets.
+- View the logs from functions.
+- Queue-up asynchronous requests.
+
+The three ways of interacting with the REST API tend to be:
+
+- Using the CLI (`faas-cli`).
+- Using the built-in UI.
+- Or via the REST API directly from your application or via cURL.
+
+All communication within OpenFaaS happens over HTTP using REST. This simple interface is made powerful when coupled with events and triggers.
+
 ![](https://docs.openfaas.com/images/connector-pattern.png)
 
+
+### OpenFaaS and Kubernetes
+
+Our bare essentials for Serverless on Kubernetes are:
+
+- A container image with function code or an executable inside.
+- A registry to host the container image.
+- A Pod to run the container image.
+- A Service to access the Pod.
+
+Often, projects will add many more components on top of this stack, such as a UI, and API gateway, auto-scaling, APIs, and many more.
 
 
 ### Code samples
@@ -191,7 +234,6 @@ Official templates exist for many popular languages and are easily extensible wi
         }, err
     }
     ```
-
 
 
 # References
