@@ -90,7 +90,7 @@ Serverless architectures will reduce the cost for applications that see inconsis
 
 Also, developers who want to push some or all of their application functions close to end users for reduced latency will require at least a partially serverless architecture, since doing so necessitates moving some processes out of the origin server.
 
-###Example of services provided by the vendor in a Serverless Architecture
+### Example of services provided by the vendor in a Serverless Architecture
  With a large number of workloads now shifting to the cloud, cloud providers need to provide backend services like:
 
 - Load balancer configuration
