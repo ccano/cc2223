@@ -177,6 +177,106 @@ Our bare essentials for Serverless on Kubernetes are:
 Often, projects will add many more components on top of this stack, such as a UI, and API gateway, auto-scaling, APIs, and many more.
 
 
+## OpenFaaS Installation instructions
+
+For installing OpenFaaS on top of a Kubernetes installation, we will proceed as follows: 
+
+- Install minikube (See [session 4](https://github.com/ccano/cc2223/tree/main/session4)).
+- Install [arkade](https://github.com/alexellis/arkade). 
+- Install OpenFaaS on Kubernetes using arkade.
+
+You might choose a different installation pipeline for your system. Check the OpenFaas website for installation manuals and instructions. 
+
+### Installation of Arkade and OpenFaas
+
+Arkade is an App installer for Kubernetes. It relies on Helm3 and Kubernetes, and eases and speeds up the installation of over 50 apps. 
+We will use arkade to install OpenFaaS. 
+
+First, we will install arkade (you can find more installation instructions [here](https://github.com/alexellis/arkade))
+```
+curl -sLS https://get.arkade.dev |sudo sh
+```
+
+Then, we install openfaas using arkade: 
+```
+arkade install openfaas
+````
+
+After the installation has completed, you will receive the commands you need to run, to log in and access the OpenFaaS Gateway service in Kubernetes.
+
+```
+Info for app: openfaas 
+# Get the faas-cli 
+curl -SLsf https://cli.openfaas.com | sudo sh
+
+# Forward the gateway to your machine 
+kubectl rollout status -n openfaas deploy/gateway 
+kubectl port-forward -n openfaas svc/gateway 8080:8080 &
+
+# If basic auth is enabled, you can now log into your gateway: 
+PASSWORD=$(kubectl get secret -n openfaas basic-auth -o 
+jsonpath="{.data.basic-auth-password}" | base64 --decode; echo) 
+echo -n $PASSWORD | faas-cli login --username admin --password-stdin
+
+faas-cli store deploy figlet 
+faas-cli list
+```
+
+You can get this message again at any time with ``arkade info openfaas``.
+
+The `kubectl rollout status` command checks that all the containers in the core OpenFaaS stack have started and are healthy.
+
+The `kubectl port-forward` command securely forwards a connection to the OpenFaaS Gateway service within your cluster to your laptop on port 8080. It will remain open for as long as the process is running, so if it appears to be inaccessible later on, just run this command again.
+
+The `faas-cli login` command and preceding line populate the PASSWORD environment variable. You can use this to get the password to open the UI at any time.
+
+We then have faas-cli store deploy figlet and faas-cli list. The first command deploys an ASCII generator function from the Function Store and the second command lists the deployed functions, you should see figlet listed.
+
+You will also find the PLONK stack components deployed, such as Prometheus and NATS. You can see them in the openfaas Kubernetes namespace:
+
+```
+kubectl get deploy --namespace openfaas
+
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+alertmanager   1/1     1            1           1m
+gateway        1/1     1            1           1m
+nats           1/1     1            1           1m
+prometheus     1/1     1            1           1m
+queue-worker   1/1     1            1           1m
+```
+
+Run again ``arkade info openfaas`` and run the specified commands: 
+```
+# Get the faas-cli
+curl -SLsf https://cli.openfaas.com | sudo sh
+
+# Forward the gateway to your machine
+kubectl rollout status -n openfaas deploy/gateway
+kubectl port-forward -n openfaas svc/gateway 8080:8080 &
+
+# If basic auth is enabled, you can now log into your gateway:
+PASSWORD=$(kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode; echo)
+echo -n $PASSWORD | faas-cli login --username admin --password-stdin
+
+echo $PASSWORD
+```
+**This last command will set up and print the admin password for login into the OpenFaaS gateway. Copy this password to use it to log into the UI. **
+
+Now you can open a browser to ``http://127.0.0.1:8080/ui/`` and log in using username ``admin`` and the password you just copied. 
+
+![](OpenFaaSGateway.png)
+
+
+## Your first OpenFaaS function
+
+With OpenFaaS you can define functions either via a CLI or via the UI of the OpenFaaS gateway. For creating a new FaaS, you can click on the *Deploy New Function* button on the menu in the left for the UI. Go to the *Custom* tab and copy the data from the screenshot below
+
+![](custom-deploy-ui.png)
+
+Click *deploy*. 
+
+
+
 ### Code samples
 
 You can generate new functions using the `faas-cli` and built-in templates or use any binary for Windows or Linux in a container.
