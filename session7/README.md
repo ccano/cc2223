@@ -194,7 +194,9 @@ Official templates exist for many popular languages and are easily extensible wi
 
 
 
+# References
 
+- EdX Course by the Linux Foundation: Serverless, FaaS with OpenFaaS and Kubernetes: (https://learning.edx.org/course/course-v1:LinuxFoundationX+LFS157x+1T2022)
 
 
 
