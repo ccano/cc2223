@@ -22,7 +22,7 @@ Function as a Service is a cloud service execution model and uses functions for 
 - Function for any scheduled job
 - A function that executes manually.
 
-Moreover, we can also chain functions, which means a particular function on completion can trigger another function to execute. For example, A function for web requests on completion can trigger any scheduled job function. This way, the process becomes more autonomous.
+Moreover, we can also chain functions, which means a particular function on completion can trigger another function to execute. For example, a function for web requests on completion can trigger any scheduled job function. This way, the process becomes more autonomous.
 
 Summing up, FaaS is a serverless way to execute modular pieces of code. FaaS lets developers write and update a piece of code on the fly, which can then be executed in response to an event, such as a user clicking on an element in a web application. This makes it easy to scale code and is a cost-efficient way to implement microservices.
 
@@ -35,7 +35,7 @@ Summing up, FaaS is a serverless way to execute modular pieces of code. FaaS let
 *Cost efficiency*: Unlike traditional cloud providers, serverless FaaS providers do not charge their clients for idle computation time. Because of this, clients only pay for as much computation time as they use, and do not need to waste money over-provisioning cloud resources.
 
 
-###What are the drawbacks of FaaS?
+### What are the drawbacks of FaaS?
 
 *Less system control*: Having a third party managing part of the infrastructure makes it tough to understand the whole system and adds debugging challenges.
 
