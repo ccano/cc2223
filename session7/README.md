@@ -290,13 +290,13 @@ The top of the UI shows the URL you can use to invoke the function from a browse
 curl -sL http://127.0.0.1:8080/function/print-env
 ```
 
-The `Invocation Count` is the global count of invocations read from the built-in Prometheus time-series. **The *Function process* is the actual command that is being call when the function is invoked (you can change it)**. 
+The `Invocation Count` is the global count of invocations read from the built-in Prometheus time-series. **The *Function process* is the actual command being called when the function is invoked (you can change it)**. 
 
 From the command line you can also manage your OpenFaaS functions using the command `faas-cli`. You can install this command with: 
 ```
 curl -SLsf https://cli.openfaas.com | sudo sh
 ```
-and explore its use to create new functions, list active functions and such. 
+and explore its use to list active functions and pull existing functions from public repos. 
 
 
 ### Exercise
@@ -355,7 +355,7 @@ This will stop the FaaS service.
 
 You can generate new functions using the `faas-cli` and built-in templates or use any binary for Windows or Linux in a container.
 
-Official templates exist for many popular languages and are easily extensible with Dockerfiles.
+Official templates exist for many popular languages and are easily extensible with Dockerfiles. Explore these options with  `faas-cli`. These are some of the available function templates for different programming languages (the repo id is specified in each function). 
 
 * Node.js (`node12`) example:
 
