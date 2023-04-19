@@ -195,6 +195,7 @@ We will use arkade to install OpenFaaS.
 To install and run arkade we first need to run minikube: 
 ```
 minikube start
+```
 
 Then, we install arkade (you can find more installation instructions [here](https://github.com/alexellis/arkade))
 ```
