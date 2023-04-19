@@ -352,11 +352,42 @@ kubectl delete namespace openfaas openfaas-fn
 
 This will stop the FaaS service. 
 
+### The CLI
+The CLI for OpenFaaS (`faas-cli`) is written in Golang and acts as an HTTP client to the OpenFaaS Gateway component.
+
+You can get a complete list of commands with `faas-cli --help`.
+
+Search and deploy pre-made functions from the Function Store or find a function template for your specific language:
+
+- `faas-cli store list/deploy`
+- `faas-cli template store list/pull`
+
+Create, build, and publish a function followed by deploying it to your cluster:
+
+- `faas-cli new`
+- `faas-cli build`
+- `faas-cli push`
+- `faas-cli deploy`
+
+List, inspect, invoke, and troubleshoot your functions:
+
+- `faas-cli list`
+- `faas-cli describe`
+- `faas-cli invoke`
+- `faas-cli logs`
+
+Authenticate to the CLI, and create secrets for your functions:
+
+- `faas-cli login`
+- `faas-cli secret`
+
+For each command, you can get more information with `faas-cli COMMAND --help` to see example usage and the various flags that are allowed. You can also find help for some of the commands in the OpenFaaS documentation.
+
 ### Code samples
 
 You can generate new functions using the `faas-cli` and built-in templates or use any binary for Windows or Linux in a container.
 
-Official templates exist for many popular languages and are easily extensible with Dockerfiles. Explore these options with  `faas-cli`. These are some of the available function templates for different programming languages (the repo id is specified in each function). 
+Official templates exist for many popular languages and are easily extensible with Dockerfiles. Explore these options with `faas-cli store` and `faas-cli template store`. These are some of the available function templates for different programming languages (the repo id is specified in each function): 
 
 * Node.js (`node12`) example:
 
