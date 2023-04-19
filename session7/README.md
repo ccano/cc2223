@@ -265,7 +265,8 @@ echo -n $PASSWORD | faas-cli login --username admin --password-stdin
 
 echo $PASSWORD
 ```
-**This last command will set up and print the admin password for login into the OpenFaaS gateway. Copy this password to use it to log into the UI. **
+
+**This last command will set up and print the admin password for login into the OpenFaaS gateway. Copy this password to use it to log into the UI.**
 
 Now you can open a browser to ``http://127.0.0.1:8080/ui/`` and log in using username ``admin`` and the password you just copied. 
 
