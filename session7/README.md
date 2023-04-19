@@ -192,7 +192,11 @@ You might choose a different installation pipeline for your system. Check the Op
 Arkade is an App installer for Kubernetes. It relies on Helm3 and Kubernetes, and eases and speeds up the installation of over 50 apps. 
 We will use arkade to install OpenFaaS. 
 
-First, we will install arkade (you can find more installation instructions [here](https://github.com/alexellis/arkade))
+To install and run arkade we first need to run minikube: 
+```
+minikube start
+
+Then, we install arkade (you can find more installation instructions [here](https://github.com/alexellis/arkade))
 ```
 curl -sLS https://get.arkade.dev |sudo sh
 ```
@@ -275,7 +279,76 @@ With OpenFaaS you can define functions either via a CLI or via the UI of the Ope
 
 Click *deploy*. 
 
+Select the `print-env` function from the left panel and click the `INVOKE` button.  
 
+![](env-invoke.png)
+
+The top of the UI shows the URL you can use to invoke the function from a browser or using curl: 
+
+```
+curl -sL http://127.0.0.1:8080/function/print-env
+```
+
+The `Invocation Count` is the global count of invocations read from the built-in Prometheus time-series. **The *Function process* is the actual command that is being call when the function is invoked (you can change it)**. 
+
+From the command line you can also manage your OpenFaaS functions using the command `faas-cli`. You can install this command with: 
+```
+curl -SLsf https://cli.openfaas.com | sudo sh
+```
+and explore its use to create new functions, list active functions and such. 
+
+
+### Exercise
+
+Create a function called `print-cal` that runs the `cal` command to print a calendar: 
+
+```
+$ curl -sL http://127.0.0.1:8080/function/print-cal
+Handling connection for 8080
+     April 2023
+Su Mo Tu We Th Fr Sa
+                   1
+ 2  3  4  5  6  7  8
+ 9 10 11 12 13 14 15
+16 17 18 19 20 21 22
+23 24 25 26 27 28 29
+30
+```
+
+
+### Stop the service
+
+From the arkade help: 
+```
+Apps installed to Kubernetes can rarely be uninstalled in a single command 
+and often leave clusters in an inconsistent state. Kubernetes does not 
+track resources created by applications in the same way that something like 
+Windows 10 or MacOS would do, so  it is often much easier for you to 
+create a new cluster, than to remove an application.
+
+With a tool like kind, you just run:
+
+kind delete cluster; kind create cluster
+
+Most arkade apps are installed with helm, so you can simply use helm to 
+remove them, but beware that each project generally provides very specific 
+guidance on how to clear up all resources that it may have created 
+at installation time.
+
+Get helm:
+arkade get helm
+
+List charts:
+helm list --all-namespaces
+
+Delete a chart:
+helm delete -n openfaas openfaas
+
+Delete any namespaces it created:
+kubectl delete namespace openfaas openfaas-fn
+```
+
+This will stop the FaaS service. 
 
 ### Code samples
 
