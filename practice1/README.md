@@ -652,7 +652,7 @@ Una vez lanzado el servicio web de Owncloud y su backend (MariaDB y Redis), pod�
 https://www.youtube.com/watch?v=Jd0JImHj3fk
    
 Este manual también puede resultaros de ayuda: https://doc.owncloud.com/server/next/admin_manual/configuration/user/user_auth_ldap.html
-
+Y en esta web se explica con detenimiento el valor de los distintos campos en la integración de NextCloud (proyecto similar a OwnCloud) y LDAP: https://docs.nextcloud.com/server/22/admin_manual/configuration_user/user_auth_ldap.html
 
 ## 3.3. Despliegue de HAProxy
 
