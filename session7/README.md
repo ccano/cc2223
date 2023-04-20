@@ -235,7 +235,7 @@ The `kubectl port-forward` command securely forwards a connection to the OpenFaa
 
 The `faas-cli login` command and preceding line populate the PASSWORD environment variable. You can use this to get the password to open the UI at any time.
 
-We then have faas-cli store deploy figlet and faas-cli list. The first command deploys an ASCII generator function from the Function Store and the second command lists the deployed functions, you should see figlet listed.
+We then have `faas-cli store deploy figlet` and `faas-cli list`. The first command deploys an ASCII generator function from the Function Store and the second command lists the deployed functions, you should see `figlet` listed.
 
 You will also find the PLONK stack components deployed, such as Prometheus and NATS. You can see them in the openfaas Kubernetes namespace:
 
@@ -382,6 +382,8 @@ Authenticate to the CLI, and create secrets for your functions:
 - `faas-cli secret`
 
 For each command, you can get more information with `faas-cli COMMAND --help` to see example usage and the various flags that are allowed. You can also find help for some of the commands in the OpenFaaS documentation.
+
+We will continue the CLI explanation with more examples in our second assignment: [Practice 2](https://github.com/ccano/cc2223/tree/main/practice2).
 
 ### Code samples
 
