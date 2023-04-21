@@ -272,6 +272,10 @@ cv2.imshow('img', img)
 
 **You should adapt this code so it takes the URL of an image, preforms the face detection on the image and the result is sent to the user or saved in the service so that it can be downloaded or viewed. Any modification to improve this code and the face detection precision will be taken into account for the evaluation of the assignment.** 
 
+## Alternatives to Face Recognition
+
+If you are interested in a different application to be provided as a service with OpenFaaS, please suggest your proposed application to the teacher for his approval. A hot alternative right now is Image Segmentation as FaaS with the [Segment Anything Model by META](https://github.com/facebookresearch/segment-anything), for example, but feel free to suggest any other useful application for your academic/research/professional context you would like to work on. 
+
 
 ##  Delivery of practice
 
