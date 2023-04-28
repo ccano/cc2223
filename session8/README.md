@@ -22,11 +22,12 @@ HDFS is designed to reliably store very large files across machines in a large c
 
 ## Connecting to Hadoop Cluster UGR
 
-Log in hadoop ugr server with your credentials (the same way):
+Log in hadoop ugr server with your credentials:
 
 ```
-ssh manuparra@hadoop...
+ssh ccsa<DNI>@hadoop...
 ```
+you will also need a password from your teacher. 
 
 ## HDFS basics
 
@@ -44,13 +45,13 @@ The management of the files in HDFS works in a different way of the files of the
 Each user has in HDFS a folder in ``/user/`` with the username, for example for the user with login mcc50600265 in HDFS have:
 
 ```
-/user/mcc50600265/
+/user/CCSA2223/mcc50600265/
 ```
 
 Attention!! The HDFS storage space is different from the user's local storage space in hadoop.ugr.es
 
 ```
-/user/mcc506000265/  NOT EQUAL /home/mcc506000265/
+/user/CCSA2223/mcc50600265/  NOT EQUAL /home/mcc506000265/
 ```
 
 ## Usage HDFS
@@ -74,10 +75,10 @@ Options are (simplified):
 -put        Put a file from local to HDFS
 ```
 
-List the content of your HDFS folder:
+List the content of a HDFS folder:
 
 ```
-hdfs dfs -ls
+hdfs dfs -ls /user/CCSA2223/ccano
 ```
 
 Create a test file:
@@ -89,55 +90,49 @@ echo “HOLA HDFS” > fichero.txt
 Move the local file ``fichero.txt`` to HDFS:
 
 ```
-hdfs dfs -put fichero.txt ./
+hdfs dfs -put fichero.txt /user/CCSA2223/ccano/.
 ```
 
 or, the same:
 
 ```
-hdfs dfs -put fichero.txt /user/<your user login>/
+hdfs dfs -put fichero.txt /user/CCSA2223/ccano/
 ```
 
 List again your folder:
 
 ```
-hdfs dfs -ls
+hdfs dfs -ls /user/CCSA2223/ccano
 ```
 
-Create a folder:
+Create a folder test`:
 
 ```
-hdfs dfs -mkdir test
+hdfs dfs -mkdir /user/CCSA2223/ccano/test
 ```
 
 Move ``fichero.txt`` to test folder:
 
 ```
-hdfs dfs -mv fichero.txt test
+hdfs dfs -mv /user/CCSA2223/ccano/fichero.txt /user/CCSA2223/ccano/test/.
 ```
 
 Show the content:
 
 ```
-hdfs dfs -cat test/fichero.txt
-```
-
-or, the same:
-
-```
-hdfs dfs -cat /user/<your user login>/test/fichero.txt
+hdfs dfs -cat /user/CCSA2223/ccano/test/fichero.txt
 ```
 
 Delete file and folder:
 
 ```
-hdfs dfs -rm test/fichero.txt
+hdfs dfs -rm /user/CCSA2223/ccano/test/fichero.txt
 ```
 
 and 
 
 ```
-hdfs dfs -rmdir test
+hdfs dfs -rmdir /user/CCSA2223/ccano/test
 ```
 
 Create two files:
@@ -153,28 +148,28 @@ echo “HOLA HDFS 2” > f2.txt
 Store in HDFS:
 
 ```
-hdfs dfs -put f1.txt
+hdfs dfs -put f1.txt /user/CCSA2223/ccano/.
 ```
 
 ```
-hdfs dfs -put f2.txt
+hdfs dfs -put f2.txt /user/CCSA2223/ccano/.
 ```
 
 Cocatenate both files:
 
 ```
-hdfs dfs -getmerge ./ merged.txt
+hdfs dfs -getmerge /user/CCSA2223/ccano/ merged.txt
 ```
 
 ## Exercice
 
 - Create 5 files in yout local account with the following names:
-  - part1.dat ,part2.dat, part3.dat. part4.dat. part5.dat 
+  - part1.dat ,part2.dat, part3.dat, part4.dat, part5.dat
 - Copy files to HDFS
 - Create the following HDFS folder structure:
   - /test/p1/
   - /train/p1/
-  - /train/p2/ 
+  - /train/p2/
 - Copy part1 in /test/p1/ and part2 in /train/p2/ 
 - Move part3, and part4 to /train/p1/
 - Finally merge folder /train/p2 and store as data_merged.txt
