@@ -162,12 +162,6 @@ Move the local file ``fichero.txt`` to HDFS:
 hdfs dfs -put fichero.txt /user/CCSA2223/ccano/.
 ```
 
-or, the same:
-
-```
-hdfs dfs -put fichero.txt /user/CCSA2223/ccano/
-```
-
 List again your folder:
 
 ```
