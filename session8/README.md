@@ -1,6 +1,7 @@
 # Workshop Material for HDFS, Hadoop and Spark
 
-Original texts by Manuel Parra: manuelparra@decsai.ugr.es
+Original texts by Manuel Parra: manuelparra@decsai.ugr.es. 
+
 With contributions by Carlos Cano: carloscano@ugr.es
 
 Content:
