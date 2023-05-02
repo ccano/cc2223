@@ -1,4 +1,4 @@
-# Workshop Material for HDFS, Hadoop and Spark
+# HDFS, Hadoop and Spark
 
 Original texts by Manuel Parra: manuelparra@decsai.ugr.es. 
 
@@ -6,7 +6,7 @@ With contributions by Carlos Cano: carloscano@ugr.es
 
 Content:
 
-- [Workshop - HDFS, Hadoop](#workshop-material-for-hdfs--hadoop-and-spark)
+- [HDFS, Hadoop](#workshop-material-for-hdfs--hadoop-and-spark)
   * [How to connect](#how-to-connect)
   * [What is hadoop.ugr.es](#what-is-hadoopugres)
   * [Working with HDFS](#working-with-hdfs)
@@ -27,7 +27,7 @@ Content:
     + [Calculate MIN of a row in Hadoop](#calculate-min-of-a-row-in-hadoop)
     + [Compile MIN in Hadoop](#compile-min-in-hadoop)
     + [References](#references-)
-- [Workshop - SparkR](#sparkr)
+- [Spark](#sparkr)
   * [How to connect](#how-to-connect-1)
   * [Start R shell for Spark](#start-r-shell-for-spark)
   * [Create the Spark Environment](#create-the-spark-environment)
