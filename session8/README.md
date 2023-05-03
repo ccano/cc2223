@@ -725,8 +725,11 @@ if __name__ == "__main__":
 ```
 
 6.- ¿Dónde están los resultados?
-Los resultados de la ejecución están dentro de la carpeta HDFS destino que se ha indicado en `saveAsTextFile()`. Al ver los ficheros generados usando: ```
+Los resultados de la ejecución están dentro de la carpeta HDFS destino que se ha indicado en `saveAsTextFile()`. Al ver los ficheros generados usando: 
+
+```
 hdfs dfs -ls directorio_destino
+
 ```
 
 aparece lo siguiente:`part-00000 part-00001 part-00002 ...`
