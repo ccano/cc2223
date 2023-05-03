@@ -433,18 +433,18 @@ hadoop jar <Application> <MainClassName> <Input in HDFS> <Output in HDFS>
 
 **Examples of execution**
 
-*Pay attention: Each run require different output folder*
+*Pay attention: Each run requires a new, different, output folder. The output folder will be created on the fly, as the command is called. *
 
 With a file Oddyssey.txt in /tmp (HDFS):
 
 ```
-hadoop jar WordCount.jar WordCount /tmp/odyssey.txt /user/mp2019/<yourID>/<folder>/
+hadoop jar WordCount.jar WordCount /tmp/odyssey.txt /user/CCSA2223/<yourID>/<folder>/
 ```
 
 With a text file in your HDFS folder:
 
 ```
-hadoop jar WordCount.jar WordCount /user/mp2019/lorem.txt  /user/mp2019/<yourID>/<folder>/
+hadoop jar WordCount.jar WordCount /user/CCSA2223/<yourID>/<yourFile>  /user/CCSA2223/<yourID>/<folder>/
 ```
 
 
@@ -455,7 +455,7 @@ hadoop jar WordCount.jar WordCount /user/mp2019/lorem.txt  /user/mp2019/<yourID>
 Check output folder with:
 
 ```
-hdfs dfs -ls /user/mp2019/<yourID>/<folder>
+hdfs dfs -ls /user/CCSA2223/<yourID>/<folder>
 ```
 
 Return ...:
@@ -469,21 +469,21 @@ Found 2 items
 Show the content of ``part-r-00000``:
 
 ```
-hdfs dfs -cat /user/mp2019/<yourID>/<folder>/part-r-00000
+hdfs dfs -cat /user/CCSA2223/<yourID>/<folder>/part-r-00000
 ```
 
 
 ### Datasets
 
-Folder ``/user/mp2019/`` contains several samples of a BigData dataset named ECBDL.
+Folder ``/user/CCSA2223/`` contains several samples of a BigData dataset named ECBDL.
 
 ```
 Rows    Bytes                         Folder and File
 ------- ---------                     ----------------
-5000    177876    2019-05-13 18:14    /user/mp2019/5000_ECBDL14_10tst.data
-20000   711174    2019-05-13 18:13    /user/mp2019/20000_ECBDL14_10tst.data
-500000  17683919  2019-05-13 18:14    /user/mp2019/500000_ECBDL14_10tst.data
-2897918 102747181 2019-05-13 18:14    /user/mp2019/ECBDL14_10tst.data
+5000    177876    2019-05-13 18:14    /user/CCSA2223/5000_ECBDL14_10tst.data
+20000   711174    2019-05-13 18:13    /user/CCSA2223/20000_ECBDL14_10tst.data
+500000  17683919  2019-05-13 18:14    /user/CCSA2223/500000_ECBDL14_10tst.data
+2897918 102747181 2019-05-13 18:14    /user/CCSA2223/ECBDL14_10tst.data
 ```
 
 
@@ -588,19 +588,19 @@ hadoop jar <Application> <MainClassName> <Input in HDFS> <Output in HDFS>
 With a file Oddyssey.txt in /tmp (HDFS):
 
 ```
-hadoop jar Min.jar Min /user/mp2019/5000_ECBDL14_10tst.data /user/mp2019/<yourID>/<folder>/
+hadoop jar Min.jar Min /user/CCSA2223/5000_ECBDL14_10tst.data /user/CCSA2223/<yourID>/<folder>/
 ```
 
 Check results:
 
 ```
-hdfs dfs -ls /user/mp2019/<yourID>/<folder>/
+hdfs dfs -ls /user/CCSA2223/<yourID>/<folder>/
 ```
 
 Show results:
 
 ```
-hdfs dfs -cat /user/mp2019/<yourID>/<folder>/part-....
+hdfs dfs -cat /user/CCSA2223/<yourID>/<folder>/part-....
 ```
 
 
@@ -615,13 +615,13 @@ hdfs dfs -cat /user/mp2019/<yourID>/<folder>/part-....
 
 
 
-cp /tmp/lorem.txt /home/mp<DNI>/lorem.txt
-hdfs dfs -put lorem.txt /user/mp2019/mp<DNI>/
-hdfs dfs -put /home/mp<DNI>/lorem.txt /user/mp2019/mp<DNI>/
+cp /tmp/lorem.txt /home/CCSA2223/<userFolder>/lorem.txt
+hdfs dfs -put lorem.txt /user/CCSA2223/<userFolder>/
+hdfs dfs -put /home/<userFolder>/lorem.txt /user/CCSA2223/<userFolder>/
 
-hdfs dfs -ls /user/mp2019/mp<DNI>/lorem.txt
+hdfs dfs -ls /user/CCSA2223/<userFolder>/lorem.txt
 cat lorem.txt
-hdfs dfs -cat /user/mp2019/mp<DNI>/lorem.txt
+hdfs dfs -cat /user/CCSA2223/<userFolder>/lorem.txt
 
 
 
