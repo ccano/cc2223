@@ -28,6 +28,8 @@ Content:
     + [Compile MIN in Hadoop](#compile-min-in-hadoop)
     + [References](#references-)
 - [Spark](#sparkr)
+
+<!--
   * [How to connect](#how-to-connect-1)
   * [Start R shell for Spark](#start-r-shell-for-spark)
   * [Create the Spark Environment](#create-the-spark-environment)
@@ -44,6 +46,7 @@ Content:
   * [Machine learning](#machine-learning)
   * [Let see some examples](#let-see-some-examples)
     + [First example](#first-example)
+-->
 
 ## How to connect
 
@@ -615,6 +618,8 @@ hdfs dfs -cat /user/CCSA2223/<yourID>/<folder>/part-....
 
 
 
+
+<!--
 cp /tmp/lorem.txt /home/CCSA2223/<userFolder>/lorem.txt
 hdfs dfs -put lorem.txt /user/CCSA2223/<userFolder>/
 hdfs dfs -put /home/<userFolder>/lorem.txt /user/CCSA2223/<userFolder>/
@@ -622,9 +627,9 @@ hdfs dfs -put /home/<userFolder>/lorem.txt /user/CCSA2223/<userFolder>/
 hdfs dfs -ls /user/CCSA2223/<userFolder>/lorem.txt
 cat lorem.txt
 hdfs dfs -cat /user/CCSA2223/<userFolder>/lorem.txt
+-->
 
-
-
+<!--
 
 # SparkR
 
@@ -919,6 +924,6 @@ See the model:
 summary(model)
 ```
 
-
+-->
 
 
