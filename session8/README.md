@@ -1,6 +1,6 @@
 # HDFS, Hadoop and Spark
 
-Original texts by Manuel Parra: manuelparra@decsai.ugr.es. 
+Original texts by Manuel Parra: manuelparra@decsai.ugr.es and José Manuel Benítez: j.m.benitez@decsai.ugr.es
 
 With contributions by Carlos Cano: carloscano@ugr.es
 
@@ -14,7 +14,7 @@ Content:
     + [HDFS storage space](#hdfs-storage-space)
     + [Usage HDFS](#usage-hdfs)
   * [Exercice](#exercice)
-  * [Working with Hadoop Map-Reduce](#working-with-hadoop-map-reduce)
+- [Working with Hadoop Map-Reduce](#working-with-hadoop-map-reduce)
     + [Structure of M/R code](#structure-of-m-r-code)
       - [Mapper](#mapper)
       - [Reducer](#reducer)
@@ -628,6 +628,216 @@ hdfs dfs -ls /user/CCSA2223/<userFolder>/lorem.txt
 cat lorem.txt
 hdfs dfs -cat /user/CCSA2223/<userFolder>/lorem.txt
 -->
+
+
+
+# Spark
+
+Desde su lanzamiento, Apache Spark ha sido adoptado rápidamente por empresas de una amplia gama de industrias y prácticamente se ha convertido en el estándar de-facto para el procesamiento de datos de gran volumen. Empresas de Internet tan conocidas como Netflix, Yahoo y eBay han desplegado Spark a escala masiva, procesando colectivamente múltiples petabytes de datos en clusters de más de 8.000 nodos. Se ha convertido rápidamente en la mayor comunidad de código abierto en Big Data, con más de 1000 colaboradores de más de 250 organizaciones.
+
+Entre las características de Spak cabe mencionar:
+- Velocidad: Diseñado de abajo hacia arriba para el rendimiento, Spark puede llegar a ser 100 veces más rápido que Hadoop para el procesamiento de datos a gran escala explotando en la computación de la memoria y otras optimizaciones. Spark también es rápido cuando los datos se almacenan en el disco, y actualmente tiene el récord mundial de ordenación a gran escala en disco.
+- Facilidad de uso: Spark tiene APIs fáciles de usar para operar en grandes conjuntos de datos. Esto incluye una colección de más de 100 operadores para transformar datos y API de marcos de datos familiares para manipular datos semiestructurados. Un ejemplo sencillo en Python de la expresividad de su API puede verse en este código, que permite consultar datos de una forma muy flexible (lee un json, selecciona los datos con `age>21` y luego devuelve la columna (path en json / key) `name.first` ):
+```
+df = spark.read.json("logs.json")
+df.where("age > 21").select("name.first").show()
+```
+- Un motor unificado: Spark viene empaquetado con bibliotecas de nivel superior, incluyendo soporte para consultas SQL, transmisión de datos, aprendizaje automático y procesamiento de gráficos. Estas bibliotecas estándar aumentan la productividad de los desarrolladores y pueden combinarse perfectamente para crear flujos de trabajo complejos.
+- Funciona en cualquier plataforma: Tiene soporte para HDFS Hadoop, Apache Mesos,
+Kubernetes, Cassandra, Hbase, etc.
+
+
+Para la ejecución de aplicaciones de Python/R/Scala en Spark sobre hadoop.ugr.es necesitamos contar con los siguientes elementos: 
+
+## Spark context
+
+Punto de entrada principal para la funcionalidad de Spark. Un SparkContext representa la conexión a un cluster de Spark, y puede ser usado para crear RDDs, acumuladores y variables en ese cluster. El SparkContext se define dentro de un script, por ejemplo, el siguiente código en python : 
+```
+conf = SparkConf().setAppName("Word Count - Python").set("spark.hadoop.yarn.resourcemanager.address", "hadoop-master:8032")
+```
+representa un Spark context en python sobre Hadoop YARN en hadoop-master:8032. 
+
+## Ejecución en modo local, standalone o YARN
+
+Para que Spark funcione necesita recursos. En el modo autónomo se inician los workers y el maestro de Spark y la capa de almacenamiento puede ser cualquiera --- HDFS, Sistema de Archivos, Cassandra etc. En el modo YARN lo que ocurre es que se está pidiendo al clúster YARN-Hadoop que administre la asignación de recursos y la gestión del mismo de forma mucho más óptima.
+
+Cuando se usa master como local[2] pides a Spark que use 2 cores y ejecute el maestro y los trabajadores en la misma JVM. En el modo local todas las tareas relacionadas con el trabajo de Spark se ejecutan en la misma JVM. Por tanto, la única diferencia entre el modo Standalone y el local es que en el modo Standalone está definiendo "contenedores" para que el worker y el maestro de Spark corran en su máquina (así puede tener 2 workers y sus tareas pueden ser distribuidas en la JVM de esos dos workers...) pero en el modo local está corriendo todo en la misma JVM en la máquina local.
+
+## Enviar un trabajo al cluster
+
+La sintaxis es la siguiente:
+```
+spark-submit
+--class <main-class> 
+--master <master-url> 
+--deploy-mode <deploy-mode> 
+--conf <key>=<value>
+....
+<application-jar> [application-arguments]
+```
+
+## Ejemplo práctico
+
+1.- Descargamos un conjunto de datos en nuestra cuenta:
+```
+wget https://raw.githubusercontent.com/mattf/joyce/master/james-joyce-ulysses.txt 
+```
+
+2.- Mover el fichero a hdfs:
+```
+hdfs dfs -put james-joyce-ulysses.txt /user/CCSA2122/<tuusuario> 
+```
+3.- Descargar el código fuente del programa:
+```
+wget https://gist.githubusercontent.com/manuparra/f6e2924e26b50a9d8028ff25a3f32495/raw/351518089e099f77ac1ccbb0bf8a297e99ac0c58/wordcount.py
+```
+
+4.- Revisar el código fuente del programa: 
+```
+cat wordcount.py
+import sys
+ 
+from pyspark import SparkContext, SparkConf
+ 
+if __name__ == "__main__":
+ 
+  # create Spark context with Spark configuration
+  conf = SparkConf().setAppName("Word Count Workshop Spark")  
+  sc = SparkContext(conf=conf)
+ 
+  # read in text file and split each document into words
+  words = sc.textFile("./james-joyce-ulysses.txt").flatMap(lambda line: line.split(" "))
+ 
+  # count the occurrence of each word
+  wordCounts = words.map(lambda word: (word, 1)).reduceByKey(lambda a,b:a +b)
+ 
+  wordCounts.saveAsTextFile("./wc_joyce/")
+  
+  sc.stop()
+```
+
+4.- Editar el código fuente del programa y modificar los datos de salida al directorio HDFS destino: Esto es necesario hacerlo cada vez que obtengamos resultados en HDFS ya que Spark por defecto no sobrescribe resultados y el proceso termina en error cuando lo intenta.
+
+5.- Enviar el programa a ejecución.
+```
+/opt/spark-2.2.0/bin/spark-submit --master spark://hadoop-master:7077 --total-executor-cores 5 --executor-memory 1g wordcount.py
+
+```
+
+6.- ¿Dónde están los resultados?
+Los resultados de la ejecución están dentro de la carpeta HDFS destino que se ha indicado en `saveAsTextFile()`. Al ver los ficheros generados usando: ```
+hdfs dfs -ls directorio_destino
+```
+
+aparece lo siguiente:`part-00000 part-00001 part-00002 ...`
+
+Cada uno de los ficheros contiene los pares claves (palabra) - valor (suma del número de ocurrencias).
+
+Si queremos unirlos todo el conjunto de resultados hay que usar la función merge de HDFS, que fusiona los resultados de las partes de la salida de datos:
+```
+hdfs dfs -getmerge ./james-joyce-ulysses.txt ./results_wc_joyce
+```
+
+
+Para que el propio programa devuelva los datos ya procesados, debemos tener en cuenta que estamos trabajando con datos que están distribuidos y han de ser *recogidos* de los nodos donde se encuentran.
+
+En el siguiente ejemplo podemos ver como hacer la misma función que el comando anterior, pero usando `.collect()` para recolectar los datos y mostrarlos en pantalla o guardarlos en un fichero de nuevo. Hay que tener cuidado con `collect()`, pues convierte un RDD a un objeto python equivalente, por lo que está limitado a los recursos del nodo:
+https://gist.githubusercontent.com/manuparra/f6e2924e26b50a9d8028ff25a3f32495/raw/351518089e099f77ac1ccbb0bf8a297e99ac0c58/wordcount_collect.py
+
+
+## Consola interactiva PySpark
+
+Para conectar a la consola interactiva, es decir un shell de Python pero con el contexto ya disponible para trabajar en Spark usando la variable spark que lo controla:
+```
+/opt/spark-2.2.0/bin/pyspark --master spark://hadoop-master:7077
+```
+
+Dentro del entorno interactivo puedes realizar pruebas con Python antes de hacer un Submit a Spark.
+
+## Trabajo con RDDs / SparkDataFrames
+
+Resilient Distributed Datasets -RDD- (concepto que sustenta los fundamentos de Apache Spark), pueden residir tanto en disco como en memoria principal.
+Cuando cargamos un conjunto de datos (por ejemplo proveniente de una fuente externa como los archivos de un directorio de un HDFS, o de una estructura de datos que haya sido previamente generada en nuestro programa) para ser procesado en Spark, la estructura que usamos internamente para volcar dichos datos es un RDD. Al volcarlo a un RDD, en función de cómo tengamos configurado nuestro entorno de trabajo en Spark, la lista de entradas que componen nuestro dataset será dividida en un número concreto de particiones (se "paralelizará" (paralelize)), cada una de ellas almacenada en uno de los nodos de nuestro clúster para procesamiento de Big Data. Esto explica el apelativo de "distributed" de los RDD.
+A partir de aquí, entrará en juego una de las características básicas de estos RDD, y es que son inmutables. Una vez que hemos creado un RDD, éste no cambiará, sino que cada transformación (map, filter, flatMap, etc.) que apliquemos sobre él generará un nuevo RDD. Esto por ejemplo facilita mucho las tareas de procesamiento concurrente, ya que si varios procesos están trabajando sobre un mismo RDD el saber que no va a cambiar simplifica la gestión de dicha concurrencia. Cada definición de un nuevo RDD no está generando realmente copias de los datos. Cuando vamos aplicando sucesivas transformaciones de los datos, lo que estamos componiendo es una "receta" que se aplica a los datos para conseguir las transformaciones.
+Ejemplo de RDD simple:
+```
+#Lista general en Python:
+lista = ['uno','dos','dos','tres','cuatro']
+#Creamos el RDD de la lista:
+listardd = sc.parallelize(lista)
+#Recolectamos los datos del RDD para convertirlo de nuevo en Obj Py
+print(listardd.collect())
+```
+
+Principales diferencias entre un RDD y Dataframes
+- Tanto RDD como los dataframes provienen de datasets (listas, datos csv,...)
+- Los RDD necesitan ser subidos a HDFS previamente, los dataframes pueden ser
+cargados en memoria directamente desde un archivo como por ejemplo un .csv
+- Los RDD son un tipo de estructura de datos especial de Apache Spark, mientras que
+los dataframes son una clase especial de R.
+- Los RDD son inmutables (su edición va generando el DAG), mientras que los
+dataframes admiten operaciones sobre los propios datos, es decir, podemos
+cambiarlos en memoria.
+- Los RDD se encuentran distribuidos entre los cluster, los dataframes en un único
+cluster o máquina.
+- Los RDD son tolerantes a fallos
+
+
+## Carga de datos desde CSV 
+
+Descarga este dataset de COVID-19:
+```
+wget https://opendata.ecdc.europa.eu/covid19/casedistribution/csv/
+```
+cámbiale el nombre a covid19.csv y muévelo a HDFS.
+
+Para cargar como un CSV dentro de SPARK como un DataFrame
+```
+df = sc.read.csv("/home/stp/test1.csv",header=True,sep=",",inferSchema=True);
+```
+o
+```
+df = sc.read.csv("/home/stp/test1.csv",header=True,sep=",",inferSchema=False);
+```
+Una vez hecho esto df contiene un DataFrame para ser utilizado con toda la funcionalidad de Spark.
+
+## Manipulación de los datos con SparkSQL
+
+Una vez creado el DataFrame es posible transformarlo en otro componente que permite el acceso al mismo mediante una sintaxis basada en SQL (ver https://spark.apache.org/docs/2.2.0/sql-programming-guide.html)
+
+Usando la variable anterior:
+```
+df.createOrReplaceTempView("test")
+sqlDF = spark.sql("SELECT * FROM test") sqlDF.show()
+```
+
+# Ejemplo plantilla
+
+```
+
+import sys
+from pyspark import SparkContext, SparkConf
+from pyspark.ml.classification import LogisticRegression
+
+if __name__ == "__main__":
+
+# create Spark context with Spark configuration conf = SparkConf().setAppName("Practica 4")
+sc = SparkContext(conf=conf)
+df = sc.read.csv("/user/ccsaDNI/fichero.csv",header=True,sep=",",inferSchema=True)
+df.show()
+df.createOrReplaceTempView("sql_dataset")
+sqlDF = sc.sql("SELECT campo1, camp3, ... c6 FROM sql_dataset LIMIT 12") sqlDF.show()
+lr = LogisticRegression(maxIter=10, regParam=0.3, elasticNetParam=0.8) lrModel = lr.fit(sqlDF)
+lrModel.summary()
+#df.collect() <- NO!
+
+sc.stop()
+
+```
+
+
+
+
 
 <!--
 
