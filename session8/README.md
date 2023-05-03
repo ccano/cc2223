@@ -400,7 +400,7 @@ public class WordCount {
 Copy source code of WordCount.java from HDFS to your home:
 
 ```
-hdfs dfs -get /user/mp2019/WordCount.java /home/<yourID>/WordCount.java
+hdfs dfs -get /user/CCSA2223/ccano/WordCount.java /home/<yourID>/WordCount.java
 ```
 
 
