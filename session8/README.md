@@ -715,16 +715,35 @@ if __name__ == "__main__":
   
   sc.stop()
 ```
+En este ejemplo, tras crear un Spark context, se lee el archivo de texto de entrada usando la variable `SparkContext` y se crea un mapa plano de palabras `words`, que es de tipo PythonRDD.
+```
+words = sc.textFile("./james-joyce-ulysses.txt").flatMap(lambda line: line.split(" "))
+```
+Al final de la línea de código se especifica que se dividen las palabras usando un solo espacio como separador.
 
-4.- Editar el código fuente del programa y modificar los datos de salida al directorio HDFS destino: Esto es necesario hacerlo cada vez que obtengamos resultados en HDFS ya que Spark por defecto no sobrescribe resultados y el proceso termina en error cuando lo intenta.
+Luego mapearemos cada palabra a un par clave:valor de palabra:1, siendo 1 el número de ocurrencias:
+```
+words.map(lambda word: (word, 1))
+```
+Después agregamos en el resultado todos los pares con la misma clave (la palabra). La agregación es la suma en este caso: 
+```
+reduceByKey(lambda a,b:a +b)
+```
+Y el resultado se almacena en formato de texto en el directorio especificado: 
+```
+wordCounts.saveAsTextFile("...")
+```
 
-5.- Enviar el programa a ejecución.
+
+5.- Editar el código fuente del programa y modificar los datos de salida al directorio HDFS destino. Esto es necesario hacerlo cada vez que obtengamos resultados en HDFS ya que Spark por defecto no sobrescribe resultados y el proceso termina en error cuando lo intenta.
+
+6.- Enviar el programa a ejecución.
 ```
 /opt/spark-2.2.0/bin/spark-submit --master spark://hadoop-master:7077 --total-executor-cores 5 --executor-memory 1g wordcount.py
 
 ```
 
-6.- ¿Dónde están los resultados?
+7.- ¿Dónde están los resultados?
 Los resultados de la ejecución están dentro de la carpeta HDFS destino que se ha indicado en `saveAsTextFile()`. Al ver los ficheros generados usando: 
 
 ```
@@ -745,6 +764,7 @@ hdfs dfs -getmerge ./james-joyce-ulysses.txt ./results_wc_joyce
 Para que el propio programa devuelva los datos ya procesados, debemos tener en cuenta que estamos trabajando con datos que están distribuidos y han de ser *recogidos* de los nodos donde se encuentran.
 
 En el siguiente ejemplo podemos ver como hacer la misma función que el comando anterior, pero usando `.collect()` para recolectar los datos y mostrarlos en pantalla o guardarlos en un fichero de nuevo. Hay que tener cuidado con `collect()`, pues convierte un RDD a un objeto python equivalente, por lo que está limitado a los recursos del nodo:
+
 https://gist.githubusercontent.com/manuparra/f6e2924e26b50a9d8028ff25a3f32495/raw/351518089e099f77ac1ccbb0bf8a297e99ac0c58/wordcount_collect.py
 
 
@@ -762,6 +782,7 @@ Dentro del entorno interactivo puedes realizar pruebas con Python antes de hacer
 Resilient Distributed Datasets -RDD- (concepto que sustenta los fundamentos de Apache Spark), pueden residir tanto en disco como en memoria principal.
 Cuando cargamos un conjunto de datos (por ejemplo proveniente de una fuente externa como los archivos de un directorio de un HDFS, o de una estructura de datos que haya sido previamente generada en nuestro programa) para ser procesado en Spark, la estructura que usamos internamente para volcar dichos datos es un RDD. Al volcarlo a un RDD, en función de cómo tengamos configurado nuestro entorno de trabajo en Spark, la lista de entradas que componen nuestro dataset será dividida en un número concreto de particiones (se "paralelizará" (paralelize)), cada una de ellas almacenada en uno de los nodos de nuestro clúster para procesamiento de Big Data. Esto explica el apelativo de "distributed" de los RDD.
 A partir de aquí, entrará en juego una de las características básicas de estos RDD, y es que son inmutables. Una vez que hemos creado un RDD, éste no cambiará, sino que cada transformación (map, filter, flatMap, etc.) que apliquemos sobre él generará un nuevo RDD. Esto por ejemplo facilita mucho las tareas de procesamiento concurrente, ya que si varios procesos están trabajando sobre un mismo RDD el saber que no va a cambiar simplifica la gestión de dicha concurrencia. Cada definición de un nuevo RDD no está generando realmente copias de los datos. Cuando vamos aplicando sucesivas transformaciones de los datos, lo que estamos componiendo es una "receta" que se aplica a los datos para conseguir las transformaciones.
+
 Ejemplo de RDD simple:
 ```
 #Lista general en Python:
@@ -814,7 +835,7 @@ df.createOrReplaceTempView("test")
 sqlDF = spark.sql("SELECT * FROM test") sqlDF.show()
 ```
 
-# Ejemplo plantilla
+# Ejemplo de plantilla para la práctica 3
 
 ```
 
@@ -824,9 +845,9 @@ from pyspark.ml.classification import LogisticRegression
 
 if __name__ == "__main__":
 
-# create Spark context with Spark configuration conf = SparkConf().setAppName("Practica 4")
+# create Spark context with Spark configuration conf = SparkConf().setAppName("Practica 3")
 sc = SparkContext(conf=conf)
-df = sc.read.csv("/user/ccsaDNI/fichero.csv",header=True,sep=",",inferSchema=True)
+df = sc.read.csv("/user/CCSA2223/usuario/fichero.csv",header=True,sep=",",inferSchema=True)
 df.show()
 df.createOrReplaceTempView("sql_dataset")
 sqlDF = sc.sql("SELECT campo1, camp3, ... c6 FROM sql_dataset LIMIT 12") sqlDF.show()
