@@ -28,7 +28,15 @@ Content:
     + [Compile MIN in Hadoop](#compile-min-in-hadoop)
     + [References](#references-)
 - [Spark](#sparkr)
-
+    + [Spark Context](#Spark-context)
+    + [Ejecución](#Ejecución-en-modo-local,-standalone-o-YARN)
+    + [Enviar un trabajo al cluster](#enviar-un-trabajo-al-cluster)
+    + [Ejemplo práctico](#ejemplo-práctico)
+    + [Consola interactiva PySpark](#consola-interactiva-PySpark)
+    + [Trabajo con RDDs / SparkDataFrames](#Trabajo-con-RDDs-/-SparkDataFrames)
+    + [Carga de datos desde csv](#Carga-de-datos-desde-csv)
+    + [Manipulación de los datos con SparkSQL](#Manipulación-de-los-datos-con-SparkSQL)
+    + [Ejemplo de plantilla para la práctica 3](#Ejemplo-de-plantilla-para-la-práctica-3)
 <!--
   * [How to connect](#how-to-connect-1)
   * [Start R shell for Spark](#start-r-shell-for-spark)
