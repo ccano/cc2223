@@ -5,10 +5,9 @@
 - Sesión 5: Presentación práctica 1 - Desarrollo y despliegue de servicios en Cloud usando contenedores
 - Sesión 6: Introducción a las BDs en CC: MongoDB
 - Sesión 7: Funciones como servicio FaaS - OpenFaaS 
-- Sesión 8: Presentación práctica 2 - FaaS / BDs en Cloud
-- Sesión 9: HDFS en hadoop.ugr.es
-- Sesión 10: Primeros pasos con Spark + MLlib en hadoop.ugr.es
-- Sesión 11: Presentación práctica 3 - BigData y procesamiento de datos en Cloud 
+- Presentación práctica 2 - FaaS / BDs en Cloud
+- Sesión 8, 9 y 10: HDFS, Hadoop y Spark + MLlib  en hadoop.ugr.es
+- Presentación práctica 3 - BigData y procesamiento de datos en Cloud 
 
 
 
@@ -44,9 +43,7 @@ Introduction to FaaS
 
 - [FaaS](./session7/README.md)
 
-## Session 9
+## Session 8 , 9 and 10
 
-Introduction to HDFS
-
-- [HDFS](./session8/README.md)
+- [Introduction to HDFS, Hadoop and Spark+MLlib](./session8/README.md)
 
