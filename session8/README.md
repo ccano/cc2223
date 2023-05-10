@@ -620,9 +620,9 @@ hdfs dfs -cat /user/CCSA2223/<yourID>/<folder>/part-....
 
 
 
-# References:
-
-- http://www.glennklockwood.com/data-intensive/hadoop/overview.html
+# Map Reduce Examples in Python :
+- https://glennklockwood.com/data-intensive/hadoop/streaming.html
+- https://www.michael-noll.com/tutorials/writing-an-hadoop-mapreduce-program-in-python/
 
 
 
