@@ -336,7 +336,7 @@ Main function considering Map and Reduce objects and additional data for the job
 
 ### Word Count example
 
-Full example of Word Count for Hadoop 2.9.3 :
+Full example of Word Count for Hadoop 2.9.3. Copy the code and save it to your local path as `WordCount.java`.
 
 ```
 import java.io.IOException;
@@ -405,27 +405,16 @@ public class WordCount {
 ```
 
 
-### WordCount example file
-
-Copy source code of WordCount.java from HDFS to your home:
-
-```
-hdfs dfs -get /user/CCSA2223/ccano/WordCount.java /home/<yourID>/WordCount.java
-```
-
-
-
-
 ### Running Hadoop applications
 
 
-First, create classes folder:
+In your home folder, first, create the `wordcount_classes` folder:
 
 ````
 mkdir wordcount_classes
 ````
 
-Compile WordCount Application (from source code WordCount.java):
+Compile WordCount Application (from source code `WordCount.java`):
 
 ```
 javac -classpath `yarn classpath` -d wordcount_classes WordCount.java
@@ -500,7 +489,7 @@ Rows    Bytes                         Folder and File
 
 ### Calculate MIN of a row in Hadoop
 
-Mapper (old version):
+Mapper:
 
 
 ```
@@ -527,7 +516,7 @@ public class MinMapper extends MapReduceBase implements Mapper<LongWritable, Tex
 ```
 
 
-Reducer (old version):
+Reducer:
 
 ````
 public class MinReducer extends MapReduceBase implements Reducer<Text, DoubleWritable, Text, DoubleWritable> {
@@ -596,7 +585,7 @@ hadoop jar <Application> <MainClassName> <Input in HDFS> <Output in HDFS>
 
 *Pay attention: Each run require different output folder*
 
-With a file Oddyssey.txt in /tmp (HDFS):
+With a file from one of these sample datasets already in HDFS:
 
 ```
 hadoop jar Min.jar Min /user/CCSA2223/5000_ECBDL14_10tst.data /user/CCSA2223/<yourID>/<folder>/
@@ -616,11 +605,9 @@ hdfs dfs -cat /user/CCSA2223/<yourID>/<folder>/part-....
 
 
 
-
-
-
-
 # Word Count example for Hadoop in Python:
+
+For python Map-Reduce implementations of the word count example, please check the following references: 
 
 - https://www.michael-noll.com/tutorials/writing-an-hadoop-mapreduce-program-in-python/
 - https://glennklockwood.com/data-intensive/hadoop/streaming.html
