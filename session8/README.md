@@ -744,7 +744,7 @@ Desde hadoop.ugr.es:
 ```
 Desde ulises.ugr.es:
 ```
-/opt/spark-3.0.1-bin-hadoop2.7/bin/spark-submit --master spark://hadoop-master:7077 --total-executor-cores 5 --executor-memory 1g wordcount.py
+/opt/spark-3.0.1-bin-hadoop2.7/bin/spark-submit --master spark://ulises:7077 --total-executor-cores 5 --executor-memory 1g wordcount.py
 ```
 7.- ¿Dónde están los resultados?
 Los resultados de la ejecución están dentro de la carpeta HDFS destino que se ha indicado en `saveAsTextFile()`. Al ver los ficheros generados usando: 
