@@ -31,7 +31,7 @@ Content:
     + [Spark Context](#Spark-context)
     + [Ejecución](#Ejecución-en-modo-local,-standalone-o-YARN)
     + [Enviar un trabajo al cluster](#enviar-un-trabajo-al-cluster)
-    + [Ejemplo práctico](#ejemplo-práctico)
+    + [PySpark, o como utilizar Spark desde Python](#PySpark-,-o-como-utilizar-Spark-desde-Python)
     + [Consola interactiva PySpark](#consola-interactiva-PySpark)
     + [Trabajo con RDDs / SparkDataFrames](#Trabajo-con-RDDs-/-SparkDataFrames)
     + [Carga de datos desde csv](#Carga-de-datos-desde-csv)
@@ -670,7 +670,11 @@ spark-submit
 <application-jar> [application-arguments]
 ```
 
-## Ejemplo práctico
+## PySpark, o como utilizar Spark desde Python
+
+Os proponemos ahora un ejemplo práctico en Python utilizando la biblioteca PySpark. Os recomendamos consultar la documentación de PySpark y los ejemplos en el siguiente enlace: https://spark.apache.org/docs/latest/api/python/
+
+Para un primer ejemplo, os proponemos seguir los siguientes pasos: 
 
 1.- Descargamos un conjunto de datos en nuestra cuenta:
 ```
@@ -728,7 +732,6 @@ Y el resultado se almacena en formato de texto en el directorio especificado:
 wordCounts.saveAsTextFile("...")
 ```
 
-
 5.- Editar el código fuente del programa y modificar los datos de salida al directorio HDFS destino. Esto es necesario hacerlo cada vez que obtengamos resultados en HDFS ya que Spark por defecto no sobrescribe resultados y el proceso termina en error cuando lo intenta.
 
 6.- Enviar el programa a ejecución.
@@ -774,7 +777,9 @@ Dentro del entorno interactivo puedes realizar pruebas con Python antes de hacer
 ## Trabajo con RDDs / SparkDataFrames
 
 Resilient Distributed Datasets -RDD- (concepto que sustenta los fundamentos de Apache Spark), pueden residir tanto en disco como en memoria principal.
+
 Cuando cargamos un conjunto de datos (por ejemplo proveniente de una fuente externa como los archivos de un directorio de un HDFS, o de una estructura de datos que haya sido previamente generada en nuestro programa) para ser procesado en Spark, la estructura que usamos internamente para volcar dichos datos es un RDD. Al volcarlo a un RDD, en función de cómo tengamos configurado nuestro entorno de trabajo en Spark, la lista de entradas que componen nuestro dataset será dividida en un número concreto de particiones (se "paralelizará" (paralelize)), cada una de ellas almacenada en uno de los nodos de nuestro clúster para procesamiento de Big Data. Esto explica el apelativo de "distributed" de los RDD.
+
 A partir de aquí, entrará en juego una de las características básicas de estos RDD, y es que son inmutables. Una vez que hemos creado un RDD, éste no cambiará, sino que cada transformación (map, filter, flatMap, etc.) que apliquemos sobre él generará un nuevo RDD. Esto por ejemplo facilita mucho las tareas de procesamiento concurrente, ya que si varios procesos están trabajando sobre un mismo RDD el saber que no va a cambiar simplifica la gestión de dicha concurrencia. Cada definición de un nuevo RDD no está generando realmente copias de los datos. Cuando vamos aplicando sucesivas transformaciones de los datos, lo que estamos componiendo es una "receta" que se aplica a los datos para conseguir las transformaciones.
 
 Ejemplo de RDD simple:
@@ -787,7 +792,7 @@ listardd = sc.parallelize(lista)
 print(listardd.collect())
 ```
 
-Principales diferencias entre un RDD y Dataframes
+Las diferencias más importantes entre un RDD y un Dataframe son las siguientes:
 - Tanto RDD como los dataframes provienen de datasets (listas, datos csv,...)
 - Los RDD necesitan ser subidos a HDFS previamente, los dataframes pueden ser
 cargados en memoria directamente desde un archivo como por ejemplo un .csv
@@ -798,7 +803,7 @@ dataframes admiten operaciones sobre los propios datos, es decir, podemos
 cambiarlos en memoria.
 - Los RDD se encuentran distribuidos entre los cluster, los dataframes en un único
 cluster o máquina.
-- Los RDD son tolerantes a fallos
+- Los RDD son tolerantes a fallos.
 
 
 ## Carga de datos desde CSV 
@@ -828,6 +833,8 @@ Usando la variable anterior:
 df.createOrReplaceTempView("test")
 sqlDF = spark.sql("SELECT * FROM test") sqlDF.show()
 ```
+
+
 
 # Ejemplo de plantilla para la práctica 3
 
