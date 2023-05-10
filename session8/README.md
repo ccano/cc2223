@@ -665,11 +665,11 @@ conf = SparkConf().setAppName("Word Count - Python").set("spark.hadoop.yarn.reso
 ```
 representa un Spark context en python sobre Hadoop YARN en hadoop-master:8032. 
 
+![Spark architecture](spark.png)
+
 ## Ejecución en modo local, standalone o YARN
 
-Para que Spark funcione necesita recursos. En el modo autónomo se inician los workers y el maestro de Spark y la capa de almacenamiento puede ser cualquiera --- HDFS, Sistema de Archivos, Cassandra etc. En el modo YARN lo que ocurre es que se está pidiendo al clúster YARN-Hadoop que administre la asignación de recursos y la gestión del mismo de forma mucho más óptima.
-
-Cuando se usa master como local[2] pides a Spark que use 2 cores y ejecute el maestro y los trabajadores en la misma JVM. En el modo local todas las tareas relacionadas con el trabajo de Spark se ejecutan en la misma JVM. Por tanto, la única diferencia entre el modo Standalone y el local es que en el modo Standalone está definiendo "contenedores" para que el worker y el maestro de Spark corran en su máquina (así puede tener 2 workers y sus tareas pueden ser distribuidas en la JVM de esos dos workers...) pero en el modo local está corriendo todo en la misma JVM en la máquina local.
+Para que Spark funcione necesita recursos. En el modo autónomo (standalone) se inician los workers y el maestro de Spark y la capa de almacenamiento puede ser cualquiera --- HDFS, Sistema de Archivos, Cassandra etc. En el modo YARN se pide al clúster YARN-Hadoop que administre la asignación de recursos y la gestión del mismo resulta más eficiente. En el modo local todas las tareas relacionadas con el trabajo de Spark se ejecutan en la misma JVM. 
 
 ## Enviar un trabajo al cluster
 
