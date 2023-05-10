@@ -629,19 +629,17 @@ hdfs dfs -cat /user/CCSA2223/<userFolder>/lorem.txt
 
 # Spark
 
-Desde su lanzamiento, Apache Spark ha sido adoptado rápidamente por empresas de una amplia gama de industrias y prácticamente se ha convertido en el estándar de-facto para el procesamiento de datos de gran volumen. Empresas de Internet tan conocidas como Netflix, Yahoo y eBay han desplegado Spark a escala masiva, procesando colectivamente múltiples petabytes de datos en clusters de más de 8.000 nodos. Se ha convertido rápidamente en la mayor comunidad de código abierto en Big Data, con más de 1000 colaboradores de más de 250 organizaciones.
+Desde su lanzamiento, Apache Spark ha sido adoptado rápidamente por empresas de una amplia gama de industrias y prácticamente se ha convertido en el estándar de-facto para el procesamiento de datos de gran volumen. Empresas de Internet tan conocidas como Netflix, Yahoo y eBay han desplegado Spark a escala masiva, procesando colectivamente múltiples petabytes de datos en clusters de más de 8.000 nodos. Se ha convertido rápidamente en la mayor comunidad de código abierto en Big Data, con más de 1.000 colaboradores de más de 250 organizaciones.
 
 Entre las características de Spak cabe mencionar:
-- Velocidad: Diseñado de abajo hacia arriba para el rendimiento, Spark puede llegar a ser 100 veces más rápido que Hadoop para el procesamiento de datos a gran escala explotando en la computación de la memoria y otras optimizaciones. Spark también es rápido cuando los datos se almacenan en el disco, y actualmente tiene el récord mundial de ordenación a gran escala en disco.
+- Velocidad: Diseñado de abajo hacia arriba para el rendimiento, **Spark puede llegar a ser 100 veces más rápido que Hadoop para el procesamiento de datos a gran escala** explotando el uso de memoria y otras optimizaciones. Spark también es rápido cuando los datos se almacenan en el disco, y actualmente tiene el récord mundial de ordenación a gran escala en disco.
 - Facilidad de uso: Spark tiene APIs fáciles de usar para operar en grandes conjuntos de datos. Esto incluye una colección de más de 100 operadores para transformar datos y API de marcos de datos familiares para manipular datos semiestructurados. Un ejemplo sencillo en Python de la expresividad de su API puede verse en este código, que permite consultar datos de una forma muy flexible (lee un json, selecciona los datos con `age>21` y luego devuelve la columna (path en json / key) `name.first` ):
 ```
 df = spark.read.json("logs.json")
 df.where("age > 21").select("name.first").show()
 ```
 - Un motor unificado: Spark viene empaquetado con bibliotecas de nivel superior, incluyendo soporte para consultas SQL, transmisión de datos, aprendizaje automático y procesamiento de gráficos. Estas bibliotecas estándar aumentan la productividad de los desarrolladores y pueden combinarse perfectamente para crear flujos de trabajo complejos.
-- Funciona en cualquier plataforma: Tiene soporte para HDFS Hadoop, Apache Mesos,
-Kubernetes, Cassandra, Hbase, etc.
-
+- Funciona en cualquier plataforma: Tiene soporte para HDFS Hadoop, Apache Mesos, Kubernetes, Cassandra, Hbase, etc.
 
 Para la ejecución de aplicaciones de Python/R/Scala en Spark sobre hadoop.ugr.es necesitamos contar con los siguientes elementos: 
 
