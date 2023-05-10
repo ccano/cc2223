@@ -256,7 +256,7 @@ hdfs dfs -getmerge /user/CCSA2223/ccano/ merged.txt
 
 ## Working with Hadoop Map-Reduce
 
-Hadoop version: 2.9.3
+The provided examples are written in Java code for Hadoop version: 2.9.3. For [examples in python, go to these references](#word-count-example-for-hadoop-in-python)
 
 ### Structure of M/R code
 
