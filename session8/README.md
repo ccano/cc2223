@@ -31,7 +31,7 @@ Content:
     + [Spark Context](#Spark-context)
     + [Ejecución](#Ejecución-en-modo-local,-standalone-o-YARN)
     + [Enviar un trabajo al cluster](#enviar-un-trabajo-al-cluster)
-    + [PySpark, o como utilizar Spark desde Python](#PySpark-,-o-como-utilizar-Spark-desde-Python)
+    + [PySpark, o como utilizar Spark desde Python](#PySpark-o-como-utilizar-Spark-desde-Python)
     + [Consola interactiva PySpark](#consola-interactiva-PySpark)
     + [Trabajo con RDDs / SparkDataFrames](#Trabajo-con-RDDs-/-SparkDataFrames)
     + [Carga de datos desde csv](#Carga-de-datos-desde-csv)
@@ -685,6 +685,7 @@ wget https://raw.githubusercontent.com/mattf/joyce/master/james-joyce-ulysses.tx
 ```
 hdfs dfs -put james-joyce-ulysses.txt /user/CCSA2122/<tuusuario> 
 ```
+
 3.- Descargar el código fuente del programa:
 ```
 wget https://gist.githubusercontent.com/manuparra/f6e2924e26b50a9d8028ff25a3f32495/raw/351518089e099f77ac1ccbb0bf8a297e99ac0c58/wordcount.py
@@ -805,6 +806,18 @@ cambiarlos en memoria.
 cluster o máquina.
 - Los RDD son tolerantes a fallos.
 
+Para aprender a manejar Dataframes y RDDS en PySpark podemos consultar los manuales de referencia de PySpark: 
+- Dataframes: https://mybinder.org/v2/gh/apache/spark/bf45fad170?filepath=python%2Fdocs%2Fsource%2Fgetting_started%2Fquickstart_df.ipynb
+- RDDs: https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.RDD.html#pyspark.RDD
+
+También es importante matizar que, tal y como se especifica en la documentación de PySpark: 
+```
+Note that the RDD API is a low-level API which can be difficult to use and you do not get the benefit of Spark’s automatic query optimization capabilities. We recommend using DataFrames instead of RDDs as it allows you to express what you want more easily and lets Spark automatically construct the most efficient query for you.
+```
+
+Es decir, PySpark recomienda el uso de APIs de usuario/programadores sobre Dataframes en lugar de RDDs, ya que Spark puede representar los dataframes en los RDDs mejor optimizados y dejando el uso explícito de RDDs para usuarios expertos. Es por esto que para la biblioteca de referencia en Machine Learning sobre Spark, MLlib, se recomienda directamente el uso de Dataframes: 
+https://spark.apache.org/docs/latest/ml-guide.html
+
 
 ## Carga de datos desde CSV 
 
@@ -834,6 +847,10 @@ df.createOrReplaceTempView("test")
 sqlDF = spark.sql("SELECT * FROM test") sqlDF.show()
 ```
 
+## MLlib
+ MLlib es la biblioteca de Machine Learning sobre Spark. Puedes consultar la documentación: 
+ - MLlib: https://spark.apache.org/docs/latest/ml-guide.html
+ - MLlib desde PySpark: https://spark.apache.org/docs/latest/api/python/reference/pyspark.ml.html
 
 
 # Ejemplo de plantilla para la práctica 3
