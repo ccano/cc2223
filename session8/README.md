@@ -26,7 +26,7 @@ Content:
     + [Datasets](#datasets)
     + [Calculate MIN of a row in Hadoop](#calculate-min-of-a-row-in-hadoop)
     + [Compile MIN in Hadoop](#compile-min-in-hadoop)
-    + [References](#references-)
+    + [Word count example for Hadoop in Python](#word-count-example-for-hadoop-in-python)
 - [Spark](#sparkr)
     + [Spark Context](#Spark-context)
     + [Ejecución](#Ejecución-en-modo-local,-standalone-o-YARN)
@@ -620,9 +620,10 @@ hdfs dfs -cat /user/CCSA2223/<yourID>/<folder>/part-....
 
 
 
-# Map Reduce Examples in Python :
-- https://glennklockwood.com/data-intensive/hadoop/streaming.html
+# Word Count example for Hadoop in Python:
+
 - https://www.michael-noll.com/tutorials/writing-an-hadoop-mapreduce-program-in-python/
+- https://glennklockwood.com/data-intensive/hadoop/streaming.html
 
 
 
