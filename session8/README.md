@@ -683,7 +683,7 @@ wget https://raw.githubusercontent.com/mattf/joyce/master/james-joyce-ulysses.tx
 
 2.- Mover el fichero a hdfs:
 ```
-hdfs dfs -put james-joyce-ulysses.txt /user/CCSA2122/<tu-usuario> 
+hdfs dfs -put james-joyce-ulysses.txt /user/CCSA2223/<tu-usuario> 
 ```
 
 3.- Descargar el código fuente del programa:
