@@ -688,7 +688,7 @@ hdfs dfs -put james-joyce-ulysses.txt /user/CCSA2223/<tu-usuario>
 
 3.- Descargar el código fuente del programa:
 ```
-wget https://gist.githubusercontent.com/manuparra/f6e2924e26b50a9d8028ff25a3f32495/raw/351518089e099f77ac1ccbb0bf8a297e99ac0c58/wordcount.py
+wget https://github.com/ccano/cc2223/blob/main/session8/wordcount.py
 ```
 
 4.- Revisar el código fuente del programa: 
@@ -765,7 +765,7 @@ aparece lo siguiente:`part-00000 part-00001 part-00002 ...`
 
 Cada uno de los ficheros contiene los pares claves (palabra) - valor (suma del número de ocurrencias). Por ejemplo, si mostramos el contenido de uno de estos ficheros: 
 ```
-$ hdfs dfs -cat /user/CCSA2223/ccano/wc_joyce/part-00968
+$ hdfs dfs -cat /user/CCSA2223/tu-usuario/wc_joyce/part-00968
 ('said:', 27)
 ('narrowly', 1)
 ('butter,', 5)
@@ -779,7 +779,7 @@ $ hdfs dfs -cat /user/CCSA2223/ccano/wc_joyce/part-00968
 
 Si queremos unir todo el conjunto de resultados hay que usar la función `-getmerge` de HDFS, que fusiona los resultados de las partes de la salida de datos:
 ```
-hdfs dfs -getmerge /user/CCSA2223/ccano/wc_joyce ./james-joyce-ulysses-wordcount-result.txt
+hdfs dfs -getmerge /user/CCSA2223/tu-usuario/wc_joyce ./james-joyce-ulysses-wordcount-result.txt
 ```
 
 
