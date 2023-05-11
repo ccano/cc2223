@@ -933,10 +933,13 @@ sc = SparkContext(conf=conf)
 df = sc.read.csv("/user/CCSA2223/usuario/fichero.csv",header=True,sep=",",inferSchema=True)
 df.show()
 df.createOrReplaceTempView("sql_dataset")
-sqlDF = sc.sql("SELECT campo1, campo3, ... campoX FROM sql_dataset LIMIT 12") sqlDF.show()
-lr = LogisticRegression(maxIter=10, regParam=0.3, elasticNetParam=0.8) lrModel = lr.fit(sqlDF)
+sqlDF = sc.sql("SELECT campo1, campo3, ... campoX FROM sql_dataset LIMIT 12") 
+sqlDF.show()
+lr = LogisticRegression(maxIter=10, regParam=0.3, elasticNetParam=0.8) 
+lrModel = lr.fit(sqlDF)
 lrModel.summary()
-#df.collect() <- Do not collect since the resources for the node are limited for a big dataset!
+
+#df.collect() <- Do NOT collect since the resources for the node are limited for a big dataset!
 
 sc.stop()
 
