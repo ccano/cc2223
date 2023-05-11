@@ -683,7 +683,7 @@ wget https://raw.githubusercontent.com/mattf/joyce/master/james-joyce-ulysses.tx
 
 2.- Mover el fichero a hdfs:
 ```
-hdfs dfs -put james-joyce-ulysses.txt /user/CCSA2122/<tuusuario> 
+hdfs dfs -put james-joyce-ulysses.txt /user/CCSA2122/<tu-usuario> 
 ```
 
 3.- Descargar el código fuente del programa:
@@ -693,30 +693,30 @@ wget https://gist.githubusercontent.com/manuparra/f6e2924e26b50a9d8028ff25a3f324
 
 4.- Revisar el código fuente del programa: 
 ```
-cat wordcount.py
-import sys
- 
-from pyspark import SparkContext, SparkConf
+$ cat wordcount.py
+import pyspark 
  
 if __name__ == "__main__":
- 
+
+  input_file = "" 	#path to your input file here
+  output_folder = "" 	#path to your output folder here
+  
   # create Spark context with Spark configuration
-  conf = SparkConf().setAppName("Word Count Workshop Spark")  
-  sc = SparkContext(conf=conf)
+  sc = pyspark.SparkContext(master='local[*]', appName="Word Count")
  
   # read in text file and split each document into words
-  words = sc.textFile("./james-joyce-ulysses.txt").flatMap(lambda line: line.split(" "))
- 
+  words = sc.textFile(input_file).flatMap(lambda line: line.split(" "))
+
   # count the occurrence of each word
   wordCounts = words.map(lambda word: (word, 1)).reduceByKey(lambda a,b:a +b)
  
-  wordCounts.saveAsTextFile("./wc_joyce/")
+  wordCounts.saveAsTextFile(output_folder)
   
   sc.stop()
 ```
 En este ejemplo, tras crear un Spark context, se lee el archivo de texto de entrada usando la variable `SparkContext` y se crea un mapa plano de palabras `words`, que es de tipo PythonRDD.
 ```
-words = sc.textFile("./james-joyce-ulysses.txt").flatMap(lambda line: line.split(" "))
+words = sc.textFile(input_file).flatMap(lambda line: line.split(" "))
 ```
 Al final de la línea de código se especifica que se dividen las palabras usando un solo espacio como separador.
 
@@ -730,37 +730,56 @@ reduceByKey(lambda a,b:a +b)
 ```
 Y el resultado se almacena en formato de texto en el directorio especificado: 
 ```
-wordCounts.saveAsTextFile("...")
+wordCounts.saveAsTextFile(output_folder)
 ```
 
-5.- Editar el código fuente del programa y modificar los datos de salida al directorio HDFS destino. Esto es necesario hacerlo cada vez que obtengamos resultados en HDFS ya que Spark por defecto no sobrescribe resultados y el proceso termina en error cuando lo intenta.
+5.- Editar el código fuente del programa y modificar los datos de entrada (`input_file`) y salida (`output_folder`) sobre HDFS. En cada ejecución será siempre obligatorio actualizar el directorio de salida ya que Spark por defecto no sobrescribe resultados y el proceso termina en error cuando lo intenta.
+
+Si tus datos de entrada y tu carpeta de salida están en HDFS en ulises.ugr.es, debes especificar la ruta a los datos siguiendo este formato: 
+```
+  input_file = "hdfs://ulises.imuds.es:8020/user/CCSA2223/tu-usuario/james-joyce-ulysses.txt"
+  output_folder = "hdfs://ulises.imuds.es:8020/user/CCSA2223/tu-usuario/wc_joyce/"
+ 
+```
 
 6.- Enviar el programa a ejecución.
+
+Desde ulises.ugr.es:
+```
+/opt/spark-3.0.1-bin-hadoop2.7/bin/spark-submit --master spark://ulises:7077 --total-executor-cores 5 --executor-memory 1g wordcount.py
+```
 
 Desde hadoop.ugr.es:
 ```
 /opt/spark-2.2.0/bin/spark-submit --master spark://hadoop-master:7077 --total-executor-cores 5 --executor-memory 1g wordcount.py
 
 ```
-Desde ulises.ugr.es:
-```
-/opt/spark-3.0.1-bin-hadoop2.7/bin/spark-submit --master spark://ulises:7077 --total-executor-cores 5 --executor-memory 1g wordcount.py
-```
 7.- ¿Dónde están los resultados?
 Los resultados de la ejecución están dentro de la carpeta HDFS destino que se ha indicado en `saveAsTextFile()`. Al ver los ficheros generados usando: 
 
 ```
 hdfs dfs -ls directorio_destino
-
 ```
 
 aparece lo siguiente:`part-00000 part-00001 part-00002 ...`
 
-Cada uno de los ficheros contiene los pares claves (palabra) - valor (suma del número de ocurrencias).
-
-Si queremos unirlos todo el conjunto de resultados hay que usar la función merge de HDFS, que fusiona los resultados de las partes de la salida de datos:
+Cada uno de los ficheros contiene los pares claves (palabra) - valor (suma del número de ocurrencias). Por ejemplo, si mostramos el contenido de uno de estos ficheros: 
 ```
-hdfs dfs -getmerge ./james-joyce-ulysses.txt ./results_wc_joyce
+$ hdfs dfs -cat /user/CCSA2223/ccano/wc_joyce/part-00968
+('said:', 27)
+('narrowly', 1)
+('butter,', 5)
+("o'er", 9)
+('narrow', 4)
+('Five,', 2)
+('dog.', 5)
+('did?', 2)
+...
+```
+
+Si queremos unir todo el conjunto de resultados hay que usar la función `-getmerge` de HDFS, que fusiona los resultados de las partes de la salida de datos:
+```
+hdfs dfs -getmerge /user/CCSA2223/ccano/wc_joyce ./james-joyce-ulysses-wordcount-result.txt
 ```
 
 
@@ -768,14 +787,42 @@ Para que el propio programa devuelva los datos ya procesados, debemos tener en c
 
 En el siguiente ejemplo podemos ver como hacer la misma función que el comando anterior, pero usando `.collect()` para recolectar los datos y mostrarlos en pantalla o guardarlos en un fichero de nuevo. Hay que tener cuidado con `collect()`, pues convierte un RDD a un objeto python equivalente, por lo que está limitado a los recursos del nodo:
 
-https://gist.githubusercontent.com/manuparra/f6e2924e26b50a9d8028ff25a3f32495/raw/351518089e099f77ac1ccbb0bf8a297e99ac0c58/wordcount_collect.py
+```
+import pyspark 
+ 
+if __name__ == "__main__":
 
+  input_file = "" #your input file here
+  output_folder = "" # your output folder here
+  
+  # create Spark context with Spark configuration
+  sc = pyspark.SparkContext(master='local[*]', appName="Word Count")
+ 
+  # read in text file and split each document into words
+  words = sc.textFile(input_file).flatMap(lambda line: line.split(" "))
+
+  # count the occurrence of each word
+  wordCounts = words.map(lambda word: (word, 1)).reduceByKey(lambda a,b:a +b)
+ 
+  output = wordCounts.collect()
+  
+  for (word, count) in output:
+    print("%s: %i" % (word, count))  
+  
+  sc.stop()
+```
 
 ## Consola interactiva PySpark
 
 Para conectar a la consola interactiva, es decir un shell de Python pero con el contexto ya disponible para trabajar en Spark usando la variable spark que lo controla:
+
+Desde hadoop.ugr.es:
 ```
 /opt/spark-2.2.0/bin/pyspark --master spark://hadoop-master:7077
+```
+Desde ulises.ugr.es: 
+```
+/opt/spark-2.2.0/bin/pyspark --master spark://ulises:7077
 ```
 
 Dentro del entorno interactivo puedes realizar pruebas con Python antes de hacer un Submit a Spark.
