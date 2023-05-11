@@ -648,8 +648,15 @@ Para la ejecución de aplicaciones de Python/R/Scala en Spark sobre hadoop.ugr.e
 Punto de entrada principal para la funcionalidad de Spark. Un SparkContext representa la conexión a un cluster de Spark, y puede ser usado para crear RDDs, acumuladores y variables en ese cluster. El SparkContext se define dentro de un script, por ejemplo, el siguiente código en python : 
 ```
 conf = SparkConf().setAppName("Word Count - Python").set("spark.hadoop.yarn.resourcemanager.address", "hadoop-master:8032")
+sc = SparkContext(conf=conf)
 ```
-representa un Spark context en python sobre Hadoop YARN en hadoop-master:8032. 
+utiliza un objeto `SparkConf` que representa los parámetros de configuración del `SparkContext`. En este caso, la variable `sc` representa un Spark context en python sobre Hadoop YARN en hadoop-master:8032. 
+
+Otro ejemplo, utilizando directamente los propios parámetros de `SparkContext` en lugar de un objeto `SparkConf`:  
+```
+sc = pyspark.SparkContext(master='local[*]', appName="Word Count")
+```
+En este caso `sc` representa un Spark context de una shell Spark ejecutando como master en el nodo local con tantas hebras como cores disponibles haya en el nodo (`local[2]` utilizaría 2 cores, `local[*]` tantos como haya disponibles).
 
 ![Spark architecture](spark.png)
 
@@ -693,7 +700,6 @@ wget https://github.com/ccano/cc2223/blob/main/session8/wordcount.py
 
 4.- Revisar el código fuente del programa: 
 ```
-$ cat wordcount.py
 import pyspark 
  
 if __name__ == "__main__":
@@ -735,14 +741,16 @@ wordCounts.saveAsTextFile(output_folder)
 
 5.- Editar el código fuente del programa y modificar los datos de entrada (`input_file`) y salida (`output_folder`) sobre HDFS. En cada ejecución será siempre obligatorio actualizar el directorio de salida ya que Spark por defecto no sobrescribe resultados y el proceso termina en error cuando lo intenta.
 
-Si tus datos de entrada y tu carpeta de salida están en HDFS en ulises.ugr.es, debes especificar la ruta a los datos siguiendo este formato: 
+Si tus datos de entrada y tu carpeta de salida están en HDFS en ulises.ugr.es, debes especificar la ruta a los datos utilizando los siguientes nombres de dominio: 
 ```
   input_file = "hdfs://ulises.imuds.es:8020/user/CCSA2223/tu-usuario/james-joyce-ulysses.txt"
   output_folder = "hdfs://ulises.imuds.es:8020/user/CCSA2223/tu-usuario/wc_joyce/"
- 
 ```
+El nombre de dominio `ulises.imuds.es` (o IP `192.168.3.100`) es el nombre (y la IP) del servidor HDFS en la red interna del cluster. 
 
 6.- Enviar el programa a ejecución.
+
+Para enviar el programa a ejecución debemos invocar el comando `spark-submit` tal y como se describe en [Enviar un trabajo al cluster](#enviar-un-trabajo-al-cluster). Para ello, debemos conocer la ruta al binario `spark-submit` y la URL del master del cluster Spark. Dependiendo de la máquina en la que ejecutemos los comandos, estos parámetros varían: 
 
 Desde ulises.ugr.es:
 ```
@@ -785,7 +793,7 @@ hdfs dfs -getmerge /user/CCSA2223/tu-usuario/wc_joyce ./james-joyce-ulysses-word
 
 Para que el propio programa devuelva los datos ya procesados, debemos tener en cuenta que estamos trabajando con datos que están distribuidos y han de ser *recogidos* de los nodos donde se encuentran.
 
-En el siguiente ejemplo podemos ver como hacer la misma función que el comando anterior, pero usando `.collect()` para recolectar los datos y mostrarlos en pantalla o guardarlos en un fichero de nuevo. Hay que tener cuidado con `collect()`, pues convierte un RDD a un objeto python equivalente, por lo que está limitado a los recursos del nodo:
+En el siguiente ejemplo podemos ver como hacer la misma función que el comando anterior, pero usando `.collect()` para recolectar los datos y mostrarlos en pantalla o guardarlos en un fichero de nuevo. Hay que tener cuidado con `collect()`, pues convierte un RDD a un objeto python equivalente, por lo que está limitado a los recursos del nodo.
 
 ```
 import pyspark 
@@ -804,7 +812,7 @@ if __name__ == "__main__":
   # count the occurrence of each word
   wordCounts = words.map(lambda word: (word, 1)).reduceByKey(lambda a,b:a +b)
  
-  output = wordCounts.collect()
+  output = wordCounts.collect()		#use with care
   
   for (word, count) in output:
     print("%s: %i" % (word, count))  
@@ -814,7 +822,7 @@ if __name__ == "__main__":
 
 ## Consola interactiva PySpark
 
-Para conectar a la consola interactiva, es decir un shell de Python pero con el contexto ya disponible para trabajar en Spark usando la variable spark que lo controla:
+En ocasiones es muy útil realizar pruebas con nuestro código antes de enviar el trabajo a Spark con `spark-submit`. La consola interactiva PySpark es un shell de Python con el contexto ya disponible para trabajar en Spark usando la variable spark que lo controla:
 
 Desde hadoop.ugr.es:
 ```
@@ -825,7 +833,11 @@ Desde ulises.ugr.es:
 /opt/spark-2.2.0/bin/pyspark --master spark://ulises:7077
 ```
 
-Dentro del entorno interactivo puedes realizar pruebas con Python antes de hacer un Submit a Spark.
+Dentro del entorno interactivo el contexto Spark ya está disponible, por lo que **no debes definir un nuevo contexto Spark**. Es decir, dentro de PySpark no ejecutes este tipo de comandos: 
+```
+  # create Spark context with Spark configuration, do not run this from within PySpark
+  sc = pyspark.SparkContext(master='local[*]', appName="Word Count")
+```
 
 ## Trabajo con RDDs / SparkDataFrames
 
@@ -896,7 +908,8 @@ Una vez creado el DataFrame es posible transformarlo en otro componente que perm
 Usando la variable anterior:
 ```
 df.createOrReplaceTempView("test")
-sqlDF = spark.sql("SELECT * FROM test") sqlDF.show()
+sqlDF = spark.sql("SELECT * FROM test") 
+sqlDF.show()
 ```
 
 ## MLlib
@@ -908,22 +921,22 @@ sqlDF = spark.sql("SELECT * FROM test") sqlDF.show()
 # Ejemplo de plantilla para la práctica 3
 
 ```
-
 import sys
 from pyspark import SparkContext, SparkConf
 from pyspark.ml.classification import LogisticRegression
 
 if __name__ == "__main__":
 
-# create Spark context with Spark configuration conf = SparkConf().setAppName("Practica 3")
+# create Spark context with Spark configuration 
+conf = SparkConf().setAppName("Practica 3")
 sc = SparkContext(conf=conf)
 df = sc.read.csv("/user/CCSA2223/usuario/fichero.csv",header=True,sep=",",inferSchema=True)
 df.show()
 df.createOrReplaceTempView("sql_dataset")
-sqlDF = sc.sql("SELECT campo1, camp3, ... c6 FROM sql_dataset LIMIT 12") sqlDF.show()
+sqlDF = sc.sql("SELECT campo1, campo3, ... campoX FROM sql_dataset LIMIT 12") sqlDF.show()
 lr = LogisticRegression(maxIter=10, regParam=0.3, elasticNetParam=0.8) lrModel = lr.fit(sqlDF)
 lrModel.summary()
-#df.collect() <- NO!
+#df.collect() <- Do not collect since the resources for the node are limited for a big dataset!
 
 sc.stop()
 
