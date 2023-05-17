@@ -946,8 +946,6 @@ Os recomendamos comenzar cualquier desarrollo desde PySpark, copiando y pegando 
 Podéis partir del siguiente código, en el que se crea un DataFrame a partir de unos datos, se filtra el DataFrame utilizando comandos SQL, se crea un modelo de Regresión Logística y se ajusta el modelo a los datos anteriores. 
 
 ```
-import sys
-from pyspark import SparkContext, SparkConf
 from pyspark.ml.classification import LogisticRegression
 
 # load your dataset into a DataFrame
@@ -973,8 +971,9 @@ sc.stop()
 
 Después de jugar con este código, para enviar un script completo a `spark-submit`, es necesario que defináis al principio del código un SparkContext y lo utilicéis donde corresponda: 
 ```
-# Whenever you want to run this code as a script submitted to pyspark-submit, first create Spark context with Spark configuration (the following two lines) 
+# Whenever you want to run this code as a script submitted to pyspark-submit, first create Spark context with Spark configuration (the following code)
 # and use `spark` and `sc` wherever approppriate in the rest of the code
+from pyspark import SparkContext, SparkConf
 conf = SparkConf().setAppName("Practica 3")
 sc = SparkContext(conf=conf)
 ```
