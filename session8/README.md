@@ -200,7 +200,7 @@ hdfs dfs -cat /user/CCSA2223/ccano/test/fichero.txt
 Delete file and folder:
 
 ```
-hdfs dfs -rm /user/CCSA2223/ccano/test/fichero.txt
+hdfs dfs -rm -skipTrash /user/CCSA2223/ccano/test/fichero.txt
 ```
 
 and 
@@ -830,14 +830,29 @@ Desde hadoop.ugr.es:
 ```
 Desde ulises.ugr.es: 
 ```
-/opt/spark-2.2.0/bin/pyspark --master spark://ulises:7077
+$ pyspark
+Python 2.7.17 (default, Mar  8 2023, 18:40:28) 
+[GCC 7.5.0] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /__ / .__/\_,_/_/ /_/\_\   version 2.3.2.3.1.0.0-78
+      /_/
+
+Using Python version 2.7.17 (default, Mar  8 2023 18:40:28)
+SparkSession available as 'spark'.
 ```
 
-Dentro del entorno interactivo el contexto Spark ya está disponible, por lo que **no debes definir un nuevo contexto Spark**. Es decir, dentro de PySpark no ejecutes este tipo de comandos: 
+Dentro del entorno interactivo pyspark utilizaremos la variable que se nos indica `spark` para referirnos a la sesión Spark y al SparkContext. Es decir, **dentro de PySpark no debes definir un nuevo contexto Spark**, porque ya hay uno definido y solo puede haber uno activo a la vez -- por tanto, **dentro de PySpark no puedes ejecutar este comando**: 
 ```
   # create Spark context with Spark configuration, do not run this from within PySpark
   sc = pyspark.SparkContext(master='local[*]', appName="Word Count")
 ```
+En los siguientes *snippets* de código utilizaremos indistintamente `sc` como SparkContext por defecto o `spark` como SparkSession por defecto, según si ese *snippet* ha sido copiado desde un comando ejecutado en la shell interactiva de PySpark o desde un script lanzado luego con `spark-submit. Más sobre SparkSession y SparkContext en el siguiente enlace: https://towardsdatascience.com/sparksession-vs-sparkcontext-vs-sqlcontext-vs-hivecontext-741d50c9486a
 
 ## Trabajo con RDDs / SparkDataFrames
 
@@ -893,13 +908,14 @@ cámbiale el nombre a covid19.csv y muévelo a HDFS.
 
 Para cargar como un CSV dentro de SPARK como un DataFrame
 ```
-df = sc.read.csv("/home/stp/test1.csv",header=True,sep=",",inferSchema=True);
+df = spark.read.csv("hdfs://ulises.imuds.es:8020/user/CCSA2223/your-username/covid19.csv",header=True,sep=",",inferSchema=True);
+df.printSchema() 
 ```
 o
 ```
-df = sc.read.csv("/home/stp/test1.csv",header=True,sep=",",inferSchema=False);
+df = spark.read.csv("hdfs://ulises.imuds.es:8020/user/CCSA2223/your-username/covid19.csv",header=True,sep=",",inferSchema=True);
 ```
-Una vez hecho esto df contiene un DataFrame para ser utilizado con toda la funcionalidad de Spark.
+Una vez hecho esto, `df` contiene un DataFrame para ser utilizado con toda la funcionalidad de Spark.
 
 ## Manipulación de los datos con SparkSQL
 
@@ -910,7 +926,11 @@ Usando la variable anterior:
 df.createOrReplaceTempView("test")
 sqlDF = spark.sql("SELECT * FROM test") 
 sqlDF.show()
+
+sqlDF = spark.sql("SELECT * FROM test WHERE countriesAndTerritories='Spain'")
+sqlDF.show()
 ```
+Desempolva tus habilidades con SQL para hacer las consultas que desees sobre el conjunto de datos y guardar los resultados en el DataFrame correspondiente. 
 
 ## MLlib
  MLlib es la biblioteca de Machine Learning sobre Spark. Puedes consultar la documentación: 
@@ -920,21 +940,26 @@ sqlDF.show()
 
 # Ejemplo de plantilla para la práctica 3
 
+
+Os recomendamos comenzar cualquier desarrollo desde PySpark, copiando y pegando comandos para ir interactuando con las variables resultantes y haciendo vuestras propias pruebas. Asumiendo que utilizáis PySpark, no hemos creado ninguna variable SparkContext y hemos utilizado la variable por defecto de SparkSession de PySpark `spark`. 
+
+Podéis partir del siguiente código, en el que se crea un DataFrame a partir de unos datos, se filtra el DataFrame utilizando comandos SQL, se crea un modelo de Regresión Logística y se ajusta el modelo a los datos anteriores. 
+
 ```
 import sys
 from pyspark import SparkContext, SparkConf
 from pyspark.ml.classification import LogisticRegression
 
-if __name__ == "__main__":
-
-# create Spark context with Spark configuration 
-conf = SparkConf().setAppName("Practica 3")
-sc = SparkContext(conf=conf)
-df = sc.read.csv("/user/CCSA2223/usuario/fichero.csv",header=True,sep=",",inferSchema=True)
+# load your dataset into a DataFrame
+df = spark.read.csv("hdfs://ulises.imuds.es:8020/user/CCSA2223/your-username/covid19.csv",header=True,sep=",",inferSchema=True);
 df.show()
+
+# create a SQL view of your dataset for further filtering using SQL language
 df.createOrReplaceTempView("sql_dataset")
-sqlDF = sc.sql("SELECT campo1, campo3, ... campoX FROM sql_dataset LIMIT 12") 
+sqlDF = spark.sql("SELECT campo1, campo3, ... campoX FROM sql_dataset LIMIT 12") 
 sqlDF.show()
+
+# Create a ML model and apply the model to the dataset
 lr = LogisticRegression(maxIter=10, regParam=0.3, elasticNetParam=0.8) 
 lrModel = lr.fit(sqlDF)
 lrModel.summary()
@@ -946,6 +971,13 @@ sc.stop()
 ```
 
 
+Después de jugar con este código, para enviar un script completo a `spark-submit`, es necesario que defináis al principio del código un SparkContext y lo utilicéis donde corresponda: 
+```
+# Whenever you want to run this code as a script submitted to pyspark-submit, first create Spark context with Spark configuration (the following two lines) 
+# and use `spark` and `sc` wherever approppriate in the rest of the code
+conf = SparkConf().setAppName("Practica 3")
+sc = SparkContext(conf=conf)
+```
 
 
 
