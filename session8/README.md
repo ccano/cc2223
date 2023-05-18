@@ -943,7 +943,16 @@ Desempolva tus habilidades con SQL para hacer las consultas que desees sobre el 
 
 Os recomendamos comenzar cualquier desarrollo desde PySpark, copiando y pegando comandos para ir interactuando con las variables resultantes y haciendo vuestras propias pruebas. Asumiendo que utilizáis PySpark, no hemos creado ninguna variable SparkContext y hemos utilizado la variable por defecto de SparkSession de PySpark `spark`. 
 
-Podéis partir del siguiente código, en el que se crea un DataFrame a partir de unos datos, se filtra el DataFrame utilizando comandos SQL, se crea un modelo de Regresión Logística y se ajusta el modelo a los datos anteriores. 
+Podéis partir de un código similar al siguiente, y os recomendamos que consultéis las referencias abajo. Se os pide que vuestro código tenga, al menos, las siguientes etapas bien delimitadas: 
+
+- Carga del dataset en un dataframe.
+- Análisis exploratorio básico de los datos: ¿cuántas columnas hay?, ¿de qué tipo son?, ¿hay valores perdidos?, ¿cómo se distribuyen las clases?, etc. 
+- Preprocesamiento y normalización de datos: selección de variables, transformación de variables (por ejemplo, de string a double, etc), normalización. 
+- Particionamiento de los datos en dos conjuntos: entrenamiento y test (por ejemplo, 80%/20%).
+- Elección de un modelo de ML para el problema. Establecer los parámetros del modelo y entrenarlo. 
+- Evaluar la bondad del modelo de ML con los datos de entrenamiento y test (curvas ROC y área bajo curva ROC, por ejemplo). 
+- Evaluar distintos modelos y parametrizaciones de los mismos y elegir el modelo con mejor métricas para el conjunto de test. 
+
 
 ```
 from pyspark.ml.classification import LogisticRegression
@@ -954,7 +963,7 @@ df.show()
 
 # create a SQL view of your dataset for further filtering using SQL language
 df.createOrReplaceTempView("sql_dataset")
-sqlDF = spark.sql("SELECT campo1, campo3, ... campoX FROM sql_dataset LIMIT 12") 
+sqlDF = spark.sql("SELECT campo1, campo3, ... campoX FROM sql_dataset") 
 sqlDF.show()
 
 # Create a ML model and apply the model to the dataset
@@ -968,7 +977,6 @@ sc.stop()
 
 ```
 
-
 Después de jugar con este código, para enviar un script completo a `spark-submit`, es necesario que defináis al principio del código un SparkContext y lo utilicéis donde corresponda: 
 ```
 # Whenever you want to run this code as a script submitted to pyspark-submit, first create Spark context with Spark configuration (the following code)
@@ -978,6 +986,11 @@ conf = SparkConf().setAppName("Practica 3")
 sc = SparkContext(conf=conf)
 ```
 
+# Referencias
+Podéis encontrar multitud de ejemplos y tutoriales guiados para el análisis de datos con técnicas de ML utilizando Spark:
+- Python: https://github.com/gogundur/Pyspark-Logistic-Regression/blob/master/Pyspark/Pyspark%20Classification.ipynb
+- Python: https://dl.acm.org/doi/pdf/10.1145/3309129.3309133
+- Scala: https://medium.com/rahasak/logistic-regression-with-apache-spark-b7ec4c98cfcd
 
 
 <!--
