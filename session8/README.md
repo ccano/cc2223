@@ -107,6 +107,12 @@ Log in hadoop ugr server with your credentials:
 ```
 ssh ccsa<DNI>@hadoop...
 ```
+
+or in ulises server with your credentials: 
+```
+
+ssh xxusername@ulises...
+```
 you will also need a password from your teacher. 
 
 ## HDFS basics
@@ -133,6 +139,10 @@ Attention!! The HDFS storage space is different from the user's local storage sp
 ```
 /user/CCSA2223/mcc50600265/  NOT EQUAL /home/mcc506000265/
 ```
+
+For ulises, the HDFS folder is located in: 
+```
+/user/xxyour-username
 
 ## Usage HDFS
 
@@ -170,43 +180,43 @@ echo “HOLA HDFS” > fichero.txt
 Move the local file ``fichero.txt`` to HDFS:
 
 ```
-hdfs dfs -put fichero.txt /user/CCSA2223/ccano/.
+hdfs dfs -put fichero.txt /user/your-username/.
 ```
 
 List again your folder:
 
 ```
-hdfs dfs -ls /user/CCSA2223/ccano
+hdfs dfs -ls /user/your-username
 ```
 
 Create a folder test`:
 
 ```
-hdfs dfs -mkdir /user/CCSA2223/ccano/test
+hdfs dfs -mkdir /user/your-username/test
 ```
 
 Move ``fichero.txt`` to test folder:
 
 ```
-hdfs dfs -mv /user/CCSA2223/ccano/fichero.txt /user/CCSA2223/ccano/test/.
+hdfs dfs -mv /user/your-username/fichero.txt /user/your-username/test/.
 ```
 
 Show the content:
 
 ```
-hdfs dfs -cat /user/CCSA2223/ccano/test/fichero.txt
+hdfs dfs -cat /user/your-username/test/fichero.txt
 ```
 
 Delete file and folder:
 
 ```
-hdfs dfs -rm -skipTrash /user/CCSA2223/ccano/test/fichero.txt
+hdfs dfs -rm -skipTrash /user/your-username/test/fichero.txt
 ```
 
 and 
 
 ```
-hdfs dfs -rmdir /user/CCSA2223/ccano/test
+hdfs dfs -rmdir /user/your-username/test
 ```
 
 Create two files:
@@ -222,17 +232,17 @@ echo “HOLA HDFS 2” > f2.txt
 Store in HDFS:
 
 ```
-hdfs dfs -put f1.txt /user/CCSA2223/ccano/.
+hdfs dfs -put f1.txt /user/your-username/.
 ```
 
 ```
-hdfs dfs -put f2.txt /user/CCSA2223/ccano/.
+hdfs dfs -put f2.txt /user/your-username/.
 ```
 
 Cocatenate both files:
 
 ```
-hdfs dfs -getmerge /user/CCSA2223/ccano/ merged.txt
+hdfs dfs -getmerge /user/your-username/ merged.txt
 ```
 
 ## Exercice
@@ -455,7 +465,7 @@ hadoop jar WordCount.jar WordCount /user/CCSA2223/<yourID>/<yourFile>  /user/CCS
 Check output folder with:
 
 ```
-hdfs dfs -ls /user/CCSA2223/<yourID>/<folder>
+hdfs dfs -ls /user/your-username/<folder>
 ```
 
 Return ...:
@@ -469,22 +479,9 @@ Found 2 items
 Show the content of ``part-r-00000``:
 
 ```
-hdfs dfs -cat /user/CCSA2223/<yourID>/<folder>/part-r-00000
+hdfs dfs -cat /user/your-username/<folder>/part-r-00000
 ```
 
-
-### Datasets
-
-Folder ``/user/CCSA2223/`` contains several samples of a BigData dataset named ECBDL.
-
-```
-Rows    Bytes                         Folder and File
-------- ---------                     ----------------
-5000    177876    2019-05-13 18:14    /user/CCSA2223/5000_ECBDL14_10tst.data
-20000   711174    2019-05-13 18:13    /user/CCSA2223/20000_ECBDL14_10tst.data
-500000  17683919  2019-05-13 18:14    /user/CCSA2223/500000_ECBDL14_10tst.data
-2897918 102747181 2019-05-13 18:14    /user/CCSA2223/ECBDL14_10tst.data
-```
 
 
 ### Calculate MIN of a row in Hadoop
@@ -690,15 +687,10 @@ wget https://raw.githubusercontent.com/mattf/joyce/master/james-joyce-ulysses.tx
 
 2.- Mover el fichero a hdfs:
 ```
-hdfs dfs -put james-joyce-ulysses.txt /user/CCSA2223/<tu-usuario> 
+hdfs dfs -put james-joyce-ulysses.txt /user/your-username 
 ```
 
-3.- Descargar el código fuente del programa:
-```
-wget https://github.com/ccano/cc2223/blob/main/session8/wordcount.py
-```
-
-4.- Revisar el código fuente del programa: 
+3.- Crear un fichero `wordcount.py` con el siguiente código fuente: 
 ```
 import pyspark 
  
@@ -738,17 +730,17 @@ Y el resultado se almacena en formato de texto en el directorio especificado:
 ```
 wordCounts.saveAsTextFile(output_folder)
 ```
-
-5.- Editar el código fuente del programa y modificar los datos de entrada (`input_file`) y salida (`output_folder`) sobre HDFS. En cada ejecución será siempre obligatorio actualizar el directorio de salida ya que Spark por defecto no sobrescribe resultados y el proceso termina en error cuando lo intenta.
+	
+4.- Editar el código fuente del programa y modificar los datos de entrada (`input_file`) y salida (`output_folder`) sobre HDFS. En cada ejecución será siempre obligatorio actualizar el directorio de salida ya que Spark por defecto no sobrescribe resultados y el proceso termina en error cuando lo intenta.
 
 Si tus datos de entrada y tu carpeta de salida están en HDFS en ulises.ugr.es, debes especificar la ruta a los datos utilizando los siguientes nombres de dominio: 
 ```
-  input_file = "hdfs://ulises.imuds.es:8020/user/CCSA2223/tu-usuario/james-joyce-ulysses.txt"
-  output_folder = "hdfs://ulises.imuds.es:8020/user/CCSA2223/tu-usuario/wc_joyce/"
+  input_file = "hdfs://ulises.imuds.es:8020/user/your-username/james-joyce-ulysses.txt"
+  output_folder = "hdfs://ulises.imuds.es:8020/user/your-username/wc_joyce/"
 ```
 El nombre de dominio `ulises.imuds.es` (o IP `192.168.3.100`) es el nombre (y la IP) del servidor HDFS en la red interna del cluster. 
 
-6.- Enviar el programa a ejecución.
+5.- Enviar el programa a ejecución.
 
 Para enviar el programa a ejecución debemos invocar el comando `spark-submit` tal y como se describe en [Enviar un trabajo al cluster](#enviar-un-trabajo-al-cluster). Para ello, debemos conocer la ruta al binario `spark-submit` y la URL del master del cluster Spark. Dependiendo de la máquina en la que ejecutemos los comandos, estos parámetros varían: 
 
@@ -762,7 +754,7 @@ Desde hadoop.ugr.es:
 /opt/spark-2.2.0/bin/spark-submit --master spark://hadoop-master:7077 --total-executor-cores 5 --executor-memory 1g wordcount.py
 
 ```
-7.- ¿Dónde están los resultados?
+6.- ¿Dónde están los resultados?
 Los resultados de la ejecución están dentro de la carpeta HDFS destino que se ha indicado en `saveAsTextFile()`. Al ver los ficheros generados usando: 
 
 ```
@@ -787,7 +779,7 @@ $ hdfs dfs -cat /user/CCSA2223/tu-usuario/wc_joyce/part-00968
 
 Si queremos unir todo el conjunto de resultados hay que usar la función `-getmerge` de HDFS, que fusiona los resultados de las partes de la salida de datos:
 ```
-hdfs dfs -getmerge /user/CCSA2223/tu-usuario/wc_joyce ./james-joyce-ulysses-wordcount-result.txt
+hdfs dfs -getmerge /user/your-username/wc_joyce ./james-joyce-ulysses-wordcount-result.txt
 ```
 
 
@@ -908,12 +900,8 @@ cámbiale el nombre a covid19.csv y muévelo a HDFS.
 
 Para cargar como un CSV dentro de SPARK como un DataFrame
 ```
-df = spark.read.csv("hdfs://ulises.imuds.es:8020/user/CCSA2223/your-username/covid19.csv",header=True,sep=",",inferSchema=True);
+df = spark.read.csv("hdfs://ulises.imuds.es:8020/user/your-username/covid19.csv",header=True,sep=",",inferSchema=True);
 df.printSchema() 
-```
-o
-```
-df = spark.read.csv("hdfs://ulises.imuds.es:8020/user/CCSA2223/your-username/covid19.csv",header=True,sep=",",inferSchema=True);
 ```
 Una vez hecho esto, `df` contiene un DataFrame para ser utilizado con toda la funcionalidad de Spark.
 
@@ -958,7 +946,7 @@ Podéis partir de un código similar al siguiente, y os recomendamos que consult
 from pyspark.ml.classification import LogisticRegression
 
 # load your dataset into a DataFrame
-df = spark.read.csv("hdfs://ulises.imuds.es:8020/user/CCSA2223/your-username/covid19.csv",header=True,sep=",",inferSchema=True);
+df = spark.read.csv("hdfs://ulises.imuds.es:8020/user/your-username/covid19.csv",header=True,sep=",",inferSchema=True);
 df.show()
 
 # create a SQL view of your dataset for further filtering using SQL language
