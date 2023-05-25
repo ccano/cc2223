@@ -143,7 +143,7 @@ Attention!! The HDFS storage space is different from the user's local storage sp
 For ulises, the HDFS folder is located in: 
 ```
 /user/xxyour-username
-
+```
 ## Usage HDFS
 
 ```
